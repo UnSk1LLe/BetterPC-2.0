@@ -1,0 +1,25 @@
+app:
+  name: "BETTER_PC_2.0"
+
+server:
+  port: "8080"
+
+
+mongoDb:
+  url: "mongodb://localhost:27017"
+  usersDbName: "users"
+  usersDbCollection:
+    - "users"
+    - "roles"
+  shopDbName: "shop"
+  shopDbCollections:
+    - "cpu"
+    - "motherboard"
+    - "ram"
+    - "ssd"
+    - "hdd"
+    - "cooling"
+    - "powersupply"
+    - "gpu"
+    - "housing"
+    - "orders"
