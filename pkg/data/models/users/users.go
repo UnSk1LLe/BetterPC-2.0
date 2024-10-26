@@ -14,17 +14,19 @@ type User struct {
 }
 
 type UserInfo struct {
-	Name         string    `bson:"name"`
-	Surname      string    `bson:"surname"`
-	Dob          time.Time `bson:"dob"`
-	Email        string    `bson:"email"`
-	PasswordHash []byte    `bson:"password"`
+	Name     string    `bson:"name"`
+	Surname  string    `bson:"surname"`
+	Dob      time.Time `bson:"dob"`
+	Email    string    `bson:"email"`
+	Password string    `bson:"password"`
+	Role     string    `bson:"role"`
+	Image    string    `bson:"image"`
 }
 
 type UpdateUserInput struct {
-	Name    string    `bson:"name"`
-	Surname string    `bson:"surname"`
-	Dob     time.Time `bson:"dob"`
+	Name    *string    `bson:"name"`
+	Surname *string    `bson:"surname"`
+	Dob     *time.Time `bson:"dob"`
 }
 
 func (u UpdateUserInput) Validate() error {

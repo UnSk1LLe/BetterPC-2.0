@@ -1,9 +1,8 @@
 app:
-  name: "BETTER_PC_2.0"
+  name: "Better PC"
 
 server:
   port: "8080"
-
 
 mongoDb:
   url: "mongodb://localhost:27017"

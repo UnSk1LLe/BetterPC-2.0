@@ -3,7 +3,7 @@ package service
 import (
 	"BetterPC_2.0/internal/repository"
 	"BetterPC_2.0/pkg/data/models/orders"
-	"BetterPC_2.0/pkg/data/models/products/details"
+	"BetterPC_2.0/pkg/data/models/products"
 	"BetterPC_2.0/pkg/data/models/products/general"
 	"BetterPC_2.0/pkg/data/models/users"
 	"go.mongodb.org/mongo-driver/bson"
@@ -11,111 +11,44 @@ import (
 )
 
 type Product interface {
-	general.General
-	UpdateGeneralInfo(productId primitive.ObjectID, productType string, input general.UpdateGeneralInput)
+	Create(product products.Product, productType string) (primitive.ObjectID, error)
+	GetById(id primitive.ObjectID, productType string) (products.Product, error)
+	GetList(filter bson.M, productType string) ([]products.Product, error)
+	UpdateById(id primitive.ObjectID, input products.ProductInput, productType string) error
+	UpdateGeneralInfoById(productId primitive.ObjectID, input general.UpdateGeneralInput, productType string) error
+	DeleteById(productId primitive.ObjectID, productType string) error
 }
 
 type Authorization interface {
 	CreateUser(user users.User) (primitive.ObjectID, error)
-	UpdateUser(userId primitive.ObjectID, input users.UpdateUserInput) error
-	DeleteUser(userId primitive.ObjectID) error
-	GetAllUsers(filter bson.M)
-	GetUserById(userId primitive.ObjectID)
+	GenerateTokens(email, password string)
 }
 
-type Orders interface {
-	CreateOrder(order orders.Order) (primitive.ObjectID, error)
-	UpdateOrder(orderId primitive.ObjectID, input orders.UpdateOrderInput) error
-	SetOrderStatus(orderId primitive.ObjectID, status string) error
-	DeleteOrder(orderId primitive.ObjectID) error
+type User interface {
+	Create(user users.User) (primitive.ObjectID, error)
+	Update(userId primitive.ObjectID, input users.UpdateUserInput) error
+	Delete(userId primitive.ObjectID) error
+	GetAll(filter bson.M)
+	GetById(userId primitive.ObjectID)
 }
 
-type Cpu interface {
-	CreateCpu(cpu details.Cpu) (primitive.ObjectID, error)
-	UpdateCpu(cpuId primitive.ObjectID, updateCpuInput details.UpdateCpuInput) (primitive.ObjectID, error)
-	DeleteCpu(cpuId primitive.ObjectID) error
-	GetAllCpu(filter bson.M) ([]details.Cpu, error)
-	GetCpuById(cpuId primitive.ObjectID) (details.Cpu, error)
-}
-
-type Motherboard interface {
-	CreateMotherboard(motherboard details.Motherboard) (primitive.ObjectID, error)
-	UpdateMotherboard(motherboardId primitive.ObjectID, updateMotherboardInput details.UpdateMotherboardInput) (primitive.ObjectID, error)
-	DeleteMotherboard(motherboardId primitive.ObjectID) error
-	GetAllMotherboard(filter bson.M) ([]details.Motherboard, error)
-	GetMotherboardById(motherboardId primitive.ObjectID) (details.Motherboard, error)
-}
-
-type Ssd interface {
-	CreateSsd(ssd details.Ssd) (primitive.ObjectID, error)
-	UpdateSsd(ssdId primitive.ObjectID, updateSsdInput details.UpdateSsdInput) (primitive.ObjectID, error)
-	DeleteSsd(ssdId primitive.ObjectID) error
-	GetAllSsd(filter bson.M) ([]details.Ssd, error)
-	GetSsdById(ssdId primitive.ObjectID) (details.Ssd, error)
-}
-
-type Hdd interface {
-	CreateHdd(hdd details.Hdd) (primitive.ObjectID, error)
-	UpdateHdd(hddId primitive.ObjectID, updateHddInput details.UpdateHddInput) (primitive.ObjectID, error)
-	DeleteHdd(hddId primitive.ObjectID) error
-	GetAllHdd(filter bson.M) ([]details.Hdd, error)
-	GetHddById(hddId primitive.ObjectID) (details.Hdd, error)
-}
-
-type Ram interface {
-	CreateRam(ram details.Ram) (primitive.ObjectID, error)
-	UpdateRam(ramId primitive.ObjectID, updateRamInput details.UpdateRamInput) (primitive.ObjectID, error)
-	DeleteRam(ramId primitive.ObjectID) error
-	GetAllRam(filter bson.M) ([]details.Ram, error)
-	GetRamById(ramId primitive.ObjectID) (details.Ram, error)
-}
-
-type Gpu interface {
-	CreateGpu(gpu details.Gpu) (primitive.ObjectID, error)
-	UpdateGpu(gpuId primitive.ObjectID, updateGpuInput details.UpdateGpuInput) (primitive.ObjectID, error)
-	DeleteGpu(gpuId primitive.ObjectID) error
-	GetAllGpu(filter bson.M) ([]details.Gpu, error)
-	GetGpuById(gpuId primitive.ObjectID) (details.Gpu, error)
-}
-
-type Cooling interface {
-	CreateCooling(cooling details.Cooling) (primitive.ObjectID, error)
-	UpdateCooling(coolingId primitive.ObjectID, updateCoolingInput details.UpdateCoolingInput) (primitive.ObjectID, error)
-	DeleteCooling(coolingId primitive.ObjectID) error
-	GetAllCooling(filter bson.M) ([]details.Cooling, error)
-	GetCoolingById(coolingId primitive.ObjectID) (details.Cooling, error)
-}
-
-type Housing interface {
-	CreateHousing(housing details.Housing) (primitive.ObjectID, error)
-	UpdateHousing(housingId primitive.ObjectID, updateHousingInput details.UpdateHousingInput) (primitive.ObjectID, error)
-	DeleteHousing(housingId primitive.ObjectID) error
-	GetAllHousing(filter bson.M) ([]details.Housing, error)
-	GetHousingById(housingId primitive.ObjectID) (details.Housing, error)
-}
-
-type PowerSupply interface {
-	CreatePowerSupply(powerSupply details.PowerSupply) (primitive.ObjectID, error)
-	UpdatePowerSupply(powerSupplyId primitive.ObjectID, updatePowerSupplyInput details.UpdatePowerSupplyInput) (primitive.ObjectID, error)
-	DeletePowerSupply(powerSupplyId primitive.ObjectID) error
-	GetAllPowerSupply(filter bson.M) ([]details.PowerSupply, error)
-	GetPowerSupplyById(powerSupplyId primitive.ObjectID) (details.PowerSupply, error)
+type Order interface {
+	Create(order orders.Order) (primitive.ObjectID, error)
+	Update(orderId primitive.ObjectID, input orders.UpdateOrderInput) error
+	SetStatus(orderId primitive.ObjectID, status string) error
+	Delete(orderId primitive.ObjectID) error
 }
 
 type Service struct {
 	Authorization
-	Cpu
-	Motherboard
-	Ram
-	Gpu
-	Cooling
-	PowerSupply
-	Hdd
-	Ssd
-	Housing
-	Orders
+	User
+	Product
+	Order
 }
 
 func NewService(repos *repository.Repository) *Service {
-	return &Service{}
+	return &Service{
+		Authorization: NewAuthService(repos.Authorization),
+		Product:       NewProductService(repos.Product),
+	}
 }

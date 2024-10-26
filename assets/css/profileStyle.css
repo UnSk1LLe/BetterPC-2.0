@@ -1,0 +1,96 @@
+
+.container {
+    width: 70%;
+    margin: auto;
+    padding: 20px;
+}
+
+
+.tabs {
+    overflow: hidden;
+    border-bottom: 1px solid #ccc;
+}
+
+.tablinks {
+    background-color: #f2f2f2;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: background-color 0.3s;
+}
+
+.tablinks:hover {
+    background-color: #ddd;
+}
+
+.tabcontent {
+    display: none;
+    padding: 20px;
+}
+
+.profile-info {
+    display: flex;
+    align-items: center;
+}
+
+.profile-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 20px;
+}
+
+.profile-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-details {
+    flex: 1;
+}
+
+.profile-details p {
+    margin: 10px 0;
+}
+
+.profile-details button {
+    padding: 10px 20px;
+    width: 100px;
+    color: #fff;
+    background-color: #636363;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.profile-details .edit-button {
+    background-color: #1a237e;
+}
+
+.profile-details .cancel-button {
+    background-color: #971c1c; /* Red color for the cancel button */
+}
+
+.orders-list {
+    /* Style for the orders list */
+}
+
+.order-details {
+    display: none;
+}
+
+.order-details.expanded {
+    display: block;
+}
+
+.toggle-details {
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: blue;
+    padding: 0;
+    margin-left: 10px;
+}

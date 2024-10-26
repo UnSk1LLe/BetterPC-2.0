@@ -11,6 +11,8 @@ import (
 	"time"
 )
 
+var MongoConnection MongoDbConnection
+
 type MongoDbConnection struct {
 	Client      *mongo.Client
 	Collections map[string]*mongo.Collection
@@ -31,25 +33,25 @@ func Init(cfg *configs.Config, logger *logging.Logger) (*MongoDbConnection, erro
 		}
 	}()
 
-	mongoDb := &MongoDbConnection{
+	MongoConnection = MongoDbConnection{
 		Client:      client,
 		Collections: make(map[string]*mongo.Collection),
 	}
 
 	for _, collectionName := range cfg.MongoDB.UsersCollectionsNames {
-		mongoDb.Collections[collectionName], err = InitCollection(client, cfg.MongoDB.UsersDbName, collectionName, logger)
+		MongoConnection.Collections[collectionName], err = InitCollection(client, cfg.MongoDB.UsersDbName, collectionName, logger)
 		if err != nil {
 			logger.Fatalf("MongoDb initializing error: %s", err.Error())
 		}
 	}
 	for _, collectionName := range cfg.MongoDB.ShopCollectionsNames {
-		mongoDb.Collections[collectionName], err = InitCollection(client, cfg.MongoDB.ShopDbName, collectionName, logger)
+		MongoConnection.Collections[collectionName], err = InitCollection(client, cfg.MongoDB.ShopDbName, collectionName, logger)
 		if err != nil {
 			logger.Fatalf("MongoDb initializing error: %s", err.Error())
 		}
 	}
 
-	return mongoDb, nil
+	return &MongoConnection, nil
 }
 
 func InitCollection(client *mongo.Client, dbName, collectionName string, logger *logging.Logger) (*mongo.Collection, error) {
@@ -61,4 +63,8 @@ func InitCollection(client *mongo.Client, dbName, collectionName string, logger 
 		return collection, nil
 	}
 	return nil, err
+}
+
+func GetConnection() *MongoDbConnection {
+	return &MongoConnection
 }

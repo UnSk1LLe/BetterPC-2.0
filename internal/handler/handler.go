@@ -2,20 +2,31 @@ package handler
 
 import (
 	"BetterPC_2.0/internal/service"
+	"BetterPC_2.0/pkg/html"
+	"BetterPC_2.0/pkg/logging"
+	"BetterPC_2.0/pkg/static"
 	"github.com/gin-gonic/gin"
 )
 
 type Handler struct {
 	services *service.Service
+	logger   *logging.Logger
 }
 
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
 
+	router.Use(gin.Recovery())
+
+	html.LoadTemplates(router)
+	static.LoadStatic(router)
+
 	auth := router.Group("/auth")
 	{
-		auth.POST("/sign-up", h.signUp)
-		auth.POST("/sign-in", h.signIn)
+		auth.GET("/register", h.RegisterForm)
+		auth.POST("/register", h.Register)
+		auth.GET("/login", h.LoginForm)
+		auth.POST("/login", h.Login)
 	}
 
 	//verify := router.POST("/:token")
@@ -24,9 +35,9 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	{
 		passwordRecovery.POST("/:email")
 		passwordRecovery.POST("/:token")
-	}
+	}*/
 
-	shop := router.Group("/shop")
+	/*shop := router.Group("/shop")
 	{
 		categories := shop.Group("/categories")
 		{
@@ -35,7 +46,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			categories.GET("/:category_name/:product_id")
 			categories.POST("/")
 
-			products := categories.Group("/products")
+			products := categories.Group("/productTypes")
 			{
 				products.GET("/")
 				products.GET("/:product_id")
@@ -55,7 +66,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		}
 	}
 
-	users := shop.Group("/users")
+	users := router.Group("/users")
 	{
 		users.GET("/")
 		users.GET("/:user_id")
@@ -64,7 +75,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		users.DELETE("/")
 	}
 
-	roles := shop.Group("/roles")
+	roles := router.Group("/roles")
 	{
 		roles.GET("/")
 		roles.GET("/:role_id")
@@ -76,6 +87,9 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	return router
 }
 
-func NewHandler(services *service.Service) *Handler {
-	return &Handler{services}
+func NewHandler(services *service.Service, logger *logging.Logger) *Handler {
+	return &Handler{
+		services: services,
+		logger:   logger,
+	}
 }

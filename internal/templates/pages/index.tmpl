@@ -1,0 +1,79 @@
+{{ define "templates/pages/index"}}
+    {{template "templates/layouts/head" .}}
+    {{template "templates/layouts/header" .}}
+<body>
+<h1>Choose PC component</h1>
+<div class="container">
+    <a href="/listProducts?productType=cpu" class="catalog-card">
+        <img src="/assets/icons/cpu.png" alt="CPU">CPU
+    </a>
+    <a href="/listProducts?productType=motherboard" class="catalog-card">
+        <img src="/assets/icons/motherboard.png" alt="MOTHERBOARD">Motherboard
+    </a>
+    <a href="/listProducts?productType=ram" class="catalog-card">
+        <img src="/assets/icons/ram.png" alt="RAM">RAM
+    </a>
+    <a href="/listProducts?productType=gpu" class="catalog-card">
+        <img src="/assets/icons/gpu.png" alt="GPU">GPU
+    </a>
+    <a href="/listProducts?productType=ssd" class="catalog-card">
+        <img src="/assets/icons/ssd.png" alt="SSD">SSD
+    </a>
+    <a href="/listProducts?productType=hdd" class="catalog-card">
+        <img src="/assets/icons/hdd.png" alt="HDD">HDD
+    </a>
+    <a href="/listProducts?productType=cooling" class="catalog-card">
+        <img src="/assets/icons/cooling.png" alt="COOLING">Cooling
+    </a>
+    <a href="/listProducts?productType=powersupply" class="catalog-card">
+        <img src="/assets/icons/powersupply.png" alt="POWER SUPPLY">Power Supply
+    </a>
+    <a href="/listProducts?productType=housing" class="catalog-card">
+        <img src="/assets/icons/housing.png" alt="HOUSING">Housing
+    </a>
+</div>
+<div class="container" style="height: 100px; margin-top: 17px">
+    <form action="/addNewProductChoice" method="post" style="width: 300px">
+        <button class="submit-button" name="cpuForm" type="submit">Add Product</button>
+    </form>
+</div>
+</body>
+<script src="/assets/js/searchAll.js"></script>
+<script>
+    let userID = '{{.User.ID}}'.slice(10, 34)
+
+    function inCartElementsNumber() {
+        let cart = getCookie('cart' + userID);
+        console.log(userID)
+        let counter = document.getElementById('cart-badge')
+        let number = 0
+
+        if (cart !== null) {
+            try {
+                cart = JSON.parse(decodeURIComponent(cart));
+                number = cart.length
+            } catch (e) {
+                console.error("No cart elements found", e);
+            }
+        }
+        counter.innerText = number.toString()
+
+        if (number > 0) {
+            counter.style.display = 'block'
+        } else {
+            counter.style.display = 'none'
+        }
+    }
+
+    function getCookie(name) {
+        let value = "; " + document.cookie;
+        let parts = value.split("; " + name + "=");
+        if (parts.length === 2) return parts.pop().split(";").shift();
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        inCartElementsNumber()
+    });
+</script>
+    {{ template "templates/layouts/foot" .}}
+{{ end }}

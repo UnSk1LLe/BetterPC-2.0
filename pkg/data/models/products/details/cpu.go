@@ -1,21 +1,23 @@
 package details
 
 import (
+	"BetterPC_2.0/pkg/data/models/products"
 	"BetterPC_2.0/pkg/data/models/products/general"
+	"errors"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type Cpu struct {
-	ID             primitive.ObjectID `bson:"_id,omitempty"`
-	General        general.General    `bson:"general"`
-	Main           MainCpu            `bson:"main"`
-	Cores          CoresCpu           `bson:"cores"`
+	ID             primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty"`
+	General        general.General    `bson:"general" json:"general"`
+	Main           MainCpu            `bson:"main"  json:"main"`
+	Cores          CoresCpu           `bson:"cores" json:"cores,omitempty"`
 	ClockFrequency ClockFrequencyCpu  `bson:"clock_frequency" json:"clock_frequency,omitempty"`
-	Ram            RamCpu             `bson:"ram"`
+	Ram            RamCpu             `bson:"ram" json:"ram,omitempty"`
 	Tdp            int                `bson:"tdp" json:"tdp,omitempty"`
 	Graphics       string             `bson:"graphics" json:"graphics,omitempty"`
 	PciE           int                `bson:"pci-e" json:"pci_e,omitempty"`
-	MaxTemperature int                `bson:"max_temperature"`
+	MaxTemperature int                `bson:"max_temperature" json:"max_temperature,omitempty"`
 }
 
 type MainCpu struct {
@@ -44,6 +46,18 @@ type RamCpu struct {
 	MaxCapacity  int   `bson:"max_capacity"`
 }
 
+func (c Cpu) GetProductModel() string {
+	return c.General.Model
+}
+
+func (c Cpu) Standardize() general.StandardizedProductData {
+	return general.StandardizedProductData{}
+}
+
+func (c Cpu) ProductFinalPrice() int {
+	return c.General.CalculateFinalPrice()
+}
+
 type UpdateCpuInput struct {
 	General        *general.General   `bson:"general"`
 	Main           *MainCpu           `bson:"main"`
@@ -58,4 +72,23 @@ type UpdateCpuInput struct {
 
 func (c UpdateCpuInput) Validate() error {
 	return general.ValidateStruct(&c)
+}
+
+func (c UpdateCpuInput) ConvertInput(input products.ProductInput) error {
+
+	if cpu, ok := input.(*UpdateCpuInput); ok {
+		c.General = cpu.General
+		c.Main = cpu.Main
+		c.Cores = cpu.Cores
+		c.ClockFrequency = cpu.ClockFrequency
+		c.Ram = cpu.Ram
+		c.Tdp = cpu.Tdp
+		c.Graphics = cpu.Graphics
+		c.PciE = cpu.PciE
+		c.MaxTemperature = cpu.MaxTemperature
+	} else {
+		errors.New("invalid input type for CPU")
+	}
+
+	return nil
 }

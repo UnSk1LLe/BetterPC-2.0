@@ -22,6 +22,19 @@ type Ram struct {
 	Height       int                `bson:"height"`
 }
 
+func (r Ram) GetProductModel() string {
+	return r.General.Model
+}
+
+// TODO add standardizers for each product type
+func (r Ram) Standardize() general.StandardizedProductData {
+	return general.StandardizedProductData{}
+}
+
+func (r Ram) ProductFinalPrice() int {
+	return r.General.CalculateFinalPrice()
+}
+
 type UpdateRamInput struct {
 	General      *general.General `bson:"general"`
 	Capacity     *int             `bson:"capacity"`

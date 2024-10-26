@@ -9,7 +9,6 @@ import (
 	"BetterPC_2.0/pkg/logging"
 	"fmt"
 	"github.com/sirupsen/logrus"
-	"os"
 )
 
 func main() {
@@ -35,11 +34,11 @@ func main() {
 	logrus.Infof("asd")
 	repos := repository.NewRepository(mongoConn)
 	services := service.NewService(repos)
-	handlers := handler.NewHandler(services)
+	handlers := handler.NewHandler(services, logger)
 
 	server := new(BetterPC_2_0.Server)
 
-	if err := server.Run(os.Getenv("PORT"), handlers.InitRoutes()); err != nil {
+	if err := server.Run(configs.GetConfig().Server.Port, handlers.InitRoutes()); err != nil {
 		logger.Fatalf("error while running the server: %v", err.Error())
 	}
 }

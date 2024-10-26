@@ -64,3 +64,42 @@ time="2024-10-19T22:04:20+06:00" level=info msg="Starting BetterPC 2.0 server" f
 {"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"gpu\" has no documents","time":"2024-10-22T21:50:56+06:00"}
 {"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"housing\" has no documents","time":"2024-10-22T21:50:56+06:00"}
 {"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"orders\" has no documents","time":"2024-10-22T21:50:56+06:00"}
+{"file":"main.go:19","func":"main.main()","level":"info","msg":"Starting BetterPC 2.0 server","time":"2024-10-26T21:42:18+06:00"}
+{"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"users\" has no documents","time":"2024-10-26T21:42:18+06:00"}
+{"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"roles\" has no documents","time":"2024-10-26T21:42:18+06:00"}
+{"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"cpu\" has no documents","time":"2024-10-26T21:42:18+06:00"}
+{"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"motherboard\" has no documents","time":"2024-10-26T21:42:18+06:00"}
+{"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"ram\" has no documents","time":"2024-10-26T21:42:18+06:00"}
+{"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"ssd\" has no documents","time":"2024-10-26T21:42:18+06:00"}
+{"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"hdd\" has no documents","time":"2024-10-26T21:42:18+06:00"}
+{"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"cooling\" has no documents","time":"2024-10-26T21:42:18+06:00"}
+{"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"powersupply\" has no documents","time":"2024-10-26T21:42:18+06:00"}
+{"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"gpu\" has no documents","time":"2024-10-26T21:42:18+06:00"}
+{"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"housing\" has no documents","time":"2024-10-26T21:42:18+06:00"}
+{"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"orders\" has no documents","time":"2024-10-26T21:42:18+06:00"}
+{"file":"main.go:19","func":"main.main()","level":"info","msg":"Starting BetterPC 2.0 server","time":"2024-10-26T21:43:53+06:00"}
+{"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"users\" has no documents","time":"2024-10-26T21:43:53+06:00"}
+{"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"roles\" has no documents","time":"2024-10-26T21:43:53+06:00"}
+{"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"cpu\" has no documents","time":"2024-10-26T21:43:53+06:00"}
+{"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"motherboard\" has no documents","time":"2024-10-26T21:43:53+06:00"}
+{"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"ram\" has no documents","time":"2024-10-26T21:43:53+06:00"}
+{"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"ssd\" has no documents","time":"2024-10-26T21:43:53+06:00"}
+{"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"hdd\" has no documents","time":"2024-10-26T21:43:53+06:00"}
+{"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"cooling\" has no documents","time":"2024-10-26T21:43:53+06:00"}
+{"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"powersupply\" has no documents","time":"2024-10-26T21:43:53+06:00"}
+{"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"gpu\" has no documents","time":"2024-10-26T21:43:53+06:00"}
+{"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"housing\" has no documents","time":"2024-10-26T21:43:53+06:00"}
+{"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"orders\" has no documents","time":"2024-10-26T21:43:53+06:00"}
+{"file":"main.go:18","func":"main.main()","level":"info","msg":"Starting BetterPC 2.0 server","time":"2024-10-26T21:49:53+06:00"}
+{"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"users\" has no documents","time":"2024-10-26T21:49:53+06:00"}
+{"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"roles\" has no documents","time":"2024-10-26T21:49:53+06:00"}
+{"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"cpu\" has no documents","time":"2024-10-26T21:49:53+06:00"}
+{"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"motherboard\" has no documents","time":"2024-10-26T21:49:53+06:00"}
+{"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"ram\" has no documents","time":"2024-10-26T21:49:53+06:00"}
+{"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"ssd\" has no documents","time":"2024-10-26T21:49:53+06:00"}
+{"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"hdd\" has no documents","time":"2024-10-26T21:49:53+06:00"}
+{"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"cooling\" has no documents","time":"2024-10-26T21:49:53+06:00"}
+{"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"powersupply\" has no documents","time":"2024-10-26T21:49:53+06:00"}
+{"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"gpu\" has no documents","time":"2024-10-26T21:49:53+06:00"}
+{"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"housing\" has no documents","time":"2024-10-26T21:49:53+06:00"}
+{"file":"mongodb.go:62","func":"BetterPC_2.0/internal/repository.InitCollection()","level":"info","msg":"Collection \"orders\" has no documents","time":"2024-10-26T21:49:53+06:00"}

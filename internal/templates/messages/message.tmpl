@@ -1,0 +1,22 @@
+{{ define "templates/messages/message" }}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Message</title>
+        <link rel="stylesheet" href="/assets/css/mainStyle.css">
+        <link rel="stylesheet" href="/assets/css/login.css"><!-- Link to your main CSS file -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    </head>
+    <body>
+    <div class="card">
+        <h1>Message</h1>
+        <form action="{{ .Action }}" method="{{.ActionMethod}}" class="login-form">
+            <p>{{ .Message }}</p>
+            <button type="submit" id="okButton" class="submit-button">OK</button>
+        </form>
+    </div>
+    </body>
+    </html>
+{{ end }}
+
