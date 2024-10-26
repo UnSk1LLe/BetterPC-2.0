@@ -1,6 +1,9 @@
 package configs
 
-import "github.com/spf13/viper"
+import (
+	"github.com/spf13/viper"
+	"time"
+)
 
 var Configurations Config
 
@@ -8,6 +11,7 @@ type Config struct {
 	App     App
 	Server  Server
 	MongoDB MongoDB
+	Tokens  Tokens
 }
 
 type App struct {
@@ -24,6 +28,13 @@ type MongoDB struct {
 	ShopDbName            string
 	UsersCollectionsNames []string
 	ShopCollectionsNames  []string
+}
+
+type Tokens struct {
+	AccessTokenTTL         time.Duration
+	AccessTokenSigningKey  string
+	RefreshTokenTTL        time.Duration
+	RefreshTokenSigningKey string
 }
 
 func InitConfig() error {
@@ -50,6 +61,12 @@ func SetConfig() {
 		},
 		App: App{
 			Name: viper.GetString("app.name"),
+		},
+		Tokens: Tokens{
+			AccessTokenTTL:         time.Duration(viper.GetInt("tokens.accessTokenTTL")) * time.Minute,
+			AccessTokenSigningKey:  viper.GetString("tokens.accessTokenSigningKey"),
+			RefreshTokenTTL:        time.Duration(viper.GetInt("tokens.refreshTokenTTL")) * time.Hour,
+			RefreshTokenSigningKey: viper.GetString("tokens.refreshTokenSigningKey"),
 		},
 	}
 }

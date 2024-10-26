@@ -62,7 +62,18 @@ func (h *Handler) Login(c *gin.Context) {
 		return
 	}
 
-	//h.services.Authorization.GenerateAccessToken(input.Email, input.Password)
+	tokens, err := h.services.Authorization.GenerateTokenPair(input.Email, input.Password)
+	if err != nil {
+		message := err.Error()
+		errors.RenderError(c, http.StatusInternalServerError, "/auth/login", "get", err, message)
+		return
+	}
+
+	//Setting tokens to cookies with httpOnly flag
+	c.SetCookie("access_token", tokens.AccessToken, 3600, "/", "", true, true)
+
+	c.SetCookie("refresh_token", tokens.RefreshToken, 7*24*3600, "/", "", true, true)
+
 	c.JSON(http.StatusOK, gin.H{"message": "Login successful!"})
 	return
 }

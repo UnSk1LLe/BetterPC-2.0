@@ -22,3 +22,9 @@ mongoDb:
     - "gpu"
     - "housing"
     - "orders"
+
+tokens:
+  accessTokenTTL: 15 # minutes
+  accessTokenSigningKey: "agjl#@$k5gag7-=ad[pfadpkadm32"
+  refreshTokenTTL: 196 # hours
+  refreshTokenSigningKey: "lfgSDFk^481&df1@_asdpogD25fE"

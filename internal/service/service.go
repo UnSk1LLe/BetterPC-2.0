@@ -21,7 +21,9 @@ type Product interface {
 
 type Authorization interface {
 	CreateUser(user users.User) (primitive.ObjectID, error)
-	GenerateTokens(email, password string)
+	GenerateTokenPair(email, password string) (TokenPair, error)
+	ParseAccessToken(accessToken string) (string, error)
+	RefreshTokens(refreshToken string) (TokenPair, error)
 }
 
 type User interface {

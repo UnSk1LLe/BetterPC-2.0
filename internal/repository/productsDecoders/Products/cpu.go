@@ -27,7 +27,7 @@ func DecodeCpuList(cur *mongo.Cursor) (*[]products.Product, error) {
 		if err := cur.Decode(&cpu); err != nil {
 			return nil, err
 		}
-		cpuList = append(cpuList, cpu) // Приводим `details.Cpu` к `productTypes.Products`
+		cpuList = append(cpuList, cpu)
 	}
 	return &cpuList, nil
 }
