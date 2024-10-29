@@ -5,6 +5,7 @@ import (
 	"BetterPC_2.0/pkg/data/models/products/general"
 	"errors"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"strconv"
 )
 
 type Cpu struct {
@@ -51,7 +52,21 @@ func (c Cpu) GetProductModel() string {
 }
 
 func (c Cpu) Standardize() general.StandardizedProductData {
-	return general.StandardizedProductData{}
+	var product general.StandardizedProductData
+	product.ProductHeader.ID = c.ID.Hex()
+	product.ProductHeader.ProductType = "cpu"
+	product.General = c.General
+	product.Name = c.Main.Category + " " + c.General.Model
+	var cores string
+	if c.Cores.Ecores > 0 {
+		cores = "P-cores: " + strconv.Itoa(c.Cores.Pcores) + " E-cores: " + strconv.Itoa(c.Cores.Ecores) + ","
+	} else {
+		cores = strconv.Itoa(c.Cores.Pcores) + ","
+	}
+	product.Description = c.Main.Category + ", " + c.Main.Generation + " Generation, " +
+		c.Main.Socket + " Socket, " + "Cores: " + cores + " Threads: " + strconv.Itoa(c.Cores.Threads) +
+		", Technical process " + strconv.Itoa(c.Cores.TechnicalProcess) + " nm, "
+	return product
 }
 
 func (c Cpu) ProductFinalPrice() int {

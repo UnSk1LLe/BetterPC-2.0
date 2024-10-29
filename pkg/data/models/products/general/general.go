@@ -2,12 +2,11 @@ package general
 
 import (
 	"errors"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"reflect"
 )
 
 type ProductHeader struct {
-	ID          primitive.ObjectID
+	ID          string
 	ProductType string
 }
 

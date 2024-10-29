@@ -3,9 +3,10 @@ package main
 import (
 	BetterPC_2_0 "BetterPC_2.0"
 	"BetterPC_2.0/configs"
-	"BetterPC_2.0/internal/handler"
+	"BetterPC_2.0/internal/handlers"
 	"BetterPC_2.0/internal/repository"
 	"BetterPC_2.0/internal/service"
+	"BetterPC_2.0/pkg/database/mongoDb"
 	"BetterPC_2.0/pkg/logging"
 	"fmt"
 	"github.com/sirupsen/logrus"
@@ -13,32 +14,38 @@ import (
 
 func main() {
 
-	logger := logging.GetLogger()
+	logger := logging.GetLogger() //initializing logger
 
 	logger.Infof("Starting BetterPC 2.0 server")
 
-	err := configs.InitConfig()
+	err := configs.InitConfig() //initializing config path
 	if err != nil {
 		logger.Fatalf("failed to initialize config: %s", err.Error())
 	}
 
-	configs.SetConfig()
+	configs.SetConfig() //setting config from yaml
 
 	fmt.Println(configs.GetConfig())
 
-	mongoConn, err := repository.Init(configs.GetConfig(), logger)
+	err = mongoDb.Init(configs.GetConfig(), logger) //establishing connection to mongoDB database
+	if err != nil {
+		logger.Fatalf("error connecting to database: %s", err.Error())
+	}
+
+	mongoDbConnection, err := mongoDb.GetConnection() //getting the established connection to mongoDb client and collections
 	if err != nil {
 		logger.Fatalf("error connecting to database: %s", err.Error())
 	}
 
 	logrus.Infof("asd")
-	repos := repository.NewRepository(mongoConn)
-	services := service.NewService(repos)
-	handlers := handler.NewHandler(services, logger)
+
+	appRepos := repository.NewRepository(mongoDbConnection)
+	appServices := service.NewService(appRepos)
+	appHandlers := handlers.NewHandler(appServices, logger)
 
 	server := new(BetterPC_2_0.Server)
 
-	if err := server.Run(configs.GetConfig().Server.Port, handlers.InitRoutes()); err != nil {
+	if err := server.Run(configs.GetConfig().Server.Port, appHandlers.InitRoutes()); err != nil {
 		logger.Fatalf("error while running the server: %v", err.Error())
 	}
 }

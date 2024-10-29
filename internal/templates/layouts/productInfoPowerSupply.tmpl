@@ -1,0 +1,45 @@
+{{ define "templates/layouts/productInfoPowerSupply"}}
+    <div class="product-item">
+        <div class="product-image">
+            <img src="{{ .Product.General.Image }}" alt="product Image">
+        </div>
+        <div class="product-details">
+            <table>
+                <tr>
+                    <td class="description-label">Manufacturer:</td>
+                    <td>{{ .Product.General.Manufacturer }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Model:</td>
+                    <td>{{ .Product.General.Model }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Form Factor:</td>
+                    <td>{{ .Product.FormFactor }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Output Power:</td>
+                    <td>{{ .Product.OutputPower }} W</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Connectors:</td>
+                    <td>SATA: {{ .Product.Connectors.Sata }}, Molex: {{ .Product.Connectors.Molex }}, PCI-E:
+                        {{ .Product.Connectors.PciE }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="description-label">Modular:</td>
+                    <td>{{ if .Product.Modules }}Yes{{ else }}No{{ end }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Motherboard Power:</td>
+                    <td>{{ .Product.MbPower }} pin</td>
+                </tr>
+                <tr>
+                    <td class="description-label">CPU Power:</td>
+                    <td>{{ .Product.CpuPower }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+{{ end }}

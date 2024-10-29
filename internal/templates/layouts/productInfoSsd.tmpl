@@ -1,0 +1,59 @@
+{{ define "templates/layouts/productInfoSsd"}}
+    <div class="product-item">
+        <div class="product-image">
+            <img src="{{ .Product.General.Image }}" alt="product Image">
+        </div>
+        <div class="product-details">
+            <table>
+                <tr>
+                    <td class="description-label">Manufacturer:</td>
+                    <td>{{ .Product.General.Manufacturer }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Model:</td>
+                    <td>{{ .Product.General.Model }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Type:</td>
+                    <td>{{ .Product.Type }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Capacity:</td>
+                    <td>{{ .Product.Capacity }} GB</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Interface:</td>
+                    <td>{{ .Product.Interface }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Memory Type:</td>
+                    <td>{{ .Product.MemoryType }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Read Speed:</td>
+                    <td>{{ .Product.Read }} MB/s</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Write Speed:</td>
+                    <td>{{ .Product.Write }} MB/s</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Form Factor:</td>
+                    <td>{{ .Product.FormFactor }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">MTFB:</td>
+                    <td>{{ .Product.Mftb }} h</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Size:</td>
+                    <td>{{ range .Product.Size }}{{ . }}x{{ end }}mm</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Weight:</td>
+                    <td>{{ .Product.Weight }} g</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+{{ end }}

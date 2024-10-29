@@ -1,5 +1,298 @@
 {{ define "templates/pages/listProducts" }}
     {{ template "templates/layouts/head" .}}
     {{ template "templates/layouts/header" .}}
+    <main>
+        <div id="filters">
+            <h2>Filters</h2>
+            <form id="filters-form" method="post" action="">
+                <div id="filter-container"></div>
+                <button class="submit-button" type="submit" onclick="listProducts('{{.ProductType}}', 1, '{{.SearchQuery}}', true)">Apply</button>
+            </form>
+        </div>
 
+        <div id="results">
+            <div class="switch-container">
+                <label class="switch">
+                    <input type="checkbox" id="toggleDisplay" {{ if .PcBuilder }}checked{{ end }}>
+                    <span class="slider"></span>
+                </label>
+                <span class="onofftext">PC Builder</span>
+            </div>
+            <div class="components-container" id="build" {{ if .PcBuilder }} style="display: flex" {{ end }}>
+                <div class="component" data-component="cpu" onclick="handleClick('cpu')">
+                    {{ if .Build.CPU.Name }}
+                        <img src="/assets/img/default/cpu.jpg" alt="CPU">
+                        <div class="component-details">
+                            <h3>{{.Build.CPU.Name}}</h3>
+                            <p class="product-price">{{ calculateDiscountPrice .Build.CPU.General.Price .Build.CPU.General.Discount }}</p>
+                        </div>
+                    {{ else }}
+                        <div class="empty-component">
+                            <img src="/assets/icons/cpu.png" alt="CPU Icon">
+                            <p>CPU</p>
+                        </div>
+                    {{ end }}
+                </div>
+
+                <div class="component" data-component="motherboard" onclick="handleClick('motherboard')">
+                    {{ if .Build.Motherboard.Name }}
+                        <img src="/assets/img/default/motherboard.jpg" alt="Motherboard">
+                        <div class="component-details">
+                            <h3>{{.Build.Motherboard.Name}}</h3>
+                            <p class="product-price">{{ calculateDiscountPrice .Build.Motherboard.General.Price .Build.Motherboard.General.Discount }}</p>
+                        </div>
+                    {{ else }}
+                        <div class="empty-component">
+                            <img src="/assets/icons/motherboard.png" alt="Motherboard Icon">
+                            <p>Motherboard</p>
+                        </div>
+                    {{ end }}
+                </div>
+
+                <div class="component" data-component="ram" onclick="handleClick('ram')">
+                    {{ if .Build.RAM.Name }}
+                        <img src="/assets/img/default/ram.jpg" alt="RAM">
+                        <div class="component-details">
+                            <h3>{{.Build.RAM.Name}}</h3>
+                            <p class="product-price">{{ calculateDiscountPrice .Build.RAM.General.Price .Build.RAM.General.Discount }}</p>
+                        </div>
+                    {{ else }}
+                        <div class="empty-component">
+                            <img src="/assets/icons/ram.png" alt="RAM Icon">
+                            <p>RAM</p>
+                        </div>
+                    {{ end }}
+                </div>
+
+                <div class="component" data-component="gpu" onclick="handleClick('gpu')">
+                    {{ if .Build.GPU.Name }}
+                        <img src="/assets/img/default/gpu.jpg" alt="GPU">
+                        <div class="component-details">
+                            <h3>{{.Build.GPU.Name}}</h3>
+                            <p class="product-price">{{ calculateDiscountPrice .Build.GPU.General.Price .Build.GPU.General.Discount }}</p>
+                        </div>
+                    {{ else }}
+                        <div class="empty-component">
+                            <img src="/assets/icons/gpu.png" alt="GPU Icon">
+                            <p>GPU</p>
+                        </div>
+                    {{ end }}
+                </div>
+
+                <div class="component" data-component="ssd" onclick="handleClick('ssd')">
+                    {{ if .Build.SSD.Name }}
+                        <img src="/assets/img/default/ssd.jpg" alt="SSD">
+                        <div class="component-details">
+                            <h3>{{.Build.SSD.Name}}</h3>
+                            <p class="product-price">{{ calculateDiscountPrice .Build.SSD.General.Price .Build.SSD.General.Discount }}</p>
+                        </div>
+                    {{ else }}
+                        <div class="empty-component">
+                            <img src="/assets/icons/ssd.png" alt="SSD Icon">
+                            <p>SSD</p>
+                        </div>
+                    {{ end }}
+                </div>
+
+                <div class="component" data-component="hdd" onclick="handleClick('hdd')">
+                    {{ if .Build.HDD.Name }}
+                        <img src="/assets/img/default/hdd.jpg" alt="HDD">
+                        <div class="component-details">
+                            <h3>{{.Build.HDD.Name}}</h3>
+                            <p class="product-price">{{ calculateDiscountPrice .Build.HDD.General.Price .Build.HDD.General.Discount }}</p>
+                        </div>
+                    {{ else }}
+                        <div class="empty-component">
+                            <img src="/assets/icons/hdd.png" alt="HDD Icon">
+                            <p>HDD</p>
+                        </div>
+                    {{ end }}
+                </div>
+
+                <div class="component" data-component="cooling" onclick="handleClick('cooling')">
+                    {{ if .Build.Cooling.Name }}
+                        <img src="/assets/img/default/cooling.jpg" alt="Cooling">
+                        <div class="component-details">
+                            <h3>{{.Build.Cooling.Name}}</h3>
+                            <p class="product-price">{{ calculateDiscountPrice .Build.Cooling.General.Price .Build.Cooling.General.Discount }}</p>
+                        </div>
+                    {{ else }}
+                        <div class="empty-component">
+                            <img src="/assets/icons/cooling.png" alt="Cooling Icon">
+                            <p>Cooling</p>
+                        </div>
+                    {{ end }}
+                </div>
+
+                <div class="component" data-component="powersupply" onclick="handleClick('powersupply')">
+                    {{ if .Build.PowerSupply.Name }}
+                        <img src="/assets/img/default/powersupply.jpg" alt="Power Supply">
+                        <div class="component-details">
+                            <h3>{{.Build.PowerSupply.Name}}</h3>
+                            <p class="product-price">{{ calculateDiscountPrice .Build.PowerSupply.General.Price .Build.PowerSupply.General.Discount }}</p>
+                        </div>
+                    {{ else }}
+                        <div class="empty-component">
+                            <img src="/assets/icons/powersupply.png" alt="Power Supply Icon">
+                            <p>Power Supply</p>
+                        </div>
+                    {{ end }}
+                </div>
+
+                <div class="component" data-component="housing" onclick="handleClick('housing')">
+                    {{ if .Build.Housing.Name }}
+                        <img src="/assets/img/default/housing.jpg" alt="Housing">
+                        <div class="component-details">
+                            <h3>{{.Build.Housing.Name}}</h3>
+                            <p class="product-price">{{ calculateDiscountPrice .Build.Housing.General.Price .Build.Housing.General.Discount }}</p>
+                        </div>
+                    {{ else }}
+                        <div class="empty-component">
+                            <img src="/assets/icons/housing.png" alt="Housing Icon">
+                            <p>Housing</p>
+                        </div>
+                    {{ end }}
+                </div>
+            </div>
+            <div>
+                <form action="/createOrderFromBuild" method="post">
+                    <button class="submit-button" name="createOrderButton" id="createOrderFromBuildButton" type="submit" {{ if .PcBuilder }} style="display: block; width: 200px; margin-left: 40%; margin-right: 40%" {{ else }} style="display: none; width: 200px; margin-left: 40%; margin-right: 40%" {{ end }}>Create Order</button>
+                </form>
+            </div>
+
+            <!---<div id="sort">
+                <label for="sort-price">Sort by Price:</label>
+                <select id="sort-price">
+                    <option value="">None</option>
+                    <option value="asc">Low to High</option>
+                    <option value="desc">High to Low</option>
+                </select>
+            </div>--->
+            <h2>Results</h2>
+            <div id="product-list">
+                {{ if .ProductsList }}
+                    {{ range $index, $item := .ProductsList }}
+                        <div class="product-card">
+                            <div class="product-image">
+                                <img src="./assets/images/{{$item.ProductHeader.ProductType}}.jpg" alt="product Image">
+                            </div>
+                            <div class="product-details">
+                                <h3 class="product-name">{{$item.Name}}</h3>
+                                <div class="product-info">
+                                    <p>{{$item.Description}}</p>
+                                </div>
+                                <div class="product-actions">
+                                    <button class="buy-button" name="showProduct" type="button" onclick="showProduct('{{$item.ProductHeader.ProductType}}', '{{$item.ProductHeader.ID}}')">Show</button>
+                                    <button class="compare-button" name="modifyProduct" type="button" onclick="modifyProductForm('{{$item.ProductHeader.ProductType}}', '{{$item.ProductHeader.ID}}')">Modify</button>
+                                    {{ if gt $item.General.Amount 0 }}
+                                        <button id="addToCartButton{{$index}}" class="buy-button" type="button" onclick="addToCart('{{$item.ProductHeader.ProductType}}', '{{$item.ProductHeader.ID}}', {{$index}})">Add to cart</button>
+                                        {{ if $.PcBuilder }}
+                                            <button id="addToBuildButton{{$index}}" name="addToBuildButton" class="compare-button" type="button" onclick="addToBuild('{{$item.ProductHeader.ProductType}}', '{{$item.ProductHeader.ID}}')">Add to Build</button>
+                                        {{ end }}
+                                    {{ else }}
+                                        <button name="outOfStock" class="buy-button" type="button" disabled>Out of stock</button>
+                                    {{ end }}
+                                </div>
+
+                                {{ if ne $item.General.Discount 0 }}
+                                    <p class="price">
+                                        <span class="old-price">{{ $item.General.Price }}</span>
+                                        <span class="discount-percentage">-{{ $item.General.Discount }}%</span>
+                                        <span class="discount-price">{{ calculateDiscountPrice $item.General.Price $item.General.Discount }}</span>
+                                    </p>
+                                {{ else }}
+                                    <p class="price">
+                                        <span class="discount-price">{{ $item.General.Price }}</span>
+                                    </p>
+                                {{ end }}
+                            </div>
+                        </div>
+                    {{ end }}
+                {{ else }}
+                    <h3>No products found</h3>
+                {{ end }}
+            </div>
+
+        </div>
+
+
+    </main>
+    <script src="/assets/js/listProducts.js"></script>
+    <script>
+        let userID = '{{.User.ID}}'.slice(10, 34)
+
+        function inCartElementsNumber() {
+            let cart = getCookie('cart' + userID);
+            let counter = document.getElementById('cart-badge')
+            let number = 0
+
+            if (cart !== null) {
+                try {
+                    cart = JSON.parse(decodeURIComponent(cart));
+                    number = cart.length
+                } catch (e) {
+                    console.error("No cart elements found", e);
+                }
+            }
+            counter.innerText = number.toString()
+
+            if (number > 0) {
+                counter.style.display = 'block'
+            } else {
+                counter.style.display = 'none'
+            }
+        }
+
+        function isProductInCart(productID) {
+            let cart = getCookie('cart' + userID);
+
+            if (cart !== null) {
+                try {
+                    cart = JSON.parse(decodeURIComponent(cart));
+                    return cart.some(item => item.ID === productID);
+                } catch (e) {
+                    console.error("No cart elements found", e);
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        function isProductInBuild(productID) {
+            let build = getCookie('build' + userID);
+
+            if (build !== null) {
+                try {
+                    build = JSON.parse(decodeURIComponent(build));
+                    return build.some(item => item.ID === productID);
+                } catch (e) {
+                    console.error("No build elements found", e);
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            {{ range $index, $item := .ProductsList }}
+            if (isProductInCart('{{ $item.ProductHeader.ID }}'.slice(10, 34))) {
+                let cartButton = document.getElementById('addToCartButton{{ $index }}')
+                cartButton.style.backgroundColor = '#e3bc00';
+                cartButton.innerText = 'In cart'
+                cartButton.onclick = function () {
+                    window.location.href = `/openCart`
+                }
+            }
+            if (isProductInBuild('{{ $item.ProductHeader.ID }}'.slice(10, 34))) {
+                let buildButton = document.getElementById('addToBuildButton{{ $index }}')
+                buildButton.style.backgroundColor = '#e3bc00';
+                buildButton.innerText = 'Added to Build'
+                buildButton.onclick = function () {}
+            }
+            {{ end }}
+            inCartElementsNumber()
+        });
+    </script>
+    </body>
+    {{ template "templates/layouts/foot" .}}
 {{ end }}

@@ -3,7 +3,7 @@
     <body>
     <div class="card">
         <h1>Registration Form</h1>
-        <form action="#" method="post" class="registration-form">
+        <form action="/auth/register" method="post" class="registration-form">
             <div class="form-group">
                 <label for="name">Name:</label>
                 <input type="text" id="name" name="name" required>
@@ -42,7 +42,7 @@
             <button type="submit" id="registerButton" class="submit-button" disabled>Register</button>
         </form>
         <div class="login-link">
-            <a id="haveAcc" href="/login">Already have an account?</a>
+            <a id="haveAcc" href="/auth/login">Already have an account?</a>
         </div>
     </div>
     <script src="/assets/js/regis.js"></script>

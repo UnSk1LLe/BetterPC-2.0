@@ -2,6 +2,7 @@ package service
 
 import (
 	"BetterPC_2.0/internal/repository"
+	"BetterPC_2.0/pkg/data/models/categories"
 	"BetterPC_2.0/pkg/data/models/orders"
 	"BetterPC_2.0/pkg/data/models/products"
 	"BetterPC_2.0/pkg/data/models/products/general"
@@ -10,20 +11,27 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+type Authorization interface {
+	CreateUser(input users.RegisterInput) (primitive.ObjectID, error)
+	GenerateTokenPair(email, password string) (TokenPair, error)
+	ParseAccessToken(accessToken string) (string, error)
+	RefreshTokens(refreshToken string) (TokenPair, primitive.ObjectID, error)
+}
+
+type Categories interface {
+	GetList(filter bson.M) ([]categories.Category, error)
+	GetById(id primitive.ObjectID) (categories.Category, error)
+	UpdateById(id primitive.ObjectID, input categories.UpdateCategoryInput) error
+}
+
 type Product interface {
 	Create(product products.Product, productType string) (primitive.ObjectID, error)
 	GetById(id primitive.ObjectID, productType string) (products.Product, error)
 	GetList(filter bson.M, productType string) ([]products.Product, error)
+	GetStandardizedList(filter bson.M, productType string) ([]general.StandardizedProductData, error)
 	UpdateById(id primitive.ObjectID, input products.ProductInput, productType string) error
 	UpdateGeneralInfoById(productId primitive.ObjectID, input general.UpdateGeneralInput, productType string) error
 	DeleteById(productId primitive.ObjectID, productType string) error
-}
-
-type Authorization interface {
-	CreateUser(user users.User) (primitive.ObjectID, error)
-	GenerateTokenPair(email, password string) (TokenPair, error)
-	ParseAccessToken(accessToken string) (string, error)
-	RefreshTokens(refreshToken string) (TokenPair, error)
 }
 
 type User interface {
@@ -42,6 +50,7 @@ type Order interface {
 }
 
 type Service struct {
+	Categories
 	Authorization
 	User
 	Product
@@ -50,6 +59,7 @@ type Service struct {
 
 func NewService(repos *repository.Repository) *Service {
 	return &Service{
+		Categories:    NewCategoryService(repos.Categories),
 		Authorization: NewAuthService(repos.Authorization),
 		Product:       NewProductService(repos.Product),
 	}

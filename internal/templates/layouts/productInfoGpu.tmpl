@@ -1,0 +1,93 @@
+{{ define "templates/layouts/productInfoGpu"}}
+    <div class="product-item">
+        <div class="product-image">
+            <img src="{{ .Product.General.Image }}" alt="product Image">
+        </div>
+        <div class="product-details">
+            <table>
+                <tr>
+                    <td class="description-label">Manufacturer:</td>
+                    <td>{{ .Product.General.Manufacturer }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Model:</td>
+                    <td>{{ .Product.General.Model }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Architecture:</td>
+                    <td>{{ .Product.Architecture }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Memory Capacity:</td>
+                    <td>{{ .Product.Memory.Capacity }} GB</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Memory Type:</td>
+                    <td>{{ .Product.Memory.Type }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Memory Interface Width:</td>
+                    <td>{{ .Product.Memory.InterfaceWidth }} bit</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Memory Frequency:</td>
+                    <td>{{ .Product.Memory.Frequency }} MHz</td>
+                </tr>
+                <tr>
+                    <td class="description-label">GPU Frequency:</td>
+                    <td>{{ .Product.GpuFrequency }} MHz</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Process Size:</td>
+                    <td>{{ .Product.ProcessSize }} nm</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Max Resolution:</td>
+                    <td>{{ .Product.MaxResolution }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Interfaces:</td>
+                    <td>
+                        {{ .Product.Interfaces }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="description-label">Max Monitors:</td>
+                    <td>{{ .Product.MaxMonitors }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Cooling Type:</td>
+                    <td>{{ .Product.Cooling.Type }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Cooling Fan Number:</td>
+                    <td>{{ .Product.Cooling.FanNumber }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">TDP:</td>
+                    <td>{{ .Product.Tdp }} W</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Recommended Power Supply:</td>
+                    <td>{{ .Product.TdpR }} W</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Power Supply:</td>
+                    <td>
+                        {{ .Product.PowerSupply }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="description-label">Slots:</td>
+                    <td>{{ .Product.Slots }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Size:</td>
+                    <td>
+                        {{index .Product.Size 0}}x{{index .Product.Size 1}}x{{index .Product.Size 2}}mm
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+{{ end }}

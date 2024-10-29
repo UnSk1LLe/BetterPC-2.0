@@ -1,0 +1,67 @@
+{{ define "templates/layouts/productInfoRam"}}
+    <div class="product-item">
+        <div class="product-image">
+            <img src="{{ .Product.General.Image }}" alt="product Image">
+        </div>
+        <div class="product-details">
+            <table>
+                <tr>
+                    <td class="description-label">Manufacturer:</td>
+                    <td>{{ .Product.General.Manufacturer }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Model:</td>
+                    <td>{{ .Product.General.Model }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Capacity:</td>
+                    <td>{{ .Product.Capacity }} GB</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Number:</td>
+                    <td>{{ .Product.Number }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Form Factor:</td>
+                    <td>{{ .Product.FormFactor }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Rank:</td>
+                    <td>{{ .Product.Rank }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Type:</td>
+                    <td>{{ .Product.Type }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Frequency:</td>
+                    <td>{{ .Product.Frequency }} MHz</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Bandwidth:</td>
+                    <td>{{ .Product.Bandwidth }} MB/s</td>
+                </tr>
+                <tr>
+                    <td class="description-label">CAS Latency:</td>
+                    <td>{{ .Product.CasLatency }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Timing Scheme:</td>
+                    <td>{{ range .Product.TimingScheme }}{{ . }} {{ end }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Voltage:</td>
+                    <td>{{ .Product.Voltage }} V</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Cooling:</td>
+                    <td>{{ .Product.Cooling }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Height:</td>
+                    <td>{{ .Product.Height }} mm</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+{{ end }}

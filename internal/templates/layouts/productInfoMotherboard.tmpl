@@ -1,0 +1,51 @@
+{{ define "templates/layouts/productInfoMotherboard"}}
+    <div class="product-item">
+        <div class="product-image">
+            <img src="{{ .Product.General.Image }}" alt="product Image">
+        </div>
+        <div class="product-details">
+            <table>
+                <tr>
+                    <td class="description-label">Manufacturer:</td>
+                    <td>{{ .Product.General.Manufacturer }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Model:</td>
+                    <td>{{ .Product.General.Model }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Socket:</td>
+                    <td>{{ .Product.Socket }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Chipset:</td>
+                    <td>{{ .Product.Chipset }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Form Factor:</td>
+                    <td>{{ .Product.FormFactor }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Interfaces:</td>
+                    <td>{{ .Product.Interfaces.Sata3 }} SATA3, {{ .Product.Interfaces.M2 }} M2</td>
+                </tr>
+                <tr>
+                    <td class="description-label">RAM:</td>
+                    <td>{{ .Product.Ram.Slots }} slots, {{ .Product.Ram.Type }} {{ .Product.Ram.MaxFrequency }}MHz ({{ .Product.Ram.MaxCapacity }})</td>
+                </tr>
+                <tr>
+                    <td class="description-label">PCI-E Standard:</td>
+                    <td>{{ .Product.PciStandard }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Motherboard power connector:</td>
+                    <td>{{ .Product.MbPower }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">CPU power connector:</td>
+                    <td>{{ .Product.CpuPower }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+{{ end }}

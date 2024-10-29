@@ -1,3 +1,59 @@
-{{ define "templates/pages/cpuInfo"}}
-
+{{ define "templates/layouts/productInfoCpu"}}
+    <div class="product-item">
+        <div class="product-image">
+            <img src="{{ .Product.General.Image }}" alt="product Image">
+        </div>
+        <div class="product-details">
+            <table>
+                <tr>
+                    <td class="description-label">Manufacturer:</td>
+                    <td>{{ .Product.General.Manufacturer }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Model:</td>
+                    <td>{{ .Product.General.Model }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Category:</td>
+                    <td>{{ .Product.Main.Category }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Generation:</td>
+                    <td>{{ .Product.Main.Generation }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Socket:</td>
+                    <td>{{ .Product.Main.Socket }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Cores:</td>
+                    <td>{{ .Product.Cores.Pcores }}P/{{ .Product.Cores.Ecores }}E/{{ .Product.Cores.Threads }}T</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Technical Process:</td>
+                    <td>{{ .Product.Cores.TechnicalProcess }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">RAM:</td>
+                    <td>{{ .Product.Ram.MaxFrequency }}MHz ({{ .Product.Ram.MaxCapacity }})</td>
+                </tr>
+                <tr>
+                    <td class="description-label">TDP:</td>
+                    <td>{{ .Product.Tdp }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Max Temperature:</td>
+                    <td>{{ .Product.MaxTemperature }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Graphics:</td>
+                    <td>{{ .Product.Graphics }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">PCI-E:</td>
+                    <td>{{ .Product.PciE }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
 {{ end }}

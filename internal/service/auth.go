@@ -32,20 +32,49 @@ func NewAuthService(repo repository.Authorization) *AuthService {
 	return &AuthService{repo: repo}
 }
 
-func (s *AuthService) CreateUser(user users.User) (primitive.ObjectID, error) {
-	user.UserInfo.Password = s.generatePasswordHash(user.UserInfo.Password)
-	return s.repo.CreateUser(user)
+func (s *AuthService) CreateUser(input users.RegisterInput) (primitive.ObjectID, error) {
+
+	dob, err := time.Parse("2006-01-02", input.Dob) //Parse dob string to time.Time
+	if err != nil {
+		return primitive.NilObjectID, errors.New("invalid date of birth format")
+	}
+
+	passwordHash, err := s.generatePasswordHash(input.Password)
+	if err != nil {
+		return primitive.NilObjectID, err
+	}
+
+	user := users.NewUserDefault()
+	user.UserInfo.Email = input.Email
+	user.UserInfo.Name = input.Name
+	user.UserInfo.Surname = input.Surname
+	user.UserInfo.Dob = dob
+	user.UserInfo.Password = passwordHash
+
+	return s.repo.CreateUser(*user)
 }
 
-func (s *AuthService) generatePasswordHash(password string) string {
-	passwordHash, _ := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-	return string(passwordHash)
+func (s *AuthService) generatePasswordHash(password string) (string, error) {
+	passwordHash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return "", err
+	}
+	return string(passwordHash), err
 }
 
 func (s *AuthService) GenerateTokenPair(email, password string) (TokenPair, error) {
-	user, err := s.repo.GetUser(email, s.generatePasswordHash(password))
+
+	user, err := s.repo.GetUser(email)
+
 	if err != nil {
 		return TokenPair{}, err
+	}
+
+	// Compare the provided password with the stored hash
+	err = bcrypt.CompareHashAndPassword([]byte(user.UserInfo.Password), []byte(password))
+	fmt.Println(err)
+	if err != nil {
+		return TokenPair{}, errors.New("invalid credentials")
 	}
 
 	accessTokenString, err := generateAccessToken(&user)
@@ -119,22 +148,22 @@ func (s *AuthService) ParseAccessToken(accessToken string) (string, error) {
 	return claims.UserId, nil
 }
 
-func (s *AuthService) RefreshTokens(refreshTokenString string) (TokenPair, error) {
+func (s *AuthService) RefreshTokens(refreshTokenString string) (TokenPair, primitive.ObjectID, error) {
 	refreshToken, err := jwt.ParseWithClaims(refreshTokenString, &tokenClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return configs.GetConfig().Tokens.RefreshTokenSigningKey, nil
 	})
 	if err != nil || !refreshToken.Valid {
-		return TokenPair{}, errors.New("invalid or expired refresh token")
+		return TokenPair{}, primitive.NilObjectID, errors.New("invalid or expired refresh token")
 	}
 
 	claims, ok := refreshToken.Claims.(*tokenClaims)
 	if !ok || claims.UserId == "" {
-		return TokenPair{}, errors.New("invalid token claims")
+		return TokenPair{}, primitive.NilObjectID, errors.New("invalid token claims")
 	}
 
 	userID, err := primitive.ObjectIDFromHex(claims.UserId)
 	if err != nil {
-		return TokenPair{}, errors.New("invalid token claims: could not get Object ID from hex")
+		return TokenPair{}, primitive.NilObjectID, errors.New("invalid token claims: could not get Object ID from hex")
 	}
 
 	newAccessToken, err := generateAccessToken(&users.User{
@@ -145,7 +174,7 @@ func (s *AuthService) RefreshTokens(refreshTokenString string) (TokenPair, error
 		},
 	})
 	if err != nil {
-		return TokenPair{}, err
+		return TokenPair{}, primitive.NilObjectID, err
 	}
 
 	newRefreshToken, err := generateRefreshToken(&users.User{
@@ -156,7 +185,7 @@ func (s *AuthService) RefreshTokens(refreshTokenString string) (TokenPair, error
 		},
 	})
 	if err != nil {
-		return TokenPair{}, err
+		return TokenPair{}, primitive.NilObjectID, err
 	}
 
 	tokens := TokenPair{
@@ -164,5 +193,5 @@ func (s *AuthService) RefreshTokens(refreshTokenString string) (TokenPair, error
 		RefreshToken: newRefreshToken,
 	}
 
-	return tokens, nil
+	return tokens, userID, nil
 }

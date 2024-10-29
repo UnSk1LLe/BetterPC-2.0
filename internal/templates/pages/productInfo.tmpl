@@ -1,0 +1,202 @@
+{{ define "templates/pages/productInfo" }}
+    {{ template "templates/layouts/head" .}}
+    {{ template "templates/layouts/header" .}}
+    <main>
+        <div class="product-table">
+        {{ if eq .ProductType "cpu" }}
+            {{ template "templates/layouts/productInfoCpu" .}}
+        {{ else if eq .ProductType "motherboard" }}
+            {{ template "templates/layouts/productInfoMotherboard" .}}
+        {{ else if eq .ProductType "ram" }}
+            {{ template "templates/layouts/productInfoRam" .}}
+        {{ else if eq .ProductType "ssd" }}
+            {{ template "templates/layouts/productInfoSsd" .}}
+        {{ else if eq .ProductType "hdd" }}
+            {{ template "templates/layouts/productInfoHdd" .}}
+        {{ else if eq .ProductType "gpu" }}
+            {{ template "templates/layouts/productInfoGpu" .}}
+        {{ else if eq .ProductType "cooling" }}
+            {{ template "templates/layouts/productInfoCooling" .}}
+        {{ else if eq .ProductType "housing" }}
+            {{ template "templates/layouts/productInfoHousing" .}}
+        {{ else if eq .ProductType "powersupply" }}
+            {{ template "templates/layouts/productInfoPowerSupply" .}}
+        {{ end }}
+
+        <div>
+            {{ if ne .Product.General.Discount 0 }}
+                <p>
+                    <span class="old-price">{{ .Product.General.Price }}</span>
+                    <span class="discount-percentage">-{{ .Product.General.Discount }}%</span>
+                    <span class="discount-price">{{ calculateDiscountPrice .Product.General.Price .Product.General.Discount }}</span>
+                </p>
+            {{ else }}
+                <p>
+                    <span class="discount-price">{{ .Product.General.Price }}</span>
+                </p>
+            {{ end }}
+        </div>
+
+        <div class="product-actions">
+            {{ if gt .Product.General.Amount 0 }}
+                <button id="addToCartButton" class="buy-button" type="button" onclick="addToCart('{{.ProductType}}', '{{.Product.ID}}')">Add to cart</button>
+                {{ if .IsCompatible }}
+                    <button id="addToBuildButton" name="addToBuildButton" class="compare-button" type="button" onclick="addToBuild('{{.ProductType}}', '{{.Product.ID}}')">Add to Build</button>
+                {{ else }}
+                    <button name="notCompatible" class="buy-button" type="button" disabled>Incompatible</button>
+                {{ end }}
+            {{ else }}
+                <button name="outOfStock" class="buy-button" type="button" disabled>Out of stock</button>
+            {{ end }}
+        </div>
+        </div>
+    </main>
+    <script src="/assets/js/searchAll.js"></script>
+    <script>
+        let userID = '{{.User.ID}}'
+
+        function addToCart(productType, productID) {
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', '/shop/addProductToCart', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        let cartButton = document.getElementById('addToCartButton')
+                        cartButton.style.backgroundColor = '#e3bc00';
+                        cartButton.innerText = 'In cart'
+                        cartButton.onclick = function () {
+                            window.location.href = `/openCart`
+                        }
+                        cartNumberInc()
+                    } else {
+                        alert('Error adding product to cart');
+                    }
+                }
+            };
+            let params = 'productType=' + encodeURIComponent(productType) + '&productID=' + encodeURIComponent(productID);
+            xhr.send(params);
+        }
+
+        function addToBuild(productType, productID) {
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', 'shop/addProductToBuild', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        let buildButton = document.getElementById('addToBuildButton')
+                        buildButton.style.backgroundColor = '#e3bc00';
+                        buildButton.innerText = "Added to Build"
+                    } else {
+                        alert('Error adding product to build');
+                    }
+                }
+            };
+            let params = 'productType=' + encodeURIComponent(productType) + '&productID=' + encodeURIComponent(productID);
+            xhr.send(params);
+        }
+
+        function cartNumberInc() {
+            let counter = document.getElementById('cart-badge')
+            let number = parseInt(counter.innerText)
+            number++
+            counter.innerText = number.toString()
+            counter.style.display = 'block'
+        }
+
+
+        function inCartElementsNumber() {
+            let cart = getCookie('cart' + userID);
+            console.log(userID)
+            let counter = document.getElementById('cart-badge')
+            let number = 0
+
+            if (cart !== null) {
+                try {
+                    cart = JSON.parse(decodeURIComponent(cart));
+                    number = cart.length
+                } catch (e) {
+                    console.error("No cart elements found", e);
+                }
+            }
+            counter.innerText = number.toString()
+
+            if (number > 0) {
+                counter.style.display = 'block'
+            } else {
+                counter.style.display = 'none'
+            }
+        }
+
+        function getCookie(name) {
+            let value = "; " + document.cookie;
+            let parts = value.split("; " + name + "=");
+            if (parts.length === 2) return parts.pop().split(";").shift();
+        }
+
+        function isProductInCart(productID) {
+            let cart = getCookie('cart' + userID);
+
+            if (cart !== null) {
+                try {
+                    cart = JSON.parse(decodeURIComponent(cart));
+                    return cart.some(item => item.ID === productID);
+                } catch (e) {
+                    console.error("No cart elements found", e);
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        function isProductInBuild(productID) {
+            let build = getCookie('build' + userID);
+
+            if (build !== null) {
+                try {
+                    build = JSON.parse(decodeURIComponent(build));
+                    return build.some(item => item.ID === productID);
+                } catch (e) {
+                    console.error("No build elements found", e);
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            if (isProductInCart('{{ .Product.ID }}'.slice(10, 34))) {
+                let cartButton = document.getElementById('addToCartButton')
+                cartButton.style.backgroundColor = '#e3bc00';
+                cartButton.innerText = 'In cart'
+                cartButton.onclick = function () {
+                    window.location.href = `/openCart`
+                }
+            }
+            if (isProductInBuild('{{ .Product.ID }}'.slice(10, 34))) {
+                let buildButton = document.getElementById('addToBuildButton')
+                buildButton.style.backgroundColor = '#e3bc00';
+                buildButton.innerText = 'Added to Build'
+                buildButton.onclick = function () {}
+            }
+            inCartElementsNumber()
+        });
+
+        function formatPrice(price) {
+            return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+        }
+
+        document.querySelectorAll('.old-price').forEach(function(element) {
+            let oldPrice = parseInt(element.innerText);
+            element.innerText = formatPrice(oldPrice) + " ₸";
+        });
+
+        document.querySelectorAll('.discount-price').forEach(function(element) {
+            let discountPrice = parseInt(element.innerText);
+            element.innerText = formatPrice(discountPrice) + " ₸";
+        });
+    </script>
+    </body>
+    {{ template "templates/layouts/foot" .}}
+{{ end }}

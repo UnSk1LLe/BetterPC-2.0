@@ -5,6 +5,7 @@ import (
 	"BetterPC_2.0/internal/repository/productsDecoders"
 	"BetterPC_2.0/pkg/data/models/products"
 	"BetterPC_2.0/pkg/data/models/products/general"
+	"BetterPC_2.0/pkg/database/mongoDb"
 	"context"
 	"errors"
 	"fmt"
@@ -15,10 +16,10 @@ import (
 )
 
 type ProductMongo struct {
-	db *MongoDbConnection
+	db *mongoDb.MongoConnection
 }
 
-func NewProductMongo(mongoConn *MongoDbConnection) *ProductMongo {
+func NewProductMongo(mongoConn *mongoDb.MongoConnection) *ProductMongo {
 	return &ProductMongo{db: mongoConn}
 }
 

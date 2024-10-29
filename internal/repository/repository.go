@@ -1,13 +1,21 @@
 package repository
 
 import (
+	"BetterPC_2.0/pkg/data/models/categories"
 	"BetterPC_2.0/pkg/data/models/orders"
 	"BetterPC_2.0/pkg/data/models/products"
 	"BetterPC_2.0/pkg/data/models/products/general"
 	"BetterPC_2.0/pkg/data/models/users"
+	"BetterPC_2.0/pkg/database/mongoDb"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
+
+type Categories interface {
+	GetList(filter bson.M) ([]categories.Category, error)
+	GetById(id primitive.ObjectID) (categories.Category, error)
+	UpdateById(id primitive.ObjectID, input categories.UpdateCategoryInput) error
+}
 
 type Product interface {
 	Create(product products.Product, productType string) (primitive.ObjectID, error)
@@ -20,7 +28,7 @@ type Product interface {
 
 type Authorization interface {
 	CreateUser(user users.User) (primitive.ObjectID, error)
-	GetUser(email, password string) (users.User, error)
+	GetUser(email string) (users.User, error)
 }
 
 type User interface {
@@ -39,13 +47,14 @@ type Order interface {
 }
 
 type Repository struct {
+	Categories
 	Authorization
 	User
 	Product
 	Order
 }
 
-func NewRepository(MongoConnection *MongoDbConnection) *Repository {
+func NewRepository(MongoConnection *mongoDb.MongoConnection) *Repository {
 	return &Repository{
 		Authorization: NewAuthMongo(MongoConnection),
 		Product:       NewProductMongo(MongoConnection),

@@ -1,0 +1,25 @@
+{{ define "tamplates/layouts/pagination" }}
+    <div class="pagination">
+        <ul class="pagination-list">
+            {{ if gt .TotalPages 1 }}
+                {{ if ne .CurrentPage 1 }}
+                    <li class="pagination-item"><a href="javascript:void(0);" onclick="listProducts('{{ .ProductType }}', 1, '{{.SearchQuery}}', true)">&laquo;</a></li>
+                    <li class="pagination-item"><a href="javascript:void(0);" onclick="listProducts('{{ .ProductType }}','{{ sub .CurrentPage 1 }}', '{{.SearchQuery}}', true)">&lsaquo;</a></li>
+                {{ end }}
+
+                {{ range $page := until 1 .TotalPages }}
+                    {{ if eq $page $.CurrentPage }}
+                        <li class="pagination-item active"><span>{{ $page }}</span></li>
+                    {{ else }}
+                        <li class="pagination-item"><a href="javascript:void(0);" onclick="listProducts('{{ $.ProductType }}', '{{ $page }}', '{{$.SearchQuery}}', true)">{{ $page }}</a></li>
+                    {{ end }}
+                {{ end }}
+
+                {{ if ne .CurrentPage .TotalPages }}
+                    <li class="pagination-item"><a href="javascript:void(0);" onclick="listProducts('{{ .ProductType }}', '{{ add .CurrentPage 1 }}', '{{.SearchQuery}}', true)">&rsaquo;</a></li>
+                    <li class="pagination-item"><a href="javascript:void(0);" onclick="listProducts('{{ .ProductType }}', '{{ .TotalPages }}', '{{.SearchQuery}}', true)">&raquo;</a></li>
+                {{ end }}
+            {{ end }}
+        </ul>
+    </div>
+{{ end }}

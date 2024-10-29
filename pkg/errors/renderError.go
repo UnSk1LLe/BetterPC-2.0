@@ -15,7 +15,7 @@ func RenderError(c *gin.Context, status int, action string, method string, err e
 		finalMessage = message[0]
 	}
 
-	html.Render(c, status, "templates/pages/error", gin.H{
+	html.Render(c, status, "templates/errors/error", gin.H{
 		"Action":       action,
 		"ActionMethod": method,
 		"Error":        err.Error(),

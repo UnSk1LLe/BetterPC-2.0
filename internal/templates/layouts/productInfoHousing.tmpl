@@ -1,0 +1,61 @@
+{{ define "templates/layouts/productInfoHousing"}}
+    <div class="product-item">
+        <div class="product-image">
+            <img src="{{ .Product.General.Image }}" alt="product Image">
+        </div>
+        <div class="product-details">
+            <table>
+                <tr>
+                    <td class="description-label">Manufacturer:</td>
+                    <td>{{ .Product.General.Manufacturer }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Model:</td>
+                    <td>{{ .Product.General.Model }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Form Factor:</td>
+                    <td>{{ .Product.FormFactor }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Drive Bays 3.5":</td>
+                    <td>{{ .Product.DriveBays.D35 }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Drive Bays 2.5":</td>
+                    <td>{{ .Product.DriveBays.D25 }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Motherboard Form Factor:</td>
+                    <td>{{ .Product.MbFormFactor }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Power Supply Form Factor:</td>
+                    <td>{{ .Product.PsFormFactor }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Expansion Slots:</td>
+                    <td>{{ .Product.ExpansionSlots }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Graphic Card Size:</td>
+                    <td>{{ .Product.GraphicCardSize }} mm</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Cooler Height:</td>
+                    <td>{{ .Product.CoolerHeight }} mm</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Size:</td>
+                    <td>
+                        {{index .Product.Size 0}}x{{index .Product.Size 1}}x{{index .Product.Size 2}} mm
+                    </td>
+                </tr>
+                <tr>
+                    <td class="description-label">Weight:</td>
+                    <td>{{ .Product.Weight }} kg</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+{{ end }}

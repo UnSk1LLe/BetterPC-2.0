@@ -1,3 +1,55 @@
-{{ define "templates/pages/coolingInfo"}}
-
+{{ define "templates/layouts/productInfoCooling"}}
+    <div class="product-item">
+        <div class="product-image">
+            <img src="{{ .Product.General.Image }}" alt="product Image">
+        </div>
+        <div class="product-details">
+            <table>
+                <tr>
+                    <td class="description-label">Manufacturer:</td>
+                    <td>{{ .Product.General.Manufacturer }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Model:</td>
+                    <td>{{ .Product.General.Model }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Type:</td>
+                    <td>{{ .Product.Type }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Sockets:</td>
+                    <td>{{ range .Product.Sockets }}{{ . }} {{ end }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Fans:</td>
+                    <td>{{ range .Product.Fans }}{{ . }} {{ end }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">TDP:</td>
+                    <td>{{ .Product.Tdp }}W</td>
+                </tr>
+                <tr>
+                    <td class="description-label">RPM:</td>
+                    <td>{{ range .Product.Rpm }}{{ . }} {{ end }}RPM</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Noise Level:</td>
+                    <td>{{ .Product.NoiseLevel }} dB</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Mount Type:</td>
+                    <td>{{ .Product.MountType }}</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Power:</td>
+                    <td>{{ .Product.Power }}W</td>
+                </tr>
+                <tr>
+                    <td class="description-label">Height:</td>
+                    <td>{{ .Product.Height }} mm</td>
+                </tr>
+            </table>
+        </div>
+    </div>
 {{ end }}
