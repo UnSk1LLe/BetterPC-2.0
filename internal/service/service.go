@@ -15,7 +15,7 @@ type Authorization interface {
 	CreateUser(input users.RegisterInput) (primitive.ObjectID, error)
 	GenerateTokenPair(email, password string) (TokenPair, error)
 	ParseAccessToken(accessToken string) (string, error)
-	RefreshTokens(refreshToken string) (TokenPair, primitive.ObjectID, error)
+	RefreshTokens(refreshToken string) (TokenPair, string, error)
 }
 
 type Categories interface {

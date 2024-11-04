@@ -4,6 +4,7 @@ import (
 	"BetterPC_2.0/internal/repository/productTypes"
 	"BetterPC_2.0/internal/repository/productsDecoders"
 	"BetterPC_2.0/pkg/data/models/products"
+	"BetterPC_2.0/pkg/data/models/products/details"
 	"BetterPC_2.0/pkg/data/models/products/general"
 	"BetterPC_2.0/pkg/database/mongoDb"
 	"context"
@@ -17,6 +18,18 @@ import (
 
 type ProductMongo struct {
 	db *mongoDb.MongoConnection
+}
+
+var productTypeFactory = map[string]func() products.Product{
+	"cpu":         func() products.Product { return &details.Cpu{} },
+	"motherboard": func() products.Product { return &details.Motherboard{} },
+	"ram":         func() products.Product { return &details.Ram{} },
+	"gpu":         func() products.Product { return &details.Gpu{} },
+	"ssd":         func() products.Product { return &details.Ssd{} },
+	"hdd":         func() products.Product { return &details.Hdd{} },
+	"cooling":     func() products.Product { return &details.Cooling{} },
+	"housing":     func() products.Product { return &details.Housing{} },
+	"powersupply": func() products.Product { return &details.PowerSupply{} },
 }
 
 func NewProductMongo(mongoConn *mongoDb.MongoConnection) *ProductMongo {
@@ -51,12 +64,16 @@ func (p *ProductMongo) GetById(id primitive.ObjectID, productType string) (produ
 		return nil, res.Err()
 	}
 
-	product, err := productsDecoders.DecodeProduct(productType, res)
+	factory, ok := productTypeFactory[productType]
+	if !ok {
+		return nil, errors.New(fmt.Sprintf("unsupported product type: %s", productType))
+	}
+
+	product, err := productsDecoders.DecodeProduct(res, factory)
 	if err != nil {
 		return nil, err
 	}
-
-	return product, nil
+	return *product, nil
 }
 
 func (p *ProductMongo) GetList(filter bson.M, productType string) ([]products.Product, error) {
@@ -70,12 +87,17 @@ func (p *ProductMongo) GetList(filter bson.M, productType string) ([]products.Pr
 		return nil, errors.New(fmt.Sprintf("error finding productTypes: %s", err.Error()))
 	}
 
-	productsList, err := productsDecoders.DecodeProductsList(productType, cur)
+	factory, ok := productTypeFactory[productType]
+	if !ok {
+		return nil, errors.New(fmt.Sprintf("unsupported product type: %s", productType))
+	}
+
+	productsList, err := productsDecoders.DecodeProductsList(cur, factory)
 	if err != nil {
 		return nil, err
 	}
 
-	return *(productsList), nil
+	return *productsList, nil
 }
 
 func (p *ProductMongo) UpdateById(productId primitive.ObjectID, input products.ProductInput, productType string) error {

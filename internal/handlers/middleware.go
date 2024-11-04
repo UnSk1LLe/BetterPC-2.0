@@ -13,7 +13,7 @@ func (h *Handler) UserIdentity(c *gin.Context) {
 		return
 	}
 
-	userId, err := h.services.Authorization.ParseAccessToken(accessToken)
+	_, err = h.services.Authorization.ParseAccessToken(accessToken)
 	if errors.Is(err, jwt.ErrTokenExpired) {
 		h.logger.Infof("access token expired, trying to refresh...")
 		refreshToken, err := c.Cookie("refresh-token")
@@ -22,15 +22,15 @@ func (h *Handler) UserIdentity(c *gin.Context) {
 			return
 		}
 
-		tokens, err := h.services.Authorization.RefreshTokens(refreshToken)
+		tokens, _, err := h.services.Authorization.RefreshTokens(refreshToken)
 		if err != nil {
 			h.logger.Errorf("error refreshing tokens: %v", err)
 			return
 		}
 
-		c.SetCookie("access-token", tokens.AccessToken, 3600, "/", "", true, true)
+		c.SetCookie("accessToken", tokens.AccessToken, 3600, "/", "", true, true)
 
-		c.SetCookie("refresh-token", tokens.RefreshToken, 7*24*3600, "/", "", true, true)
+		c.SetCookie("refreshToken", tokens.RefreshToken, 7*24*3600, "/", "", true, true)
 	}
 
 }

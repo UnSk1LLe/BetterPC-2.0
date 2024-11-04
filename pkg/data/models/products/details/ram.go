@@ -3,6 +3,7 @@ package details
 import (
 	"BetterPC_2.0/pkg/data/models/products/general"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"strconv"
 )
 
 type Ram struct {
@@ -22,17 +23,22 @@ type Ram struct {
 	Height       int                `bson:"height"`
 }
 
-func (r Ram) GetProductModel() string {
-	return r.General.Model
+func (ram Ram) GetProductModel() string {
+	return ram.General.Model
 }
 
-// TODO add standardizers for each product type
-func (r Ram) Standardize() general.StandardizedProductData {
-	return general.StandardizedProductData{}
+func (ram Ram) Standardize() general.StandardizedProductData {
+	var product general.StandardizedProductData
+	product.ProductHeader.ID = ram.ID.Hex()
+	product.ProductHeader.ProductType = "ram"
+	product.Name = ram.General.Model
+	product.General = ram.General
+	product.Description = "Capacity: " + strconv.Itoa(ram.Capacity) + "GB, Type: " + ram.Type +
+		", Frequency: " + strconv.Itoa(ram.Frequency) + "MHz, CAS Latency: " + ram.CasLatency
+	return product
 }
-
-func (r Ram) ProductFinalPrice() int {
-	return r.General.CalculateFinalPrice()
+func (ram Ram) ProductFinalPrice() int {
+	return ram.General.CalculateFinalPrice()
 }
 
 type UpdateRamInput struct {

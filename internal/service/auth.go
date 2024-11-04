@@ -137,33 +137,33 @@ func (s *AuthService) ParseAccessToken(accessToken string) (string, error) {
 		return configs.GetConfig().Tokens.AccessTokenSigningKey, nil
 	})
 	if err != nil {
-		return primitive.NilObjectID.Hex(), err
+		return "", err
 	}
 
 	claims, ok := token.Claims.(*tokenClaims)
 	if !ok {
-		return primitive.NilObjectID.Hex(), errors.New("token claims are not of type *tokenClaims")
+		return "", errors.New("token claims are not of type *tokenClaims")
 	}
 
 	return claims.UserId, nil
 }
 
-func (s *AuthService) RefreshTokens(refreshTokenString string) (TokenPair, primitive.ObjectID, error) {
+func (s *AuthService) RefreshTokens(refreshTokenString string) (TokenPair, string, error) {
 	refreshToken, err := jwt.ParseWithClaims(refreshTokenString, &tokenClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return configs.GetConfig().Tokens.RefreshTokenSigningKey, nil
 	})
 	if err != nil || !refreshToken.Valid {
-		return TokenPair{}, primitive.NilObjectID, errors.New("invalid or expired refresh token")
+		return TokenPair{}, "", errors.New("invalid or expired refresh token")
 	}
 
 	claims, ok := refreshToken.Claims.(*tokenClaims)
 	if !ok || claims.UserId == "" {
-		return TokenPair{}, primitive.NilObjectID, errors.New("invalid token claims")
+		return TokenPair{}, "", errors.New("invalid token claims")
 	}
 
 	userID, err := primitive.ObjectIDFromHex(claims.UserId)
 	if err != nil {
-		return TokenPair{}, primitive.NilObjectID, errors.New("invalid token claims: could not get Object ID from hex")
+		return TokenPair{}, "", errors.New("invalid token claims: could not get Object ID from hex")
 	}
 
 	newAccessToken, err := generateAccessToken(&users.User{
@@ -174,7 +174,7 @@ func (s *AuthService) RefreshTokens(refreshTokenString string) (TokenPair, primi
 		},
 	})
 	if err != nil {
-		return TokenPair{}, primitive.NilObjectID, err
+		return TokenPair{}, "", err
 	}
 
 	newRefreshToken, err := generateRefreshToken(&users.User{
@@ -185,7 +185,7 @@ func (s *AuthService) RefreshTokens(refreshTokenString string) (TokenPair, primi
 		},
 	})
 	if err != nil {
-		return TokenPair{}, primitive.NilObjectID, err
+		return TokenPair{}, "", err
 	}
 
 	tokens := TokenPair{
@@ -193,5 +193,5 @@ func (s *AuthService) RefreshTokens(refreshTokenString string) (TokenPair, primi
 		RefreshToken: newRefreshToken,
 	}
 
-	return tokens, userID, nil
+	return tokens, userID.Hex(), nil
 }

@@ -3,6 +3,7 @@ package details
 import (
 	"BetterPC_2.0/pkg/data/models/products/general"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"strconv"
 )
 
 type Gpu struct {
@@ -38,6 +39,26 @@ type interfacesGpu struct {
 type coolingGpu struct {
 	Type      string `bson:"type"`
 	FanNumber int    `bson:"fan_number"`
+}
+
+func (gpu Gpu) GetProductModel() string {
+	return gpu.General.Model
+}
+
+func (gpu Gpu) Standardize() general.StandardizedProductData {
+	var product general.StandardizedProductData
+	product.ProductHeader.ID = gpu.ID.Hex()
+	product.ProductHeader.ProductType = "gpu"
+	product.Name = gpu.General.Model
+	product.General = gpu.General
+	product.Description = "Architecture: " + gpu.Architecture + ", Memory: " + strconv.Itoa(gpu.Memory.Capacity) +
+		"GB " + gpu.Memory.Type + ", Frequency: " + strconv.Itoa(gpu.GpuFrequency) + "MHz, " +
+		"Max Resolution: " + gpu.MaxResolution
+	return product
+}
+
+func (gpu Gpu) ProductFinalPrice() int {
+	return gpu.General.CalculateFinalPrice()
 }
 
 type UpdateGpuInput struct {

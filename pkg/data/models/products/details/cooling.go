@@ -3,6 +3,8 @@ package details
 import (
 	"BetterPC_2.0/pkg/data/models/products/general"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"strconv"
+	"strings"
 )
 
 type Cooling struct {
@@ -17,6 +19,25 @@ type Cooling struct {
 	MountType  string             `bson:"mount_type"`
 	Power      int                `bson:"power"`
 	Height     int                `bson:"height"`
+}
+
+func (cooling Cooling) GetProductModel() string {
+	return cooling.General.Model
+}
+
+func (cooling Cooling) Standardize() general.StandardizedProductData {
+	var product general.StandardizedProductData
+	product.ProductHeader.ID = cooling.ID.Hex()
+	product.ProductHeader.ProductType = "cooling"
+	product.Name = cooling.General.Model
+	product.General = cooling.General
+	product.Description = "Type: " + cooling.Type + ", Sockets: " + strings.Join(cooling.Sockets, ", ") +
+		", Fans: " + strconv.Itoa(len(cooling.Fans)) + ", TDP: " + strconv.Itoa(cooling.Tdp) + "W"
+	return product
+}
+
+func (cooling Cooling) ProductFinalPrice() int {
+	return cooling.General.CalculateFinalPrice()
 }
 
 type UpdateCoolingInput struct {

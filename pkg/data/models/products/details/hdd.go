@@ -3,6 +3,7 @@ package details
 import (
 	"BetterPC_2.0/pkg/data/models/products/general"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"strconv"
 )
 
 type Hdd struct {
@@ -18,6 +19,25 @@ type Hdd struct {
 	Mftb         int                `bson:"mftb"`
 	Size         []float64          `bson:"size"`
 	Weight       int                `bson:"weight"`
+}
+
+func (hdd Hdd) GetProductModel() string {
+	return hdd.General.Model
+}
+
+func (hdd Hdd) Standardize() general.StandardizedProductData {
+	var product general.StandardizedProductData
+	product.ProductHeader.ID = hdd.ID.Hex()
+	product.ProductHeader.ProductType = "hdd"
+	product.Name = hdd.General.Model
+	product.General = hdd.General
+	product.Description = "Type: " + hdd.Type + ", Capacity: " + strconv.Itoa(hdd.Capacity) + "GB, " +
+		"Interface: " + hdd.Interface + ", Spindle Speed: " + strconv.Itoa(hdd.SpindleSpeed) + "RPM"
+	return product
+}
+
+func (hdd Hdd) ProductFinalPrice() int {
+	return hdd.General.CalculateFinalPrice()
 }
 
 type UpdateHddInput struct {

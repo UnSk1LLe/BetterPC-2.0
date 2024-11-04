@@ -1,45 +1,37 @@
 package productsDecoders
 
 import (
-	"BetterPC_2.0/internal/repository/productsDecoders/Products"
 	"BetterPC_2.0/pkg/data/models/products"
-	"errors"
+	"context"
 	"go.mongodb.org/mongo-driver/mongo"
+	"time"
 )
 
-func DecodeProduct(productType string, result *mongo.SingleResult) (products.Product, error) {
-	switch productType {
-	case "cpu":
-		return Products.DecodeCpu(result)
-	// case "ram": return DecodeRam(result)
-	// case "motherboard": return DecodeMotherboard(result)
-	// case "ssd": return DecodeSsd(result)
-	// case "hdd": return DecodeHdd(result)
-	// case "powersupply": return DecodePowerSupply(result)
-	// case "cooling": return DecodeCooling(result)
-	// case "housing": return DecodeHousing(result)
-	// case "gpu": return DecodeGpu(result)
-
-	default:
-		return nil, errors.New("unsupported product type")
+func DecodeProduct(result *mongo.SingleResult, factory func() products.Product) (*products.Product, error) {
+	product := factory() // Create a new instance of the product
+	if err := result.Decode(product); err != nil {
+		return nil, err
 	}
-
+	return &product, nil
 }
 
-func DecodeProductsList(productType string, cur *mongo.Cursor) (*[]products.Product, error) {
-	switch productType {
-	case "cpu":
-		return Products.DecodeCpuList(cur)
-	// case "ram": return DecodeRamList(cur)
-	// case "motherboard": return DecodeMotherboardList(cur)
-	// case "ssd": return DecodeSsdList(cur)
-	// case "hdd": return DecodeHddList(cur)
-	// case "powersupply": return DecodePowerSupplyList(cur)
-	// case "cooling": return DecodeCoolingList(cur)
-	// case "housing": return DecodeHousingList(cur)
-	// case "gpu": return DecodeGpuList(cur)
+// DecodeProductsList decodes documents from a cursor into a list of products using the provided factory function.
+func DecodeProductsList(cur *mongo.Cursor, factory func() products.Product) (*[]products.Product, error) {
+	var productsList []products.Product
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
 
-	default:
-		return nil, errors.New("unsupported product type")
+	for cur.Next(ctx) {
+		product := factory() // Create a new instance of the product type
+		if err := cur.Decode(product); err != nil {
+			return nil, err
+		}
+		productsList = append(productsList, product)
 	}
+
+	if err := cur.Err(); err != nil {
+		return nil, err
+	}
+
+	return &productsList, nil
 }

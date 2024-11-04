@@ -47,30 +47,30 @@ type RamCpu struct {
 	MaxCapacity  int   `bson:"max_capacity"`
 }
 
-func (c Cpu) GetProductModel() string {
-	return c.General.Model
+func (cpu Cpu) GetProductModel() string {
+	return cpu.General.Model
 }
 
-func (c Cpu) Standardize() general.StandardizedProductData {
+func (cpu Cpu) Standardize() general.StandardizedProductData {
 	var product general.StandardizedProductData
-	product.ProductHeader.ID = c.ID.Hex()
+	product.ProductHeader.ID = cpu.ID.Hex()
 	product.ProductHeader.ProductType = "cpu"
-	product.General = c.General
-	product.Name = c.Main.Category + " " + c.General.Model
+	product.General = cpu.General
+	product.Name = cpu.Main.Category + " " + cpu.General.Model
 	var cores string
-	if c.Cores.Ecores > 0 {
-		cores = "P-cores: " + strconv.Itoa(c.Cores.Pcores) + " E-cores: " + strconv.Itoa(c.Cores.Ecores) + ","
+	if cpu.Cores.Ecores > 0 {
+		cores = "P-cores: " + strconv.Itoa(cpu.Cores.Pcores) + " E-cores: " + strconv.Itoa(cpu.Cores.Ecores) + ","
 	} else {
-		cores = strconv.Itoa(c.Cores.Pcores) + ","
+		cores = strconv.Itoa(cpu.Cores.Pcores) + ","
 	}
-	product.Description = c.Main.Category + ", " + c.Main.Generation + " Generation, " +
-		c.Main.Socket + " Socket, " + "Cores: " + cores + " Threads: " + strconv.Itoa(c.Cores.Threads) +
-		", Technical process " + strconv.Itoa(c.Cores.TechnicalProcess) + " nm, "
+	product.Description = cpu.Main.Category + ", " + cpu.Main.Generation + " Generation, " +
+		cpu.Main.Socket + " Socket, " + "Cores: " + cores + " Threads: " + strconv.Itoa(cpu.Cores.Threads) +
+		", Technical process " + strconv.Itoa(cpu.Cores.TechnicalProcess) + " nm, "
 	return product
 }
 
-func (c Cpu) ProductFinalPrice() int {
-	return c.General.CalculateFinalPrice()
+func (cpu Cpu) ProductFinalPrice() int {
+	return cpu.General.CalculateFinalPrice()
 }
 
 type UpdateCpuInput struct {

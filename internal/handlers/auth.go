@@ -71,9 +71,9 @@ func (h *Handler) Login(c *gin.Context) {
 	}
 
 	//Setting tokens to cookies with httpOnly flag
-	c.SetCookie("access_token", tokens.AccessToken, 3600, "/", "", true, true)
+	c.SetCookie("accessToken", tokens.AccessToken, 3600, "/", "", true, true)
 
-	c.SetCookie("refresh_token", tokens.RefreshToken, 7*24*3600, "/", "", true, true)
+	c.SetCookie("refreshToken", tokens.RefreshToken, 7*24*3600, "/", "", true, true)
 
 	c.Redirect(http.StatusFound, "/shop/categories")
 	return
@@ -96,9 +96,9 @@ func (h *Handler) Refresh(c *gin.Context) {
 	}
 
 	//Setting tokens to cookies with httpOnly flag
-	c.SetCookie("access_token", tokens.AccessToken, 3600, "/", "", true, true)
+	c.SetCookie("accessToken", tokens.AccessToken, 3600, "/", "", true, true)
 
-	c.SetCookie("refresh_token", tokens.RefreshToken, 7*24*3600, "/", "", true, true)
+	c.SetCookie("refreshToken", tokens.RefreshToken, 7*24*3600, "/", "", true, true)
 
 	c.Redirect(http.StatusFound, "/shop/categories")
 	return

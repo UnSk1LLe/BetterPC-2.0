@@ -3,6 +3,7 @@ package details
 import (
 	"BetterPC_2.0/pkg/data/models/products/general"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"strconv"
 )
 
 type Motherboard struct {
@@ -30,6 +31,26 @@ type interfaces struct {
 	M2      int `bson:"M2"`
 	PciE1x  int `bson:"PCI_E_1x"`
 	PciE16x int `bson:"PCI_E_16x"`
+}
+
+func (motherboard Motherboard) GetProductModel() string {
+	return motherboard.General.Model
+}
+
+func (motherboard Motherboard) Standardize() general.StandardizedProductData {
+	var product general.StandardizedProductData
+	product.ProductHeader.ID = motherboard.ID.Hex()
+	product.ProductHeader.ProductType = "motherboard"
+	product.Name = motherboard.General.Model
+	product.General = motherboard.General
+	product.Description = "Socket: " + motherboard.Socket + ", Chipset: " + motherboard.Chipset +
+		", Form Factor: " + motherboard.FormFactor + ", RAM: " + motherboard.Ram.Type + " " +
+		strconv.Itoa(motherboard.Ram.MaxCapacity) + "GB"
+	return product
+}
+
+func (motherboard Motherboard) ProductFinalPrice() int {
+	return motherboard.General.CalculateFinalPrice()
 }
 
 type UpdateMotherboardInput struct {

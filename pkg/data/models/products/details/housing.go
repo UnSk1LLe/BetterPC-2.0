@@ -3,6 +3,7 @@ package details
 import (
 	"BetterPC_2.0/pkg/data/models/products/general"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"strconv"
 )
 
 type Housing struct {
@@ -35,6 +36,25 @@ type UpdateHousingInput struct {
 	CoolerHeight    *int             `bson:"cooler_height"`
 	Size            *[]int           `bson:"size"`
 	Weight          *float64         `bson:"weight"`
+}
+
+func (housing Housing) GetProductModel() string {
+	return housing.General.Model
+}
+
+func (housing Housing) Standardize() general.StandardizedProductData {
+	var product general.StandardizedProductData
+	product.ProductHeader.ID = housing.ID.Hex()
+	product.ProductHeader.ProductType = "housing"
+	product.Name = housing.General.Model
+	product.General = housing.General
+	product.Description = "Form Factor: " + housing.FormFactor + ", Motherboard Form Factor: " +
+		housing.MbFormFactor + ", Expansion Slots: " + strconv.Itoa(housing.ExpansionSlots)
+	return product
+}
+
+func (housing Housing) ProductFinalPrice() int {
+	return housing.General.CalculateFinalPrice()
 }
 
 func (h UpdateHousingInput) Validate() error {

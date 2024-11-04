@@ -3,6 +3,7 @@ package details
 import (
 	"BetterPC_2.0/pkg/data/models/products/general"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"strconv"
 )
 
 type Ssd struct {
@@ -18,6 +19,26 @@ type Ssd struct {
 	Mftb       float64            `bson:"mftb"`
 	Size       []float64          `bson:"size"`
 	Weight     int                `bson:"weight"`
+}
+
+func (ssd Ssd) GetProductModel() string {
+	return ssd.General.Model
+}
+
+func (ssd Ssd) Standardize() general.StandardizedProductData {
+	var product general.StandardizedProductData
+	product.ProductHeader.ID = ssd.ID.Hex()
+	product.ProductHeader.ProductType = "ssd"
+	product.Name = ssd.General.Model
+	product.General = ssd.General
+	product.Description = "Type: " + ssd.Type + ", Capacity: " + strconv.Itoa(ssd.Capacity) + "GB, " +
+		"Interface: " + ssd.Interface + ", Read Speed: " + strconv.Itoa(ssd.Read) + "MB/s, " +
+		"Write Speed: " + strconv.Itoa(ssd.Write) + "MB/s"
+	return product
+}
+
+func (ssd Ssd) ProductFinalPrice() int {
+	return ssd.General.CalculateFinalPrice()
 }
 
 type UpdateSsdInput struct {

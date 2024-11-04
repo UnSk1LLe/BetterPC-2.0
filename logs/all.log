@@ -1046,3 +1046,22 @@ time="2024-10-19T22:04:20+06:00" level=info msg="Starting BetterPC 2.0 server" f
 {"file":"mongo_db.go:59","func":"BetterPC_2.0/pkg/database/mongoDb.InitCollection()","level":"info","msg":"Collection \"orders\" found","time":"2024-10-30T00:37:08+06:00"}
 {"file":"mongo_db.go:63","func":"BetterPC_2.0/pkg/database/mongoDb.InitCollection()","level":"warning","msg":"Collection \"orders\" has no documents","time":"2024-10-30T00:37:08+06:00"}
 {"file":"mongo_db.go:59","func":"BetterPC_2.0/pkg/database/mongoDb.InitCollection()","level":"info","msg":"Collection \"categories\" found","time":"2024-10-30T00:37:08+06:00"}
+{"file":"main.go:19","func":"main.main()","level":"info","msg":"Starting BetterPC 2.0 server","time":"2024-11-05T04:13:51+06:00"}
+{"file":"mongo_db.go:59","func":"BetterPC_2.0/pkg/database/mongoDb.InitCollection()","level":"info","msg":"Collection \"users\" found","time":"2024-11-05T04:13:51+06:00"}
+{"file":"mongo_db.go:59","func":"BetterPC_2.0/pkg/database/mongoDb.InitCollection()","level":"info","msg":"Collection \"roles\" found","time":"2024-11-05T04:13:51+06:00"}
+{"file":"mongo_db.go:63","func":"BetterPC_2.0/pkg/database/mongoDb.InitCollection()","level":"warning","msg":"Collection \"roles\" has no documents","time":"2024-11-05T04:13:51+06:00"}
+{"file":"mongo_db.go:59","func":"BetterPC_2.0/pkg/database/mongoDb.InitCollection()","level":"info","msg":"Collection \"cpu\" found","time":"2024-11-05T04:13:51+06:00"}
+{"file":"mongo_db.go:59","func":"BetterPC_2.0/pkg/database/mongoDb.InitCollection()","level":"info","msg":"Collection \"motherboard\" found","time":"2024-11-05T04:13:51+06:00"}
+{"file":"mongo_db.go:59","func":"BetterPC_2.0/pkg/database/mongoDb.InitCollection()","level":"info","msg":"Collection \"ram\" found","time":"2024-11-05T04:13:51+06:00"}
+{"file":"mongo_db.go:59","func":"BetterPC_2.0/pkg/database/mongoDb.InitCollection()","level":"info","msg":"Collection \"ssd\" found","time":"2024-11-05T04:13:51+06:00"}
+{"file":"mongo_db.go:59","func":"BetterPC_2.0/pkg/database/mongoDb.InitCollection()","level":"info","msg":"Collection \"hdd\" found","time":"2024-11-05T04:13:51+06:00"}
+{"file":"mongo_db.go:59","func":"BetterPC_2.0/pkg/database/mongoDb.InitCollection()","level":"info","msg":"Collection \"cooling\" found","time":"2024-11-05T04:13:51+06:00"}
+{"file":"mongo_db.go:59","func":"BetterPC_2.0/pkg/database/mongoDb.InitCollection()","level":"info","msg":"Collection \"powersupply\" found","time":"2024-11-05T04:13:51+06:00"}
+{"file":"mongo_db.go:59","func":"BetterPC_2.0/pkg/database/mongoDb.InitCollection()","level":"info","msg":"Collection \"gpu\" found","time":"2024-11-05T04:13:51+06:00"}
+{"file":"mongo_db.go:59","func":"BetterPC_2.0/pkg/database/mongoDb.InitCollection()","level":"info","msg":"Collection \"housing\" found","time":"2024-11-05T04:13:51+06:00"}
+{"file":"mongo_db.go:59","func":"BetterPC_2.0/pkg/database/mongoDb.InitCollection()","level":"info","msg":"Collection \"orders\" found","time":"2024-11-05T04:13:51+06:00"}
+{"file":"mongo_db.go:63","func":"BetterPC_2.0/pkg/database/mongoDb.InitCollection()","level":"warning","msg":"Collection \"orders\" has no documents","time":"2024-11-05T04:13:51+06:00"}
+{"file":"mongo_db.go:59","func":"BetterPC_2.0/pkg/database/mongoDb.InitCollection()","level":"info","msg":"Collection \"categories\" found","time":"2024-11-05T04:13:51+06:00"}
+{"file":"middleware.go:12","func":"BetterPC_2.0/internal/handlers.(*Handler).UserIdentity()","level":"error","msg":"error getting access token: http: named cookie not present","time":"2024-11-05T04:14:07+06:00"}
+{"file":"middleware.go:12","func":"BetterPC_2.0/internal/handlers.(*Handler).UserIdentity()","level":"error","msg":"error getting access token: http: named cookie not present","time":"2024-11-05T04:14:14+06:00"}
+{"file":"middleware.go:12","func":"BetterPC_2.0/internal/handlers.(*Handler).UserIdentity()","level":"error","msg":"error getting access token: http: named cookie not present","time":"2024-11-05T04:14:17+06:00"}
