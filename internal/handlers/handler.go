@@ -1,9 +1,12 @@
 package handlers
 
 import (
+	"BetterPC_2.0/configs"
+	"BetterPC_2.0/internal/middlewares"
 	"BetterPC_2.0/internal/service"
 	"BetterPC_2.0/pkg/html"
 	"BetterPC_2.0/pkg/logging"
+	"BetterPC_2.0/pkg/sessions"
 	"BetterPC_2.0/pkg/static"
 	"BetterPC_2.0/pkg/templateFunctions"
 	"github.com/gin-gonic/gin"
@@ -21,9 +24,13 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 	router.Use(gin.Logger())
 
+	sessions.Init(router)
+
 	router.SetFuncMap(templateFunctions.TmplFuncs)
 	html.LoadTemplates(router)
 	static.LoadStatic(router)
+
+	middleware := middlewares.NewMiddleware(h.services, h.logger, configs.GetConfig())
 
 	auth := router.Group("/auth")
 	{
@@ -44,12 +51,13 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 	shop := router.Group("/shop") //endpoints for customers
 	{
+		shop.Use(middleware.UserIdentity(h.logger))
 
-		categories := shop.Group("/categories", h.UserIdentity)
+		categories := shop.Group("/categories")
 		{
 			categories.GET("/", h.ListCategories)
 
-			products := categories.Group(":product_type/products")
+			products := categories.Group(":product_type")
 			{
 				products.GET("/", h.ListStandardizedProducts)
 				products.GET("/:product_id", h.ShowProductInfo)
@@ -59,6 +67,8 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 		adminPanel := shop.Group("/adminPanel") //endpoints for admins
 		{
+			adminPanel.Use(middleware.AdminOnly())
+
 			categories := adminPanel.Group("/categories")
 			{
 				//categories.GET("/", h.ListCategoriesAdmin)
@@ -66,11 +76,12 @@ func (h *Handler) InitRoutes() *gin.Engine {
 				//categories.PUT("/:id", h.UpdateCategory)
 				//categories.DELETE("/:id", h.DeleteCategory)
 
-				products := categories.Group(":category_name/products")
+				products := categories.Group(":category_name")
 				{
+					//products.GET("/", h.ListProductsAdmin)
 					//products.GET("/:product_id", h.ShowProductInfoAdmin)
 					products.POST("/", h.CreateProduct)
-					//products.PUT("/:product_id/updateGeneral", h.UpdateProductGeneral)
+					//products.PATCH("/:product_id/updateGeneral", h.UpdateProductGeneral)
 					//products.PUT("/:product_id/updateFull", h.UpdateProduct)
 					products.DELETE("/:id", h.DeleteProduct)
 				}
@@ -81,7 +92,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 				orders.GET("/")
 				orders.GET("/:order_id")
 				orders.POST("/")
-				orders.PUT("/:order_id")
+				orders.PATCH("/:order_id")
 				orders.DELETE("/:order_id")
 			}*/
 
@@ -90,7 +101,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 				users.GET("/")
 				users.GET("/:user_id")
 				users.POST("/")
-				users.PUT("/")
+				users.PATCH("/")
 				users.DELETE("/")
 			}
 
@@ -99,7 +110,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 				roles.GET("/")
 				roles.GET("/:role_id")
 				roles.POST("/")
-				roles.PUT("/")
+				roles.PATCH("/")
 				roles.DELETE("/")
 			}*/
 		}

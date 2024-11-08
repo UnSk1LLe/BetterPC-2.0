@@ -27,5 +27,19 @@ mongoDb:
 tokens:
   accessTokenTTL: 15 # minutes
   accessTokenSigningKey: "agjl#@$k5gag7-=ad[pfadpkadm32"
-  refreshTokenTTL: 196 # hours
+  refreshTokenTTL: 168 # hours
   refreshTokenSigningKey: "lfgSDFk^481&df1@_asdpogD25fE"
+
+notifications:
+  email: "betterpc@mail.ru"
+  password: "YkrvYMZ8KgEnqqtyUtGG"
+  smtpHost: "smtp.mail.ru"
+  smtpPort: "587"
+
+users:
+  image: "/assets/icons/userdefault.png"
+  verificationTokenTTL: 24 #hours
+  roles:
+    customerRole: "CUSTOMER"
+    adminRole: "ADMIN"
+    shopAssistantRole: "SHOP_ASSISTANT"

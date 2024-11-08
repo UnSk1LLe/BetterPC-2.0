@@ -11,6 +11,13 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+type Authorization interface {
+	CreateUser(user users.User) (primitive.ObjectID, error)
+	GetUserByEmail(email string) (users.User, error)
+	CheckUserExists(userId primitive.ObjectID) (bool, error)
+	HasRole(userId primitive.ObjectID, roles []string) (bool, error)
+}
+
 type Categories interface {
 	GetList(filter bson.M) ([]categories.Category, error)
 	GetById(id primitive.ObjectID) (categories.Category, error)
@@ -26,17 +33,12 @@ type Product interface {
 	DeleteById(productId primitive.ObjectID, productType string) error
 }
 
-type Authorization interface {
-	CreateUser(user users.User) (primitive.ObjectID, error)
-	GetUser(email string) (users.User, error)
-}
-
 type User interface {
 	Create(user users.User) (primitive.ObjectID, error)
 	Update(userId primitive.ObjectID, input users.UpdateUserInput) error
 	Delete(userId primitive.ObjectID) error
-	GetAll(filter bson.M)
-	GetById(userId primitive.ObjectID)
+	GetList(filter bson.M) ([]users.User, error)
+	GetById(userId primitive.ObjectID) (users.User, error)
 }
 
 type Order interface {
@@ -44,6 +46,8 @@ type Order interface {
 	Update(orderId primitive.ObjectID, input orders.UpdateOrderInput) error
 	SetStatus(orderId primitive.ObjectID, status string) error
 	Delete(orderId primitive.ObjectID) error
+	GetById(id primitive.ObjectID) (orders.Order, error)
+	GetList(filter bson.M) ([]orders.Order, error)
 }
 
 type Repository struct {
@@ -56,7 +60,9 @@ type Repository struct {
 
 func NewRepository(MongoConnection *mongoDb.MongoConnection) *Repository {
 	return &Repository{
+		User:          NewUsersMongo(MongoConnection),
 		Authorization: NewAuthMongo(MongoConnection),
 		Product:       NewProductMongo(MongoConnection),
+		Order:         NewOrderMongo(MongoConnection),
 	}
 }

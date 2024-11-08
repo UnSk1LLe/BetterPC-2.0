@@ -49,14 +49,14 @@ func (l *Logger) GetLoggerWithField(a string, v interface{}) *Logger {
 func init() {
 	l := logrus.New()
 	l.SetReportCaller(true)
-	l.Formatter = &logrus.JSONFormatter{
+	l.Formatter = &logrus.TextFormatter{
 		CallerPrettyfier: func(frame *runtime.Frame) (function string, file string) {
 			filename := path.Base(frame.File)
 			return fmt.Sprintf("%s()", frame.Function), fmt.Sprintf("%s:%d", filename, frame.Line)
 		},
 
-		//DisableColors: false,
-		//FullTimestamp: true,
+		DisableColors: false,
+		FullTimestamp: true,
 		//PrettyPrint: true,
 	}
 	err := os.MkdirAll("logs", 0644)

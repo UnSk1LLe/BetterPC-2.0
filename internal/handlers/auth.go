@@ -71,9 +71,18 @@ func (h *Handler) Login(c *gin.Context) {
 	}
 
 	//Setting tokens to cookies with httpOnly flag
-	c.SetCookie("accessToken", tokens.AccessToken, 3600, "/", "", true, true)
+	c.SetCookie("accessToken", tokens.AccessToken, 15*60, "/", "", true, true)
+	c.SetCookie("refreshToken", tokens.RefreshToken, 7*24*60*60, "/", "", true, true)
 
-	c.SetCookie("refreshToken", tokens.RefreshToken, 7*24*3600, "/", "", true, true)
+	c.Redirect(http.StatusFound, "/shop/categories")
+	return
+}
+
+func (h *Handler) Logout(c *gin.Context) {
+	//TODO
+
+	c.SetCookie("accessToken", "", -1, "/", "", true, true)
+	c.SetCookie("refreshToken", "", -1, "/", "", true, true)
 
 	c.Redirect(http.StatusFound, "/shop/categories")
 	return
@@ -88,7 +97,7 @@ func (h *Handler) Refresh(c *gin.Context) {
 		return
 	}
 
-	tokens, _, err := h.services.Authorization.RefreshTokens(refreshToken)
+	_, tokens, err := h.services.Authorization.RefreshTokens(refreshToken)
 	if err != nil {
 		message := err.Error()
 		errors.RenderError(c, http.StatusInternalServerError, "/auth/login", "get", err, message)
@@ -97,7 +106,6 @@ func (h *Handler) Refresh(c *gin.Context) {
 
 	//Setting tokens to cookies with httpOnly flag
 	c.SetCookie("accessToken", tokens.AccessToken, 3600, "/", "", true, true)
-
 	c.SetCookie("refreshToken", tokens.RefreshToken, 7*24*3600, "/", "", true, true)
 
 	c.Redirect(http.StatusFound, "/shop/categories")

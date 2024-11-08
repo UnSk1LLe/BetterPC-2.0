@@ -8,10 +8,12 @@ import (
 var Configurations Config
 
 type Config struct {
-	App     App
-	Server  Server
-	MongoDB MongoDB
-	Tokens  Tokens
+	App           App
+	Server        Server
+	MongoDB       MongoDB
+	Tokens        Tokens
+	Notifications Notifications
+	User          User
 }
 
 type App struct {
@@ -35,6 +37,25 @@ type Tokens struct {
 	AccessTokenSigningKey  string
 	RefreshTokenTTL        time.Duration
 	RefreshTokenSigningKey string
+}
+
+type Notifications struct {
+	Email    string
+	Password string
+	SmtpHost string
+	SmtpPort string
+}
+
+type User struct {
+	Image                string
+	VerificationTokenTTL time.Duration
+	Roles                UserRoles
+}
+
+type UserRoles struct {
+	CustomerRole      string
+	ShopAssistantRole string
+	AdminRole         string
 }
 
 func InitConfig() error {
@@ -67,6 +88,21 @@ func SetConfig() {
 			AccessTokenSigningKey:  viper.GetString("tokens.accessTokenSigningKey"),
 			RefreshTokenTTL:        time.Duration(viper.GetInt("tokens.refreshTokenTTL")) * time.Hour,
 			RefreshTokenSigningKey: viper.GetString("tokens.refreshTokenSigningKey"),
+		},
+		Notifications: Notifications{
+			Email:    viper.GetString("notifications.email"),
+			Password: viper.GetString("notifications.password"),
+			SmtpHost: viper.GetString("notifications.smtpHost"),
+			SmtpPort: viper.GetString("notifications.smtpPort"),
+		},
+		User: User{
+			Image:                viper.GetString("users.image"),
+			VerificationTokenTTL: time.Duration(viper.GetInt("users.verificationTokenTTL")) * time.Hour,
+			Roles: UserRoles{
+				CustomerRole:      viper.GetString("users.roles.customerRole"),
+				ShopAssistantRole: viper.GetString("users.roles.shopAssistantRole"),
+				AdminRole:         viper.GetString("users.roles.adminRole"),
+			},
 		},
 	}
 }

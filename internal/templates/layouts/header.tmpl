@@ -6,17 +6,17 @@
         <div id="menu">
             <ul>
                 <li class="dropdown">
-                    <a href="/shop" class="dropbtn catalog-button">Catalog</a>
+                    <a href="/shop/categories" class="dropbtn catalog-button">Catalog</a>
                     <div class="dropdown-content">
-                        <a href="/listProducts?productType=cpu">CPU</a>
-                        <a href="/listProducts?productType=gpu">GPU</a>
-                        <a href="/listProducts?productType=motherboard">Motherboards</a>
-                        <a href="/listProducts?productType=ram">RAM</a>
-                        <a href="/listProducts?productType=powersupply">Power supply</a>
-                        <a href="/listProducts?productType=ssd">SSD</a>
-                        <a href="/listProducts?productType=hdd">HDD</a>
-                        <a href="/listProducts?productType=cooling">Cooling</a>
-                        <a href="/listProducts?productType=housing">Housing</a>
+                        <a href="/shop/categories/cpu">CPU</a>
+                        <a href="/shop/categories/gpu">GPU</a>
+                        <a href="/shop/categories/motherboard">Motherboards</a>
+                        <a href="/shop/categories/ram">RAM</a>
+                        <a href="/shop/categories/powersupply">Power supply</a>
+                        <a href="/shop/categories/ssd">SSD</a>
+                        <a href="/shop/categories/hdd">HDD</a>
+                        <a href="/shop/categories/cooling">Cooling</a>
+                        <a href="/shop/categories/housing">Housing</a>
                     </div>
                 </li>
             </ul>
@@ -29,22 +29,32 @@
         </div>
         <div id="add-panel">
             <div id="shopping-cart" class="shopping-cart">
-                <a href="/openCart"><img src="/assets/icons/cart.png" alt="Shopping Cart"></a>
+                <a href="/shop/cart"><img src="/assets/icons/cart.png" alt="Shopping Cart"></a>
                 <span id="cart-badge" class="cart-badge">5</span>
             </div>
             <div class="user-container">
-                <img src="{{ .User.UserInfo.Image }}" alt="User Account">
+                {{ if .User.ID }}
+                <img src="{{ .User.Image }}" alt="User Account">
                 <ul>
                     <li class="dropdown">
                         <span>
-                            <a href="#" class="dropbtn catalog-button">{{ .User.UserInfo.Name }}</a>
+                            <a href="#" class="dropbtn catalog-button">{{ .User.Name }}</a>
                          </span>
                         <div class="dropdown-content">
-                            <a href="/showUserProfile">Profile</a>
-                            <a href="/logout">Log out</a>
+                            <a href="/shop/profile">Profile</a>
+                            <a href="/auth/logout">Log out</a>
                         </div>
                     </li>
                 </ul>
+                {{ else }}
+                    <ul>
+                        <li class="dropdown">
+                            <div class="dropdown-content">
+                                <a href="/auth/login">Login</a>
+                            </div>
+                        </li>
+                    </ul>
+                {{ end }}
             </div>
         </div>
     </nav>

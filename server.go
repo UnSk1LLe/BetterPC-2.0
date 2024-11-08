@@ -1,8 +1,8 @@
 package BetterPC_2_0
 
 import (
+	"BetterPC_2.0/pkg/logging"
 	"context"
-	"fmt"
 	"net/http"
 	"time"
 )
@@ -11,7 +11,7 @@ type Server struct {
 	httpServer *http.Server
 }
 
-func (s *Server) Run(port string, handler http.Handler) error {
+func (s *Server) Run(port string, handler http.Handler, logger *logging.Logger) error {
 	s.httpServer = &http.Server{
 		Addr:              ":" + port,
 		Handler:           handler,
@@ -20,7 +20,7 @@ func (s *Server) Run(port string, handler http.Handler) error {
 		WriteTimeout:      10 * time.Second,
 	}
 
-	fmt.Printf("Server started on port %s", port)
+	logger.Infof("Server started on port %s", port)
 	return s.httpServer.ListenAndServe()
 }
 

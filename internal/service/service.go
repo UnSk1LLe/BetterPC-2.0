@@ -14,8 +14,9 @@ import (
 type Authorization interface {
 	CreateUser(input users.RegisterInput) (primitive.ObjectID, error)
 	GenerateTokenPair(email, password string) (TokenPair, error)
-	ParseAccessToken(accessToken string) (string, error)
-	RefreshTokens(refreshToken string) (TokenPair, string, error)
+	ParseAccessToken(accessToken string) (users.UserResponse, error)
+	RefreshTokens(refreshToken string) (users.UserResponse, TokenPair, error)
+	HasRole(userId primitive.ObjectID, roles ...string) (bool, error)
 }
 
 type Categories interface {
@@ -38,8 +39,8 @@ type User interface {
 	Create(user users.User) (primitive.ObjectID, error)
 	Update(userId primitive.ObjectID, input users.UpdateUserInput) error
 	Delete(userId primitive.ObjectID) error
-	GetAll(filter bson.M)
-	GetById(userId primitive.ObjectID)
+	GetList(filter bson.M) ([]users.User, error)
+	GetById(userId primitive.ObjectID) (users.User, error)
 }
 
 type Order interface {
@@ -47,6 +48,8 @@ type Order interface {
 	Update(orderId primitive.ObjectID, input orders.UpdateOrderInput) error
 	SetStatus(orderId primitive.ObjectID, status string) error
 	Delete(orderId primitive.ObjectID) error
+	GetById(id primitive.ObjectID) (orders.Order, error)
+	GetList(filter bson.M) ([]orders.Order, error)
 }
 
 type Service struct {
@@ -60,7 +63,9 @@ type Service struct {
 func NewService(repos *repository.Repository) *Service {
 	return &Service{
 		Categories:    NewCategoryService(repos.Categories),
-		Authorization: NewAuthService(repos.Authorization),
+		Authorization: NewAuthService(repos.Authorization, repos.User),
 		Product:       NewProductService(repos.Product),
+		Order:         NewOrderService(repos.Order),
+		User:          NewUserService(repos.User),
 	}
 }

@@ -116,7 +116,7 @@ function addProduct() {
 }
 
 function showProduct(productType, productID) {
-    window.location.href = `/shop/categories/${encodeURIComponent(productType)}/products/${encodeURIComponent(productID)}`;
+    window.location.href = `/shop/categories/${encodeURIComponent(productType)}/${encodeURIComponent(productID)}`;
 }
 
 document.addEventListener('DOMContentLoaded', function () {

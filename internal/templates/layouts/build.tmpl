@@ -1,7 +1,7 @@
 {{ define "templates/layouts/build" }}
     <div class="component-detail-form" id="cpu-detail-form">
         <div class="detail-info">
-            <img src="./assets/images/cpu.jpg" alt="CPU image" class="detail-image">
+            <img src="/assets/images/cpu.jpg" alt="CPU image" class="detail-image">
             <h4>{{.Build.CPU.Name}}</h4>
             <p>{{.Build.CPU.Description}}</p>
             <p class="product-price">{{ calculateDiscountPrice .Build.CPU.General.Price .Build.CPU.General.Discount }}</p>
@@ -14,7 +14,7 @@
 
     <div class="component-detail-form" id="motherboard-detail-form">
         <div class="detail-info">
-            <img src="./assets/images/motherboard.jpg" alt="Motherboard image" class="detail-image">
+            <img src="/assets/images/motherboard.jpg" alt="Motherboard image" class="detail-image">
             <h4>{{.Build.Motherboard.Name}}</h4>
             <p>{{.Build.Motherboard.Description}}</p>
             <p class="product-price">{{ calculateDiscountPrice .Build.Motherboard.General.Price .Build.Motherboard.General.Discount }}</p>
@@ -27,7 +27,7 @@
 
     <div class="component-detail-form" id="ram-detail-form">
         <div class="detail-info">
-            <img src="./assets/images/ram.jpg" alt="RAM image" class="detail-image">
+            <img src="/assets/images/ram.jpg" alt="RAM image" class="detail-image">
             <h4>{{.Build.RAM.Name}}</h4>
             <p>{{.Build.RAM.Description}}</p>
             <p class="product-price">{{ calculateDiscountPrice .Build.RAM.General.Price .Build.RAM.General.Discount }}</p>

@@ -42,7 +42,7 @@ func (a *AuthMongo) CreateUser(user users.User) (primitive.ObjectID, error) {
 	return newUser.InsertedID.(primitive.ObjectID), nil
 }
 
-func (a *AuthMongo) GetUser(email string) (users.User, error) {
+func (a *AuthMongo) GetUserByEmail(email string) (users.User, error) {
 	var user users.User
 
 	res := a.db.Collections["users"].FindOne(context.TODO(), bson.M{"user_info.email": email})
@@ -55,4 +55,36 @@ func (a *AuthMongo) GetUser(email string) (users.User, error) {
 		return users.User{}, errors.New("error decoding the user")
 	}
 	return user, nil
+}
+
+func (a *AuthMongo) CheckUserExists(userId primitive.ObjectID) (bool, error) {
+	//checking if user with the given id already exists
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	res := a.db.Collections["users"].FindOne(ctx, bson.M{"_id": userId})
+
+	if res.Err() != nil {
+		return false, res.Err()
+	}
+
+	return true, nil
+}
+
+func (a *AuthMongo) HasRole(userId primitive.ObjectID, roles []string) (bool, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	filter := bson.M{
+		"_id":   userId,
+		"roles": bson.M{"$in": roles},
+	}
+
+	res := a.db.Collections["users"].FindOne(ctx, filter)
+
+	if res.Err() != nil {
+		return false, res.Err()
+	}
+
+	return true, nil
 }

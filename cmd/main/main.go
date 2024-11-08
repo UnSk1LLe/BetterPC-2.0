@@ -9,12 +9,15 @@ import (
 	"BetterPC_2.0/pkg/database/mongoDb"
 	"BetterPC_2.0/pkg/logging"
 	"fmt"
-	"github.com/sirupsen/logrus"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
 
-	logger := logging.GetLogger() //initializing logger
+	logger := logging.GetLogger()
+	//initializing logger
+
+	gin.ForceConsoleColor()
 
 	logger.Infof("Starting BetterPC 2.0 server")
 
@@ -27,6 +30,8 @@ func main() {
 
 	fmt.Println(configs.GetConfig())
 
+	service.InitAuth(configs.GetConfig())
+
 	err = mongoDb.Init(configs.GetConfig(), logger) //establishing connection to mongoDB database
 	if err != nil {
 		logger.Fatalf("error connecting to database: %s", err.Error())
@@ -37,15 +42,17 @@ func main() {
 		logger.Fatalf("error connecting to database: %s", err.Error())
 	}
 
-	logrus.Infof("asd")
-
 	appRepos := repository.NewRepository(mongoDbConnection)
 	appServices := service.NewService(appRepos)
 	appHandlers := handlers.NewHandler(appServices, logger)
 
 	server := new(BetterPC_2_0.Server)
 
-	if err := server.Run(configs.GetConfig().Server.Port, appHandlers.InitRoutes()); err != nil {
+	port := configs.GetConfig().Server.Port
+
+	if err := server.Run(port, appHandlers.InitRoutes(), logger); err != nil {
 		logger.Fatalf("error while running the server: %v", err.Error())
 	}
+
+	logger.Info(1)
 }
