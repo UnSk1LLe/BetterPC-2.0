@@ -46,8 +46,12 @@ type RamCpu struct {
 	MaxCapacity  int   `bson:"max_capacity" json:"max_capacity,omitempty"`
 }
 
-func (cpu Cpu) GetProductModel() string {
+func (cpu Cpu) GetModel() string {
 	return cpu.General.Model
+}
+
+func (cpu Cpu) GetStock() int {
+	return cpu.General.Amount
 }
 
 func (cpu Cpu) Standardize() generalResponses.StandardizedProductData {
@@ -68,6 +72,6 @@ func (cpu Cpu) Standardize() generalResponses.StandardizedProductData {
 	return product
 }
 
-func (cpu Cpu) ProductFinalPrice() int {
-	return cpu.General.CalculateFinalPrice()
+func (cpu Cpu) CalculateFinalPrice() int {
+	return cpu.General.GetFinalPrice()
 }

@@ -34,8 +34,12 @@ type Interfaces struct {
 	PciE16x int `bson:"PCI_E_16x"`
 }
 
-func (motherboard Motherboard) GetProductModel() string {
+func (motherboard Motherboard) GetModel() string {
 	return motherboard.General.Model
+}
+
+func (motherboard Motherboard) GetStock() int {
+	return motherboard.General.Amount
 }
 
 func (motherboard Motherboard) Standardize() generalResponses.StandardizedProductData {
@@ -50,6 +54,6 @@ func (motherboard Motherboard) Standardize() generalResponses.StandardizedProduc
 	return product
 }
 
-func (motherboard Motherboard) ProductFinalPrice() int {
-	return motherboard.General.CalculateFinalPrice()
+func (motherboard Motherboard) CalculateFinalPrice() int {
+	return motherboard.General.GetFinalPrice()
 }

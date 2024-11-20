@@ -1,10 +1,10 @@
 package repository
 
 import (
+	"BetterPC_2.0/internal/repository/database/mongoDb"
 	"BetterPC_2.0/pkg/data/models/users"
 	userErrors "BetterPC_2.0/pkg/data/models/users/errors"
 	userUpdateRequests "BetterPC_2.0/pkg/data/models/users/requests/patch"
-	"BetterPC_2.0/pkg/database/mongoDb"
 	"context"
 	"errors"
 	"fmt"

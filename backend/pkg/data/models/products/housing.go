@@ -26,8 +26,12 @@ type DriveBays struct {
 	D25 int `bson:"2_5"`
 }
 
-func (housing Housing) GetProductModel() string {
+func (housing Housing) GetModel() string {
 	return housing.General.Model
+}
+
+func (housing Housing) GetStock() int {
+	return housing.General.Amount
 }
 
 func (housing Housing) Standardize() generalResponses.StandardizedProductData {
@@ -41,6 +45,6 @@ func (housing Housing) Standardize() generalResponses.StandardizedProductData {
 	return product
 }
 
-func (housing Housing) ProductFinalPrice() int {
-	return housing.General.CalculateFinalPrice()
+func (housing Housing) CalculateFinalPrice() int {
+	return housing.General.GetFinalPrice()
 }

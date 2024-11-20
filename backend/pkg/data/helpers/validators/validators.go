@@ -11,12 +11,13 @@ func ValidateStruct(input interface{}) error {
 
 	logrus.Info(reflect.TypeOf(input))
 
-	// Ensure that we are working with a pointer to a struct
-	if v.Kind() != reflect.Ptr || v.Elem().Kind() != reflect.Struct {
-		return validatorErrors.ErrInvalidInput
+	// Ensure we are working with a pointer to a struct, or a pointer to a pointer, etc.
+	for v.Kind() == reflect.Ptr {
+		if v.IsNil() {
+			return validatorErrors.ErrInvalidInput
+		}
+		v = v.Elem() // Dereference the pointer
 	}
-
-	v = v.Elem() // Dereference the input pointer to get the underlying struct
 
 	// Iterate over the struct fields
 	for i := 0; i < v.NumField(); i++ {

@@ -25,8 +25,12 @@ type Connectors struct {
 	PciE  []int `bson:"PCI_E"`
 }
 
-func (powerSupply PowerSupply) GetProductModel() string {
+func (powerSupply PowerSupply) GetModel() string {
 	return powerSupply.General.Model
+}
+
+func (powerSupply PowerSupply) GetStock() int {
+	return powerSupply.General.Amount
 }
 
 func (powerSupply PowerSupply) Standardize() generalResponses.StandardizedProductData {
@@ -40,6 +44,6 @@ func (powerSupply PowerSupply) Standardize() generalResponses.StandardizedProduc
 	return product
 }
 
-func (powerSupply PowerSupply) ProductFinalPrice() int {
-	return powerSupply.General.CalculateFinalPrice()
+func (powerSupply PowerSupply) CalculateFinalPrice() int {
+	return powerSupply.General.GetFinalPrice()
 }

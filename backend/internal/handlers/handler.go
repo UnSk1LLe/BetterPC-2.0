@@ -98,14 +98,15 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			}
 		}
 
-		/*orders := shop.Group("/orders")
+		orders := shop.Group("/orders")
 		{
-			orders.GET("/")
-			orders.GET("/:order_id")
-			orders.POST("/")
-			orders.PATCH("/:order_id")
-			orders.DELETE("/:order_id")
-		}*/
+			orders.GET("/", h.ListOrders)
+			orders.GET("/:order_id", h.OrderDetails)
+			orders.POST("/", h.CreateOrderWithItemHeaders)
+			orders.PATCH("/:id/cancel", h.CancelOrder)
+			//orders.PATCH("/:order_id", h.UpdateOrder)
+			orders.DELETE("/:id", h.DeleteOrder)
+		}
 
 		/*users := router.Group("/users")
 		{

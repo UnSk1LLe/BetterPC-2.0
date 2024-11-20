@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"BetterPC_2.0/internal/repository/database/mongoDb"
 	"BetterPC_2.0/pkg/data/models/categories"
 	"BetterPC_2.0/pkg/data/models/orders"
 	"BetterPC_2.0/pkg/data/models/products"
@@ -8,7 +9,6 @@ import (
 	productRequests "BetterPC_2.0/pkg/data/models/products/requests"
 	"BetterPC_2.0/pkg/data/models/users"
 	userUpdateRequests "BetterPC_2.0/pkg/data/models/users/requests/patch"
-	"BetterPC_2.0/pkg/database/mongoDb"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -45,18 +45,19 @@ type Categories interface {
 }
 
 type Product interface {
-	Create(product products.Product, productType string) (primitive.ObjectID, error)
-	GetById(id primitive.ObjectID, productType string) (products.Product, error)
-	GetList(filter bson.M, productType string) ([]products.Product, error)
-	UpdateById(id primitive.ObjectID, input productRequests.ProductUpdateRequest, productType string) error
-	UpdateGeneralInfoById(productId primitive.ObjectID, input generalRequests.UpdateGeneralRequest, productType string) error
-	DeleteById(productId primitive.ObjectID, productType string) error
+	Create(product products.Product, productType products.ProductType) (primitive.ObjectID, error)
+	GetById(id primitive.ObjectID, productType products.ProductType) (products.Product, error)
+	GetList(filter bson.M, productType products.ProductType) ([]products.Product, error)
+	UpdateById(id primitive.ObjectID, input productRequests.ProductUpdateRequest, productType products.ProductType) error
+	UpdateGeneralInfoById(productId primitive.ObjectID, input generalRequests.UpdateGeneralRequest, productType products.ProductType) error
+	DeleteById(productId primitive.ObjectID, productType products.ProductType) error
 }
 
 type Order interface {
 	Create(order orders.Order) (primitive.ObjectID, error)
+	Cancel(orderId primitive.ObjectID) error
 	Update(orderId primitive.ObjectID, input orders.UpdateOrderInput) error
-	SetStatus(orderId primitive.ObjectID, status string) error
+	SetStatus(orderId primitive.ObjectID, status orders.OrderStatus) error
 	Delete(orderId primitive.ObjectID) error
 	GetById(id primitive.ObjectID) (orders.Order, error)
 	GetList(filter bson.M) ([]orders.Order, error)

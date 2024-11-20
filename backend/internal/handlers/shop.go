@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"BetterPC_2.0/internal/handlers/helpers/responseManager"
+	"BetterPC_2.0/pkg/data/models/products"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
@@ -18,7 +19,11 @@ func (h *Handler) Shop(c *gin.Context) {
 
 func (h *Handler) ListStandardizedProducts(c *gin.Context) {
 
-	productType := c.Param("product_type")
+	productType, err := products.ProductTypeFromString(c.Param("product_type"))
+	if err != nil {
+		responseManager.ErrorResponseWithLog(c, http.StatusBadRequest, err.Error())
+		return
+	}
 
 	standardizedProductsList, err := h.services.Product.GetStandardizedList(bson.M{}, productType)
 	if err != nil {
@@ -48,7 +53,11 @@ func (h *Handler) ShowProductInfo(c *gin.Context) {
 		return
 	}
 
-	productType := c.Param("product_type")
+	productType, err := products.ProductTypeFromString(c.Param("product_type"))
+	if err != nil {
+		responseManager.ErrorResponseWithLog(c, http.StatusBadRequest, err.Error())
+		return
+	}
 
 	product, err := h.services.Product.GetById(productId, productType)
 

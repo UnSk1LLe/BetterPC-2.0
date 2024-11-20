@@ -21,9 +21,9 @@ func (h *Handler) CreateProductPage(c *gin.Context) {
 }
 
 func (h *Handler) CreateProduct(c *gin.Context) {
-	productType := c.Param("product_type")
-	if productType == "" {
-		responseManager.ErrorResponseWithLog(c, http.StatusBadRequest, "product_type is empty")
+	productType, err := products.ProductTypeFromString(c.Param("product_type"))
+	if err != nil {
+		responseManager.ErrorResponseWithLog(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
@@ -51,7 +51,7 @@ func (h *Handler) CreateProduct(c *gin.Context) {
 		if errors.Is(err, productErrors.ErrProductModelAlreadyExists) {
 			message := fmt.Sprintf(
 				"could not create %s with the model %s: %s",
-				productType, product.GetProductModel(), err.Error(),
+				productType, product.GetModel(), err.Error(),
 			)
 
 			responseManager.ErrorResponseWithLog(c, http.StatusConflict, message)
@@ -72,9 +72,9 @@ func (h *Handler) CreateProduct(c *gin.Context) {
 }
 
 func (h *Handler) DeleteProduct(c *gin.Context) {
-	productType := c.Param("product_type")
-	if productType == "" {
-		responseManager.ErrorResponseWithLog(c, http.StatusBadRequest, "product_type is empty")
+	productType, err := products.ProductTypeFromString(c.Param("product_type"))
+	if err != nil {
+		responseManager.ErrorResponseWithLog(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
@@ -106,9 +106,9 @@ func (h *Handler) DeleteProduct(c *gin.Context) {
 }
 
 func (h *Handler) UpdateProduct(c *gin.Context) {
-	productType := c.Param("product_type")
-	if productType == "" {
-		responseManager.ErrorResponseWithLog(c, http.StatusBadRequest, "product_type is empty")
+	productType, err := products.ProductTypeFromString(c.Param("product_type"))
+	if err != nil {
+		responseManager.ErrorResponseWithLog(c, http.StatusBadRequest, err.Error())
 		return
 	}
 

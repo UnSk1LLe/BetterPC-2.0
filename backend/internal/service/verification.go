@@ -5,7 +5,7 @@ import (
 	"BetterPC_2.0/internal/service/helpers/passwordHasher"
 	userErrors "BetterPC_2.0/pkg/data/models/users/errors"
 	"BetterPC_2.0/pkg/data/models/users/requests/patch"
-	"BetterPC_2.0/pkg/tokens"
+	"BetterPC_2.0/pkg/tokensGen"
 	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"time"
@@ -23,7 +23,7 @@ func NewVerificationService(repo repository.Verification) *VerificationService {
 }
 
 func (vs *VerificationService) SetNewToken(email string, tokenTTL time.Duration) (string, error) {
-	token, err := tokens.GenerateNewUUID(email)
+	token, err := tokensGen.GenerateNewUUID(email)
 	if err != nil {
 		return "", errors.New("error generating token: " + err.Error())
 	}
@@ -69,7 +69,7 @@ func (vs *VerificationService) IsVerifiedUser(email string) (bool, error) {
 }
 
 func (vs *VerificationService) GenerateRecoveryToken(email string) (string, error) {
-	newToken, err := tokens.GenerateNewUUID(email)
+	newToken, err := tokensGen.GenerateNewUUID(email)
 	if err != nil {
 		return "", errors.New("error generating token: " + err.Error())
 	}

@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"BetterPC_2.0/pkg/database/mongoDb"
+	"BetterPC_2.0/internal/repository/database/mongoDb"
 	"go.mongodb.org/mongo-driver/bson"
 )
 

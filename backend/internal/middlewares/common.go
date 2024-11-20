@@ -9,7 +9,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/patrickmn/go-cache"
 	"github.com/pkg/errors"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"net/http"
 	"reflect"
 	"slices"
@@ -58,13 +57,7 @@ func (m *Middleware) CheckUserPermissions(c *gin.Context, roles ...string) (stat
 		return http.StatusForbidden, errors.New(errMessage)
 	}
 
-	userObjId, err := primitive.ObjectIDFromHex(response.ID)
-	if err != nil {
-		errMessage := fmt.Sprintf("error converting user object id to primitive.ObjectID: %v", err)
-		return http.StatusInternalServerError, errors.New(errMessage)
-	}
-
-	hasRole, err := m.services.HasRole(userObjId, roles...)
+	hasRole, err := m.services.HasRole(response.ID, roles...)
 	if err != nil {
 		errMessage := fmt.Sprintf("access denied! error confirming user permissions: %v", err)
 		return http.StatusInternalServerError, errors.New(errMessage)

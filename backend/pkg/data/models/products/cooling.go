@@ -22,8 +22,12 @@ type Cooling struct {
 	Height     int                `bson:"height"`
 }
 
-func (cooling Cooling) GetProductModel() string {
+func (cooling Cooling) GetModel() string {
 	return cooling.General.Model
+}
+
+func (cooling Cooling) GetStock() int {
+	return cooling.General.Amount
 }
 
 func (cooling Cooling) Standardize() generalResponses.StandardizedProductData {
@@ -37,6 +41,6 @@ func (cooling Cooling) Standardize() generalResponses.StandardizedProductData {
 	return product
 }
 
-func (cooling Cooling) ProductFinalPrice() int {
-	return cooling.General.CalculateFinalPrice()
+func (cooling Cooling) CalculateFinalPrice() int {
+	return cooling.General.GetFinalPrice()
 }

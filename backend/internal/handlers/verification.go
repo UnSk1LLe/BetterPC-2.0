@@ -55,7 +55,7 @@ func (h *Handler) SendVerificationLink(c *gin.Context) {
 
 	serverUrl := h.cfg.Server.Url
 	endpointPath := c.Request.URL.Path
-	verificationUrl := fmt.Sprintf("%s%s/%s", serverUrl, endpointPath, token)
+	verificationUrl := fmt.Sprintf("%s%s%s", serverUrl, endpointPath, token)
 
 	emailSubject := "Email verification"
 	emailBody := fmt.Sprintf(`Please click the following link to verify your email address: 

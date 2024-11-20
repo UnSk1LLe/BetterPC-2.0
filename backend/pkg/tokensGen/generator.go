@@ -1,4 +1,4 @@
-package tokens
+package tokensGen
 
 import (
 	"crypto/sha256"

@@ -22,8 +22,12 @@ type Hdd struct {
 	Weight       int                `bson:"weight"`
 }
 
-func (hdd Hdd) GetProductModel() string {
+func (hdd Hdd) GetModel() string {
 	return hdd.General.Model
+}
+
+func (hdd Hdd) GetStock() int {
+	return hdd.General.Amount
 }
 
 func (hdd Hdd) Standardize() generalResponses.StandardizedProductData {
@@ -37,6 +41,6 @@ func (hdd Hdd) Standardize() generalResponses.StandardizedProductData {
 	return product
 }
 
-func (hdd Hdd) ProductFinalPrice() int {
-	return hdd.General.CalculateFinalPrice()
+func (hdd Hdd) CalculateFinalPrice() int {
+	return hdd.General.GetFinalPrice()
 }

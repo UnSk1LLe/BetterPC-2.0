@@ -2,11 +2,11 @@ app:
   name: "Better PC"
 
 server:
-  url: "http://localhost:8080/"
+  url: "http://localhost:8080"
   port: "8080"
 
 mongoDb:
-  url: "mongodb://localhost:27017"
+  url: "mongodb+srv://betterPC:median1@cluster0.qtpqc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
   usersDbName: "users"
   usersDbCollection:
     - "users"

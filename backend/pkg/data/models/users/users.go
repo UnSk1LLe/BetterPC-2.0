@@ -12,6 +12,8 @@ type User struct {
 	ID           primitive.ObjectID `bson:"_id"`
 	UserInfo     UserInfo           `bson:"user_info"`
 	Verification Verification       `bson:"verification"`
+	CreatedAt    primitive.DateTime `bson:"created_at" json:"created_at,omitempty"`
+	UpdatedAt    primitive.DateTime `bson:"updated_at" json:"updated_at,omitempty"`
 }
 
 type UserInfo struct {
@@ -46,6 +48,8 @@ func NewUserDefault(token string, cfg *configs.Config) *User {
 			ExpiresAt:  primitive.NewDateTimeFromTime(time.Now().Add(cfg.Tokens.VerificationTokenTTL)),
 			IsVerified: false,
 		},
+		CreatedAt: primitive.NewDateTimeFromTime(time.Now()),
+		UpdatedAt: primitive.NewDateTimeFromTime(time.Now()),
 	}
 	return user
 }

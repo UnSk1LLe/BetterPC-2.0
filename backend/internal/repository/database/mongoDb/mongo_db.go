@@ -14,16 +14,29 @@ import (
 
 var MongoConn MongoConnection
 
+type Database interface {
+	GetCollection(name string) (*mongo.Collection, bool)
+	GetClient() *mongo.Client
+}
+
 type MongoConnection struct {
 	Client      *mongo.Client
 	Collections map[string]*mongo.Collection
 }
 
+func (db MongoConnection) GetCollection(name string) (*mongo.Collection, bool) {
+	collection, ok := db.Collections[name]
+	return collection, ok
+}
+
+func (db MongoConnection) GetClient() *mongo.Client {
+	return db.Client
+}
+
 func Init(cfg *configs.Config, logger *logging.Logger) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
-	client, err := mongo.Connect(ctx, options.Client().
-		ApplyURI(cfg.MongoDB.Url))
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(cfg.MongoDB.Url))
 	if err != nil {
 		return err
 	}
@@ -33,7 +46,7 @@ func Init(cfg *configs.Config, logger *logging.Logger) error {
 		Collections: make(map[string]*mongo.Collection),
 	}
 
-	for _, collectionName := range cfg.MongoDB.UsersCollectionsNames {
+	for _, collectionName := range cfg.MongoDB.UsersCollectionsNames { //TODO include dependency from the product types
 		MongoConn.Collections[collectionName], err = InitCollection(client, cfg.MongoDB.UsersDbName, collectionName, logger)
 		if err != nil {
 			logger.Fatalf("MongoDb initializing error: %s", err.Error())
@@ -78,7 +91,8 @@ func GetConnection() (*MongoConnection, error) {
 }
 
 func CloseConnection() error {
-	ctx, _ := context.WithTimeout(context.Background(), 20*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
+	defer cancel()
 
 	MongoConn.Collections = map[string]*mongo.Collection{}
 	if err := MongoConn.Client.Disconnect(ctx); err != nil {

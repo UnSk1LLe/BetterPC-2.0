@@ -7,9 +7,9 @@ import (
 )
 
 type UpdateUserInfoRequest struct {
-	Name    *string    `bson:"name"`
-	Surname *string    `bson:"surname"`
-	Dob     *time.Time `bson:"dob"`
+	Name    string     `bson:"user_info.name" json:"name"`
+	Surname string     `bson:"user_info.surname" json:"surname"`
+	Dob     *time.Time `bson:"user_info.dob" json:"dob"`
 }
 
 func (u *UpdateUserInfoRequest) Validate() error {

@@ -84,7 +84,8 @@ func (h *Handler) SendRecoveryLink(c *gin.Context) {
 
 	serverUrl := h.cfg.Server.Url
 	endpointPath := c.Request.URL.Path
-	recoveryUrl := fmt.Sprintf("%s%s/%s", serverUrl, endpointPath, token)
+
+	recoveryUrl := fmt.Sprintf("%s%s%s", serverUrl, endpointPath, token)
 
 	emailSubject := "Password recovery"
 	emailBody := fmt.Sprintf(`Use the following link to create a new password for your account:

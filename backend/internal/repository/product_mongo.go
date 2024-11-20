@@ -1,13 +1,13 @@
 package repository
 
 import (
+	"BetterPC_2.0/internal/repository/database/mongoDb"
 	"BetterPC_2.0/internal/repository/helpers/productsDecoders"
 	"BetterPC_2.0/internal/repository/helpers/typeValidators"
 	"BetterPC_2.0/pkg/data/models/products"
 	productErrors "BetterPC_2.0/pkg/data/models/products/errors"
 	generalProductRequests "BetterPC_2.0/pkg/data/models/products/general/requests"
 	productRequests "BetterPC_2.0/pkg/data/models/products/requests"
-	"BetterPC_2.0/pkg/database/mongoDb"
 	"context"
 	"errors"
 	"fmt"
@@ -23,40 +23,40 @@ type productStructsTypes struct {
 	updateProductType reflect.Type
 }
 
-var ProductTypesMap = map[string]productStructsTypes{
-	"cpu": {
+var ProductTypesMap = map[products.ProductType]productStructsTypes{
+	products.ProductTypes.Cpu: {
 		productType:       reflect.TypeOf(products.Cpu{}),
 		updateProductType: reflect.TypeOf(productRequests.UpdateCpuRequest{}),
 	},
-	"ram": {
+	products.ProductTypes.Ram: {
 		productType:       reflect.TypeOf(products.Ram{}),
 		updateProductType: reflect.TypeOf(productRequests.UpdateRamRequest{}),
 	},
-	"motherboard": {
+	products.ProductTypes.Motherboard: {
 		productType:       reflect.TypeOf(products.Motherboard{}),
 		updateProductType: reflect.TypeOf(productRequests.UpdateMotherboardRequest{}),
 	},
-	"gpu": {
+	products.ProductTypes.Gpu: {
 		productType:       reflect.TypeOf(products.Gpu{}),
 		updateProductType: reflect.TypeOf(productRequests.UpdateGpuRequest{}),
 	},
-	"ssd": {
+	products.ProductTypes.Ssd: {
 		productType:       reflect.TypeOf(products.Ssd{}),
 		updateProductType: reflect.TypeOf(productRequests.UpdateSsdRequest{}),
 	},
-	"hdd": {
+	products.ProductTypes.Hdd: {
 		productType:       reflect.TypeOf(products.Hdd{}),
 		updateProductType: reflect.TypeOf(productRequests.UpdateHddRequest{}),
 	},
-	"powersupply": {
+	products.ProductTypes.PowerSupply: {
 		productType:       reflect.TypeOf(products.PowerSupply{}),
 		updateProductType: reflect.TypeOf(productRequests.UpdatePowerSupplyRequest{}),
 	},
-	"cooling": {
+	products.ProductTypes.Cooling: {
 		productType:       reflect.TypeOf(products.Cooling{}),
 		updateProductType: reflect.TypeOf(productRequests.UpdateCoolingRequest{}),
 	},
-	"housing": {
+	products.ProductTypes.Housing: {
 		productType:       reflect.TypeOf(products.Housing{}),
 		updateProductType: reflect.TypeOf(productRequests.UpdateHousingRequest{}),
 	},
@@ -70,16 +70,16 @@ func NewProductMongo(mongoConn *mongoDb.MongoConnection) *ProductMongo {
 	return &ProductMongo{db: mongoConn}
 }
 
-func (p *ProductMongo) Create(product products.Product, productType string) (primitive.ObjectID, error) {
+func (p *ProductMongo) Create(product products.Product, productType products.ProductType) (primitive.ObjectID, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	res := p.db.Collections[productType].FindOne(ctx, bson.M{"general.model": product.GetProductModel()})
+	res := p.db.Collections[productType.String()].FindOne(ctx, bson.M{"general.model": product.GetModel()})
 	if !errors.Is(res.Err(), mongo.ErrNoDocuments) {
 		return primitive.NilObjectID, productErrors.ErrProductModelAlreadyExists
 	}
 
-	newProduct, err := p.db.Collections[productType].InsertOne(ctx, product)
+	newProduct, err := p.db.Collections[productType.String()].InsertOne(ctx, product)
 	if err != nil {
 		return primitive.NilObjectID, errors.New(fmt.Sprintf("error inserting %s: %s", productType, err.Error()))
 	}
@@ -87,11 +87,11 @@ func (p *ProductMongo) Create(product products.Product, productType string) (pri
 	return newProduct.InsertedID.(primitive.ObjectID), nil
 }
 
-func (p *ProductMongo) GetById(id primitive.ObjectID, productType string) (products.Product, error) {
+func (p *ProductMongo) GetById(id primitive.ObjectID, productType products.ProductType) (products.Product, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	res := p.db.Collections[productType].FindOne(ctx, bson.M{"_id": id})
+	res := p.db.Collections[productType.String()].FindOne(ctx, bson.M{"_id": id})
 	if errors.Is(res.Err(), mongo.ErrNoDocuments) {
 		return nil, productErrors.ErrNoProductsFound
 	} else if res.Err() != nil {
@@ -102,7 +102,6 @@ func (p *ProductMongo) GetById(id primitive.ObjectID, productType string) (produ
 	if !ok {
 		return nil, productErrors.ErrUnsupportedProductType
 	}
-
 	product, err := productsDecoders.DecodeProduct(res, factory)
 	if err != nil {
 		return nil, err
@@ -110,11 +109,11 @@ func (p *ProductMongo) GetById(id primitive.ObjectID, productType string) (produ
 	return *product, nil
 }
 
-func (p *ProductMongo) GetList(filter bson.M, productType string) ([]products.Product, error) {
+func (p *ProductMongo) GetList(filter bson.M, productType products.ProductType) ([]products.Product, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	cur, err := p.db.Collections[productType].Find(ctx, filter)
+	cur, err := p.db.Collections[productType.String()].Find(ctx, filter)
 	if errors.Is(err, mongo.ErrNoDocuments) {
 		return nil, productErrors.ErrNoProductsFound
 	} else if err != nil {
@@ -134,13 +133,13 @@ func (p *ProductMongo) GetList(filter bson.M, productType string) ([]products.Pr
 	return *productsList, nil
 }
 
-func (p *ProductMongo) UpdateById(productId primitive.ObjectID, input productRequests.ProductUpdateRequest, productType string) error {
+func (p *ProductMongo) UpdateById(productId primitive.ObjectID, input productRequests.ProductUpdateRequest, productType products.ProductType) error {
 	err := typeValidators.ValidateType(input, ProductTypesMap[productType].updateProductType)
 	if err != nil {
 		return productErrors.ErrProductTypesMismatch
 	}
 
-	collection, ok := p.db.Collections[productType]
+	collection, ok := p.db.Collections[productType.String()]
 	if !ok {
 		return productErrors.ErrProductTypesMismatch
 	}
@@ -168,21 +167,36 @@ func (p *ProductMongo) UpdateById(productId primitive.ObjectID, input productReq
 	return nil
 }
 
-func (p *ProductMongo) UpdateGeneralInfoById(productId primitive.ObjectID, input generalProductRequests.UpdateGeneralRequest, collectionName string) error {
-	/*ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+func (p *ProductMongo) UpdateGeneralInfoById(productId primitive.ObjectID, input generalProductRequests.UpdateGeneralRequest, productType products.ProductType) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
+	generalUpdateData, err := input.Decompose()
+	if err != nil {
+		return err
+	}
 
-	_, err := p.db.Collections[collectionName].UpdateOne(ctx, bson.M{"product_id": productId}, bson.M{"$set": input})*/
+	update := bson.M{"$set": generalUpdateData}
+
+	res, err := p.db.Collections[productType.String()].UpdateByID(ctx, productId, update)
+	if err != nil {
+		return err
+	}
+	if res.MatchedCount == 0 {
+		return productErrors.ErrNoProductsFound
+	}
+	if res.ModifiedCount == 0 {
+		return productErrors.ErrProductNotModified
+	}
 
 	return nil
 }
 
-func (p *ProductMongo) DeleteById(productId primitive.ObjectID, productType string) error {
+func (p *ProductMongo) DeleteById(productId primitive.ObjectID, productType products.ProductType) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	delRes, err := p.db.Collections[productType].DeleteOne(ctx, bson.M{"productId": productId})
+	delRes, err := p.db.Collections[productType.String()].DeleteOne(ctx, bson.M{"productId": productId})
 	if err != nil {
 		return errors.New(fmt.Sprintf("error deleting product with id <%s> in collection <%s>: %s", productId, productType, err.Error()))
 	} else if delRes.DeletedCount == 0 {

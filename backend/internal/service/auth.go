@@ -7,7 +7,7 @@ import (
 	"BetterPC_2.0/pkg/data/models/users"
 	userRequests "BetterPC_2.0/pkg/data/models/users/requests/auth"
 	userResponses "BetterPC_2.0/pkg/data/models/users/responses"
-	"BetterPC_2.0/pkg/tokens"
+	"BetterPC_2.0/pkg/tokensGen"
 	"errors"
 	"fmt"
 	"github.com/golang-jwt/jwt/v5"
@@ -69,7 +69,7 @@ func (s *AuthService) CreateUser(input userRequests.RegisterRequest) (primitive.
 		return primitive.NilObjectID, err
 	}
 
-	verificationToken, err := tokens.GenerateNewUUID(input.Email)
+	verificationToken, err := tokensGen.GenerateNewUUID(input.Email)
 	if err != nil {
 		return primitive.NilObjectID, errors.New("failed to generate verification token: " + err.Error())
 	}
@@ -246,12 +246,17 @@ func (s *AuthService) RefreshTokens(refreshTokenString string) (userResponses.Us
 	return response, tokens, nil
 }
 
-func (s *AuthService) HasRole(userId primitive.ObjectID, roles ...string) (bool, error) {
+func (s *AuthService) HasRole(userId string, roles ...string) (bool, error) {
+	userObjId, err := primitive.ObjectIDFromHex(userId)
+	if err != nil {
+		return false, err
+	}
+
 	if len(roles) == 0 {
 		return false, errors.New("no roles provided for check provided: argument <roles> must contain at least one value")
 	}
 
-	hasRole, err := s.repo.HasRole(userId, roles)
+	hasRole, err := s.repo.HasRole(userObjId, roles)
 	if err != nil {
 		return false, err
 	}

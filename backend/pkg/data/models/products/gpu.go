@@ -42,8 +42,12 @@ type CoolingGpu struct {
 	FanNumber int    `bson:"fan_number"`
 }
 
-func (gpu Gpu) GetProductModel() string {
+func (gpu Gpu) GetModel() string {
 	return gpu.General.Model
+}
+
+func (gpu Gpu) GetStock() int {
+	return gpu.General.Amount
 }
 
 func (gpu Gpu) Standardize() generalResponses.StandardizedProductData {
@@ -58,6 +62,6 @@ func (gpu Gpu) Standardize() generalResponses.StandardizedProductData {
 	return product
 }
 
-func (gpu Gpu) ProductFinalPrice() int {
-	return gpu.General.CalculateFinalPrice()
+func (gpu Gpu) CalculateFinalPrice() int {
+	return gpu.General.GetFinalPrice()
 }

@@ -18,15 +18,15 @@ func NewProductService(repo repository.Product) *ProductService {
 	return &ProductService{repo: repo}
 }
 
-func (p *ProductService) Create(product products.Product, productType string) (primitive.ObjectID, error) {
+func (p *ProductService) Create(product products.Product, productType products.ProductType) (primitive.ObjectID, error) {
 	return p.repo.Create(product, productType)
 }
 
-func (p *ProductService) GetById(id primitive.ObjectID, productType string) (products.Product, error) {
+func (p *ProductService) GetById(id primitive.ObjectID, productType products.ProductType) (products.Product, error) {
 	return p.repo.GetById(id, productType)
 }
 
-func (p *ProductService) GetStandardizedList(filter bson.M, productType string) ([]generalResponses.StandardizedProductData, error) {
+func (p *ProductService) GetStandardizedList(filter bson.M, productType products.ProductType) ([]generalResponses.StandardizedProductData, error) {
 	productsList, err := p.repo.GetList(filter, productType)
 	if err != nil {
 		return nil, err
@@ -40,15 +40,15 @@ func (p *ProductService) GetStandardizedList(filter bson.M, productType string) 
 	return standardizedProductsList, nil
 }
 
-func (p *ProductService) GetList(filter bson.M, productType string) ([]products.Product, error) {
+func (p *ProductService) GetList(filter bson.M, productType products.ProductType) ([]products.Product, error) {
 	return p.repo.GetList(filter, productType)
 }
 
-func (p *ProductService) DeleteById(id primitive.ObjectID, productType string) error {
+func (p *ProductService) DeleteById(id primitive.ObjectID, productType products.ProductType) error {
 	return p.repo.DeleteById(id, productType)
 }
 
-func (p *ProductService) UpdateById(id primitive.ObjectID, input productRequests.ProductUpdateRequest, productType string) error {
+func (p *ProductService) UpdateById(id primitive.ObjectID, input productRequests.ProductUpdateRequest, productType products.ProductType) error {
 	err := input.Validate()
 	if err != nil {
 		return err
@@ -56,6 +56,10 @@ func (p *ProductService) UpdateById(id primitive.ObjectID, input productRequests
 	return p.repo.UpdateById(id, input, productType)
 }
 
-func (p *ProductService) UpdateGeneralInfoById(id primitive.ObjectID, input generalRequests.UpdateGeneralRequest, productType string) error {
+func (p *ProductService) UpdateGeneralInfoById(id primitive.ObjectID, input generalRequests.UpdateGeneralRequest, productType products.ProductType) error {
+	err := input.Validate()
+	if err != nil {
+		return err
+	}
 	return p.repo.UpdateGeneralInfoById(id, input, productType)
 }

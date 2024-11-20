@@ -9,6 +9,6 @@ type General struct {
 	Image        string `bson:"image" json:"image"`
 }
 
-func (g *General) CalculateFinalPrice() int {
+func (g *General) GetFinalPrice() int {
 	return g.Price - (g.Price * g.Discount / 100)
 }
