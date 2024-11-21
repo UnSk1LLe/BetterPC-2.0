@@ -1,0 +1,64 @@
+{
+  "nil_pointer_input": {
+    "ram": {
+      "channels": 5,
+      "max_frequency": [5555, 0],
+      "max_capacity": 128
+    }
+  },
+
+  "embed_structure_nil_pointer_input": {
+    "ram": {
+      "channels": 5,
+      "max_capacity": 128
+    },
+    "pci_e": 5
+  },
+
+  "nil_value_input": {
+    "general": {
+      "discount": 0
+    },
+    "main": {
+      "model": ""
+    },
+    "clock_frequency": {},
+    "ram": {
+      "channels": 5,
+      "max_capacity": 128
+    },
+    "graphics": "",
+    "pci_e": 5
+  },
+
+  "full_input": {
+    "general": {
+      "manufacturer": "Intel",
+      "model": "OTHER MODEL",
+      "price": 555555,
+      "discount": 0,
+      "amount": 5,
+      "image": "/assets/img/default/cpu.jpg"
+    },
+    "main": {
+      "category": "Intel Core i7",
+      "generation": "Intel 10th",
+      "socket": "LGA 1200",
+      "year": 2020
+    },
+    "clock_frequency": {
+      "p-cores": [5.5, 5.5],
+      "e-cores": [5, 5],
+      "free_multiplier": true
+    },
+    "ram": {
+      "channels": 5,
+      "max_frequency": [5555, 0],
+      "max_capacity": 128
+    },
+    "tdp": 555,
+    "graphics": "",
+    "pci_e": 5,
+    "max_temperature": 100
+  }
+}

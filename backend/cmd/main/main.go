@@ -39,12 +39,9 @@ func main() {
 		logger.Warn(warns)
 	}
 
-	err = mongoDb.Init(configs.GetConfig(), logger) //establishing connection to mongoDB database
-	if err != nil {
-		logger.Fatalf("error connecting to database: %s", err.Error())
-	}
+	mongoDb.MustConnectMongo(configs.GetConfig(), logger) //establishing connection to mongoDB database
 
-	mongoDbConnection, err := mongoDb.GetConnection() //getting the established connection to mongoDb client and collections
+	mongoDbConnection, err := mongoDb.GetMongoDB() //getting the established connection to mongoDb client and collections
 	if err != nil {
 		logger.Fatalf("error connecting to database: %s", err.Error())
 	}

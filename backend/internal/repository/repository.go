@@ -72,7 +72,7 @@ type Repository struct {
 	Order
 }
 
-func NewRepository(MongoConnection *mongoDb.MongoConnection) *Repository {
+func NewRepository(MongoConnection mongoDb.Database) *Repository {
 	return &Repository{
 		User:          NewUsersMongo(MongoConnection),
 		Authorization: NewAuthMongo(MongoConnection),

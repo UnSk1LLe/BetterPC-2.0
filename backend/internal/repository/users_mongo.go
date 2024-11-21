@@ -15,10 +15,10 @@ import (
 )
 
 type UsersMongo struct {
-	db *mongoDb.MongoConnection
+	db mongoDb.Database
 }
 
-func NewUsersMongo(conn *mongoDb.MongoConnection) *UsersMongo {
+func NewUsersMongo(conn mongoDb.Database) *UsersMongo {
 	return &UsersMongo{db: conn}
 }
 
@@ -27,7 +27,7 @@ func (u *UsersMongo) Create(user users.User) (primitive.ObjectID, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	res := u.db.Collections["users"].FindOne(ctx, bson.M{"user_info.email": user.UserInfo.Email})
+	res := u.db.GetUsersCollection().FindOne(ctx, bson.M{"user_info.email": user.UserInfo.Email})
 
 	if !errors.Is(res.Err(), mongo.ErrNoDocuments) && res.Err() != nil {
 		return primitive.NilObjectID, res.Err()
@@ -37,7 +37,7 @@ func (u *UsersMongo) Create(user users.User) (primitive.ObjectID, error) {
 	}
 
 	//Inserting the user into users collection
-	newUser, err := u.db.Collections["users"].InsertOne(ctx, user)
+	newUser, err := u.db.GetUsersCollection().InsertOne(ctx, user)
 	if err != nil {
 		return primitive.NilObjectID, errors.New(fmt.Sprintf("error creating new user: %s", err.Error()))
 	}
@@ -55,7 +55,7 @@ func (u *UsersMongo) UpdateUserInfoById(userId primitive.ObjectID, input userUpd
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	res, err := u.db.Collections["users"].UpdateByID(ctx, userId, input)*/
+	res, err := u.db.GetUsersCollection().UpdateByID(ctx, userId, input)*/
 	return nil
 }
 
@@ -71,7 +71,7 @@ func (u *UsersMongo) DeleteById(userId primitive.ObjectID) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	delRes, err := u.db.Collections["users"].DeleteOne(ctx, bson.M{"_id": userId})
+	delRes, err := u.db.GetUsersCollection().DeleteOne(ctx, bson.M{"_id": userId})
 	if err != nil {
 		return errors.New(fmt.Sprintf("error deleting user: %s", err.Error()))
 	} else if delRes.DeletedCount == 0 {
@@ -87,7 +87,7 @@ func (u *UsersMongo) GetList(filter bson.M) ([]users.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	cur, err := u.db.Collections["users"].Find(ctx, filter)
+	cur, err := u.db.GetUsersCollection().Find(ctx, filter)
 	if err != nil {
 		return usersList, errors.New(fmt.Sprintf("error finding users: %s", err.Error()))
 	}
@@ -106,7 +106,7 @@ func (u *UsersMongo) GetById(userId primitive.ObjectID) (users.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	result := u.db.Collections["users"].FindOne(ctx, bson.M{"_id": userId})
+	result := u.db.GetUsersCollection().FindOne(ctx, bson.M{"_id": userId})
 	if errors.Is(result.Err(), mongo.ErrNoDocuments) {
 		return user, userErrors.ErrUserNotFound
 	}

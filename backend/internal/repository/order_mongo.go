@@ -17,10 +17,10 @@ import (
 )
 
 type OrderMongo struct {
-	db *mongoDb.MongoConnection
+	db mongoDb.Database
 }
 
-func NewOrderMongo(db *mongoDb.MongoConnection) *OrderMongo {
+func NewOrderMongo(db mongoDb.Database) *OrderMongo {
 	return &OrderMongo{db: db}
 }
 
@@ -35,7 +35,7 @@ func (o *OrderMongo) Create(order orders.Order) (primitive.ObjectID, error) {
 		if err != nil {
 			return nil, err
 		}
-		res, err := o.db.Collections["orders"].InsertOne(ctx, order)
+		res, err := o.db.GetOrdersCollection().InsertOne(ctx, order)
 		if err != nil {
 			return nil, err
 		}
@@ -43,7 +43,7 @@ func (o *OrderMongo) Create(order orders.Order) (primitive.ObjectID, error) {
 		return res.InsertedID, nil
 	}
 
-	session, err := o.db.Client.StartSession()
+	session, err := o.db.GetClient().StartSession()
 	if err != nil {
 		return primitive.ObjectID{}, err
 	}
@@ -71,7 +71,7 @@ func (o *OrderMongo) Cancel(orderId primitive.ObjectID) error {
 			"status":     orders.OrderStatuses.Cancelled,
 			"updated_at": time.Now(),
 		}}
-		res := o.db.Collections["orders"].FindOneAndUpdate(sesCtx, filter, update)
+		res := o.db.GetOrdersCollection().FindOneAndUpdate(sesCtx, filter, update)
 		if res.Err() != nil {
 			switch {
 			case errors.Is(res.Err(), mongo.ErrNoDocuments):
@@ -100,7 +100,7 @@ func (o *OrderMongo) Cancel(orderId primitive.ObjectID) error {
 		return order.ID, nil
 	}
 
-	session, err := o.db.Client.StartSession()
+	session, err := o.db.GetClient().StartSession()
 	if err != nil {
 		return err
 	}
@@ -116,7 +116,7 @@ func (o *OrderMongo) Cancel(orderId primitive.ObjectID) error {
 
 func (o *OrderMongo) updateProductStock(ctx mongo.SessionContext, productList map[products.ProductType][]orders.ProductHeader, increment bool) error {
 	for productType, productHeaders := range productList {
-		collection := o.db.Collections[productType.String()]
+		collection := o.db.GetProductCollection(productType)
 		if collection == nil {
 			return productErrors.ErrUnsupportedProductType
 		}
@@ -170,7 +170,7 @@ func (o *OrderMongo) Update(orderId primitive.ObjectID, input orders.UpdateOrder
 		filter := bson.M{"_id": orderId}
 		update := bson.M{"$set": bson.M{}}
 
-		res := o.db.Collections["orders"].FindOneAndUpdate(sesCtx, filter, update)
+		res := o.db.GetOrdersCollection().FindOneAndUpdate(sesCtx, filter, update)
 		if res.Err() != nil {
 			switch {
 			case errors.Is(res.Err(), mongo.ErrNoDocuments):
@@ -192,7 +192,7 @@ func (o *OrderMongo) Update(orderId primitive.ObjectID, input orders.UpdateOrder
 		return nil, nil
 	}
 
-	session, err := o.db.Client.StartSession()
+	session, err := o.db.GetClient().StartSession()
 	if err != nil {
 		return err
 	}
@@ -209,7 +209,7 @@ func (o *OrderMongo) SetStatus(orderId primitive.ObjectID, status orders.OrderSt
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	_, err := o.db.Collections["orders"].UpdateOne(ctx, bson.M{"_id": orderId}, bson.M{"$set": bson.M{"status": status}})
+	_, err := o.db.GetOrdersCollection().UpdateOne(ctx, bson.M{"_id": orderId}, bson.M{"$set": bson.M{"status": status}})
 	if err != nil {
 		return errors.New(fmt.Sprintf("error updating order status: %s", err.Error()))
 	}
@@ -222,7 +222,7 @@ func (o *OrderMongo) Delete(orderId primitive.ObjectID) error {
 	errMsg := "error deleting order"
 	defer cancel()
 
-	session, err := o.db.Client.StartSession()
+	session, err := o.db.GetClient().StartSession()
 	if err != nil {
 		return errors.Wrap(err, errMsg)
 	}
@@ -231,7 +231,7 @@ func (o *OrderMongo) Delete(orderId primitive.ObjectID) error {
 	callback := func(sesCtx mongo.SessionContext) (interface{}, error) {
 		var order orders.Order
 
-		res := o.db.Collections["orders"].FindOneAndDelete(sesCtx, bson.M{"_id": orderId})
+		res := o.db.GetOrdersCollection().FindOneAndDelete(sesCtx, bson.M{"_id": orderId})
 		if res.Err() != nil {
 
 			switch {
@@ -267,7 +267,7 @@ func (o *OrderMongo) GetById(id primitive.ObjectID) (orders.Order, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	res := o.db.Collections["orders"].FindOne(ctx, bson.M{"_id": id})
+	res := o.db.GetOrdersCollection().FindOne(ctx, bson.M{"_id": id})
 	if res.Err() != nil {
 		switch {
 		case errors.Is(res.Err(), mongo.ErrNoDocuments):
@@ -291,7 +291,7 @@ func (o *OrderMongo) GetList(filter bson.M) ([]orders.Order, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	cur, err := o.db.Collections["orders"].Find(ctx, filter)
+	cur, err := o.db.GetOrdersCollection().Find(ctx, filter)
 	if err != nil {
 		switch {
 		case errors.Is(err, mongo.ErrNoDocuments):

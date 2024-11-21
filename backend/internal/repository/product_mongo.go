@@ -63,10 +63,10 @@ var ProductTypesMap = map[products.ProductType]productStructsTypes{
 }
 
 type ProductMongo struct {
-	db *mongoDb.MongoConnection
+	db mongoDb.Database
 }
 
-func NewProductMongo(mongoConn *mongoDb.MongoConnection) *ProductMongo {
+func NewProductMongo(mongoConn mongoDb.Database) *ProductMongo {
 	return &ProductMongo{db: mongoConn}
 }
 
@@ -74,12 +74,12 @@ func (p *ProductMongo) Create(product products.Product, productType products.Pro
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	res := p.db.Collections[productType.String()].FindOne(ctx, bson.M{"general.model": product.GetModel()})
+	res := p.db.GetProductCollection(productType).FindOne(ctx, bson.M{"general.model": product.GetModel()})
 	if !errors.Is(res.Err(), mongo.ErrNoDocuments) {
 		return primitive.NilObjectID, productErrors.ErrProductModelAlreadyExists
 	}
 
-	newProduct, err := p.db.Collections[productType.String()].InsertOne(ctx, product)
+	newProduct, err := p.db.GetProductCollection(productType).InsertOne(ctx, product)
 	if err != nil {
 		return primitive.NilObjectID, errors.New(fmt.Sprintf("error inserting %s: %s", productType, err.Error()))
 	}
@@ -91,7 +91,7 @@ func (p *ProductMongo) GetById(id primitive.ObjectID, productType products.Produ
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	res := p.db.Collections[productType.String()].FindOne(ctx, bson.M{"_id": id})
+	res := p.db.GetProductCollection(productType).FindOne(ctx, bson.M{"_id": id})
 	if errors.Is(res.Err(), mongo.ErrNoDocuments) {
 		return nil, productErrors.ErrNoProductsFound
 	} else if res.Err() != nil {
@@ -113,7 +113,7 @@ func (p *ProductMongo) GetList(filter bson.M, productType products.ProductType) 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	cur, err := p.db.Collections[productType.String()].Find(ctx, filter)
+	cur, err := p.db.GetProductCollection(productType).Find(ctx, filter)
 	if errors.Is(err, mongo.ErrNoDocuments) {
 		return nil, productErrors.ErrNoProductsFound
 	} else if err != nil {
@@ -139,10 +139,7 @@ func (p *ProductMongo) UpdateById(productId primitive.ObjectID, input productReq
 		return productErrors.ErrProductTypesMismatch
 	}
 
-	collection, ok := p.db.Collections[productType.String()]
-	if !ok {
-		return productErrors.ErrProductTypesMismatch
-	}
+	collection := p.db.GetProductCollection(productType)
 	if collection == nil {
 		return errors.New(fmt.Sprintf("mongo collection reference error: collection %s is nil", productType))
 	}
@@ -178,7 +175,7 @@ func (p *ProductMongo) UpdateGeneralInfoById(productId primitive.ObjectID, input
 
 	update := bson.M{"$set": generalUpdateData}
 
-	res, err := p.db.Collections[productType.String()].UpdateByID(ctx, productId, update)
+	res, err := p.db.GetProductCollection(productType).UpdateByID(ctx, productId, update)
 	if err != nil {
 		return err
 	}
@@ -196,7 +193,7 @@ func (p *ProductMongo) DeleteById(productId primitive.ObjectID, productType prod
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	delRes, err := p.db.Collections[productType.String()].DeleteOne(ctx, bson.M{"productId": productId})
+	delRes, err := p.db.GetProductCollection(productType).DeleteOne(ctx, bson.M{"productId": productId})
 	if err != nil {
 		return errors.New(fmt.Sprintf("error deleting product with id <%s> in collection <%s>: %s", productId, productType, err.Error()))
 	} else if delRes.DeletedCount == 0 {

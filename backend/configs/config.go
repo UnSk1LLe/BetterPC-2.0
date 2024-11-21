@@ -27,11 +27,15 @@ type Server struct {
 }
 
 type MongoDB struct {
-	Url                   string
-	UsersDbName           string
-	ShopDbName            string
-	UsersCollectionsNames []string
-	ShopCollectionsNames  []string
+	Username                string
+	Password                string
+	ClusterAddress          string
+	Options                 string
+	UsersDbName             string
+	ShopDbName              string
+	UsersCollectionName     string
+	OrdersCollectionName    string
+	ProductsCollectionNames []string
 }
 
 type LocalCache struct {
@@ -78,11 +82,15 @@ func InitConfig() error {
 func SetConfig() {
 	Configurations = &Config{
 		MongoDB: MongoDB{
-			Url:                   viper.GetString("mongoDb.url"),
-			UsersDbName:           viper.GetString("mongoDb.usersDbName"),
-			UsersCollectionsNames: viper.GetStringSlice("mongoDb.usersDbCollection"),
-			ShopDbName:            viper.GetString("mongoDb.shopDbName"),
-			ShopCollectionsNames:  viper.GetStringSlice("mongoDb.shopDbCollections"),
+			Username:                viper.GetString("mongoDb.username"),
+			Password:                viper.GetString("mongoDb.password"),
+			ClusterAddress:          viper.GetString("mongoDb.clusterAddress"),
+			Options:                 viper.GetString("mongoDb.options"),
+			UsersDbName:             viper.GetString("mongoDb.usersDbName"),
+			UsersCollectionName:     viper.GetString("mongoDb.usersCollection"),
+			ShopDbName:              viper.GetString("mongoDb.shopDbName"),
+			OrdersCollectionName:    viper.GetString("mongoDb.ordersCollection"),
+			ProductsCollectionNames: viper.GetStringSlice("mongoDb.productsCollectionList"),
 		},
 		Server: Server{
 			Url:  viper.GetString("server.url"),

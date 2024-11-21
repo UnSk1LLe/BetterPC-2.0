@@ -15,11 +15,11 @@ import (
 )
 
 type VerificationMongo struct {
-	db *mongoDb.MongoConnection
+	db mongoDb.Database
 }
 
-func NewVerificationMongo(conn *mongoDb.MongoConnection) *VerificationMongo {
-	return &VerificationMongo{conn}
+func NewVerificationMongo(conn mongoDb.Database) *VerificationMongo {
+	return &VerificationMongo{db: conn}
 }
 
 func (v *VerificationMongo) SetTokenByEmail(email, token string, expTime primitive.DateTime) error {
@@ -35,7 +35,7 @@ func (v *VerificationMongo) SetTokenByEmail(email, token string, expTime primiti
 		},
 	}
 
-	res, err := v.db.Collections["users"].UpdateOne(ctx, filter, update)
+	res, err := v.db.GetUsersCollection().UpdateOne(ctx, filter, update)
 	if err != nil {
 		return err
 	}
@@ -55,7 +55,7 @@ func (v *VerificationMongo) CompareUserToken(token string) (bool, error) {
 		"verification.expires_at": bson.M{"$lt": primitive.NewDateTimeFromTime(time.Now())},
 	}
 
-	res := v.db.Collections["users"].FindOne(ctx, filter)
+	res := v.db.GetUsersCollection().FindOne(ctx, filter)
 	if errors.Is(res.Err(), mongo.ErrNoDocuments) {
 		return false, userErrors.ErrUserNotFound
 	}
@@ -74,7 +74,7 @@ func (v *VerificationMongo) IsVerifiedUser(email string) (bool, error) {
 
 	filter := bson.M{"user_info.email": email}
 
-	res := v.db.Collections["users"].FindOne(ctx, filter)
+	res := v.db.GetUsersCollection().FindOne(ctx, filter)
 	if errors.Is(res.Err(), mongo.ErrNoDocuments) {
 		return false, userErrors.ErrUserNotFound
 	}
@@ -103,7 +103,7 @@ func (v *VerificationMongo) UpdateVerificationDataById(userId primitive.ObjectID
 
 	update := bson.M{"$set": fieldsValues}
 
-	updRes, err := v.db.Collections["users"].UpdateByID(ctx, userId, update)
+	updRes, err := v.db.GetUsersCollection().UpdateByID(ctx, userId, update)
 	if err != nil {
 		return errors.New("error updating verification data: " + err.Error())
 	}
@@ -122,7 +122,7 @@ func (v *VerificationMongo) GetUserByVerificationToken(token string) (users.User
 
 	filter := bson.M{"verification.token": token}
 
-	res := v.db.Collections["users"].FindOne(ctx, filter)
+	res := v.db.GetUsersCollection().FindOne(ctx, filter)
 
 	if errors.Is(res.Err(), mongo.ErrNoDocuments) {
 		return user, userErrors.ErrUserNotFound
@@ -152,7 +152,7 @@ func (v *VerificationMongo) UpdateUserPasswordById(userId primitive.ObjectID, pa
 		"verification.token": "",
 	}}
 
-	updRes, err := v.db.Collections["users"].UpdateByID(ctx, userId, update)
+	updRes, err := v.db.GetUsersCollection().UpdateByID(ctx, userId, update)
 	if err != nil {
 		return errors.New("error updating verification data: " + err.Error())
 	}

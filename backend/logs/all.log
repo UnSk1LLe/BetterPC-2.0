@@ -5666,3 +5666,101 @@ time="2024-11-10T03:45:52+05:00" level=info msg="Server started on port 8080" fu
 [36mINFO[0m[2024-11-20T07:46:10+05:00]mongo_db.go:72 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "categories" found                
 [33mWARN[0m[2024-11-20T07:46:10+05:00]mongo_db.go:76 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "categories" has no documents     
 [36mINFO[0m[2024-11-20T07:46:10+05:00]server.go:23 BetterPC_2%2e0.(*Server).Run() Server started on port 8080                  
+[36mINFO[0m[2024-11-20T08:18:04+05:00]main.go:24 main.main() Starting BetterPC 2.0 server                 
+[36mINFO[0m[2024-11-20T08:18:05+05:00]mongo_db.go:72 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "users" found                     
+[36mINFO[0m[2024-11-20T08:18:06+05:00]mongo_db.go:72 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "roles" found                     
+[33mWARN[0m[2024-11-20T08:18:06+05:00]mongo_db.go:76 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "roles" has no documents          
+[36mINFO[0m[2024-11-20T08:18:06+05:00]mongo_db.go:72 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "cpu" found                       
+[36mINFO[0m[2024-11-20T08:18:06+05:00]mongo_db.go:72 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "motherboard" found               
+[33mWARN[0m[2024-11-20T08:18:06+05:00]mongo_db.go:76 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "motherboard" has no documents    
+[36mINFO[0m[2024-11-20T08:18:06+05:00]mongo_db.go:72 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "ram" found                       
+[33mWARN[0m[2024-11-20T08:18:06+05:00]mongo_db.go:76 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "ram" has no documents            
+[36mINFO[0m[2024-11-20T08:18:06+05:00]mongo_db.go:72 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "ssd" found                       
+[33mWARN[0m[2024-11-20T08:18:06+05:00]mongo_db.go:76 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "ssd" has no documents            
+[36mINFO[0m[2024-11-20T08:18:06+05:00]mongo_db.go:72 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "hdd" found                       
+[33mWARN[0m[2024-11-20T08:18:06+05:00]mongo_db.go:76 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "hdd" has no documents            
+[36mINFO[0m[2024-11-20T08:18:06+05:00]mongo_db.go:72 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "cooling" found                   
+[33mWARN[0m[2024-11-20T08:18:06+05:00]mongo_db.go:76 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "cooling" has no documents        
+[36mINFO[0m[2024-11-20T08:18:06+05:00]mongo_db.go:72 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "powersupply" found               
+[33mWARN[0m[2024-11-20T08:18:06+05:00]mongo_db.go:76 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "powersupply" has no documents    
+[36mINFO[0m[2024-11-20T08:18:06+05:00]mongo_db.go:72 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "gpu" found                       
+[36mINFO[0m[2024-11-20T08:18:07+05:00]mongo_db.go:72 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "housing" found                   
+[33mWARN[0m[2024-11-20T08:18:07+05:00]mongo_db.go:76 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "housing" has no documents        
+[36mINFO[0m[2024-11-20T08:18:07+05:00]mongo_db.go:72 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "orders" found                    
+[33mWARN[0m[2024-11-20T08:18:07+05:00]mongo_db.go:76 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "orders" has no documents         
+[36mINFO[0m[2024-11-20T08:18:07+05:00]mongo_db.go:72 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "categories" found                
+[33mWARN[0m[2024-11-20T08:18:07+05:00]mongo_db.go:76 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "categories" has no documents     
+[36mINFO[0m[2024-11-20T08:18:07+05:00]server.go:23 BetterPC_2%2e0.(*Server).Run() Server started on port 8080                  
+[36mINFO[0m[2024-11-20T08:20:27+05:00]main.go:26 main.main() Starting BetterPC 2.0 server                 
+[36mINFO[0m[2024-11-20T08:20:27+05:00]mongo_db.go:72 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "users" found                     
+[36mINFO[0m[2024-11-20T08:20:28+05:00]mongo_db.go:72 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "roles" found                     
+[33mWARN[0m[2024-11-20T08:20:29+05:00]mongo_db.go:76 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "roles" has no documents          
+[36mINFO[0m[2024-11-20T08:20:29+05:00]mongo_db.go:72 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "cpu" found                       
+[36mINFO[0m[2024-11-20T08:20:29+05:00]mongo_db.go:72 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "motherboard" found               
+[33mWARN[0m[2024-11-20T08:20:29+05:00]mongo_db.go:76 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "motherboard" has no documents    
+[36mINFO[0m[2024-11-20T08:20:29+05:00]mongo_db.go:72 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "ram" found                       
+[33mWARN[0m[2024-11-20T08:20:29+05:00]mongo_db.go:76 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "ram" has no documents            
+[36mINFO[0m[2024-11-20T08:20:29+05:00]mongo_db.go:72 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "ssd" found                       
+[33mWARN[0m[2024-11-20T08:20:29+05:00]mongo_db.go:76 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "ssd" has no documents            
+[36mINFO[0m[2024-11-20T08:20:29+05:00]mongo_db.go:72 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "hdd" found                       
+[33mWARN[0m[2024-11-20T08:20:29+05:00]mongo_db.go:76 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "hdd" has no documents            
+[36mINFO[0m[2024-11-20T08:20:29+05:00]mongo_db.go:72 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "cooling" found                   
+[33mWARN[0m[2024-11-20T08:20:29+05:00]mongo_db.go:76 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "cooling" has no documents        
+[36mINFO[0m[2024-11-20T08:20:29+05:00]mongo_db.go:72 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "powersupply" found               
+[33mWARN[0m[2024-11-20T08:20:29+05:00]mongo_db.go:76 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "powersupply" has no documents    
+[36mINFO[0m[2024-11-20T08:20:29+05:00]mongo_db.go:72 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "gpu" found                       
+[36mINFO[0m[2024-11-20T08:20:29+05:00]mongo_db.go:72 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "housing" found                   
+[33mWARN[0m[2024-11-20T08:20:29+05:00]mongo_db.go:76 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "housing" has no documents        
+[36mINFO[0m[2024-11-20T08:20:29+05:00]mongo_db.go:72 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "orders" found                    
+[33mWARN[0m[2024-11-20T08:20:29+05:00]mongo_db.go:76 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "orders" has no documents         
+[36mINFO[0m[2024-11-20T08:20:29+05:00]mongo_db.go:72 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "categories" found                
+[33mWARN[0m[2024-11-20T08:20:30+05:00]mongo_db.go:76 BetterPC_2.0/internal/repository/database/mongoDb.InitCollection() Collection "categories" has no documents     
+[36mINFO[0m[2024-11-20T08:20:30+05:00]server.go:23 BetterPC_2%2e0.(*Server).Run() Server started on port 8080                  
+[36mINFO[0m[2024-11-20T12:10:07+05:00]main.go:24 main.main() Starting BetterPC 2.0 server                 
+[36mINFO[0m[2024-11-20T12:10:08+05:00]mongo_db.go:91 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "" found                          
+[36mINFO[0m[2024-11-20T12:10:09+05:00]mongo_db.go:91 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "" found                          
+[36mINFO[0m[2024-11-20T12:10:09+05:00]mongo_db.go:91 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "cpu" found                       
+[36mINFO[0m[2024-11-20T12:10:09+05:00]mongo_db.go:91 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "motherboard" found               
+[33mWARN[0m[2024-11-20T12:10:09+05:00]mongo_db.go:95 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "motherboard" has no documents    
+[36mINFO[0m[2024-11-20T12:10:09+05:00]mongo_db.go:91 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "ram" found                       
+[33mWARN[0m[2024-11-20T12:10:09+05:00]mongo_db.go:95 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "ram" has no documents            
+[36mINFO[0m[2024-11-20T12:10:09+05:00]mongo_db.go:91 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "ssd" found                       
+[33mWARN[0m[2024-11-20T12:10:09+05:00]mongo_db.go:95 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "ssd" has no documents            
+[36mINFO[0m[2024-11-20T12:10:09+05:00]mongo_db.go:91 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "hdd" found                       
+[33mWARN[0m[2024-11-20T12:10:10+05:00]mongo_db.go:95 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "hdd" has no documents            
+[36mINFO[0m[2024-11-20T12:10:10+05:00]mongo_db.go:91 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "cooling" found                   
+[33mWARN[0m[2024-11-20T12:10:10+05:00]mongo_db.go:95 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "cooling" has no documents        
+[36mINFO[0m[2024-11-20T12:10:10+05:00]mongo_db.go:91 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "powersupply" found               
+[33mWARN[0m[2024-11-20T12:10:10+05:00]mongo_db.go:95 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "powersupply" has no documents    
+[36mINFO[0m[2024-11-20T12:10:10+05:00]mongo_db.go:91 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "gpu" found                       
+[36mINFO[0m[2024-11-20T12:10:10+05:00]mongo_db.go:91 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "housing" found                   
+[33mWARN[0m[2024-11-20T12:10:10+05:00]mongo_db.go:95 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "housing" has no documents        
+[36mINFO[0m[2024-11-20T12:10:10+05:00]mongo_db.go:91 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "orders" found                    
+[33mWARN[0m[2024-11-20T12:10:10+05:00]mongo_db.go:95 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "orders" has no documents         
+[36mINFO[0m[2024-11-20T12:10:10+05:00]mongo_db.go:91 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "categories" found                
+[33mWARN[0m[2024-11-20T12:10:10+05:00]mongo_db.go:95 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "categories" has no documents     
+[36mINFO[0m[2024-11-20T12:10:10+05:00]server.go:23 BetterPC_2%2e0.(*Server).Run() Server started on port 8080                  
+[36mINFO[0m[2024-11-21T11:32:53+05:00]main.go:24 main.main() Starting BetterPC 2.0 server                 
+[36mINFO[0m[2024-11-21T11:32:54+05:00]mongo_db.go:98 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "" found                          
+[36mINFO[0m[2024-11-21T11:32:56+05:00]mongo_db.go:98 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "" found                          
+[36mINFO[0m[2024-11-21T11:32:56+05:00]mongo_db.go:98 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "cpu" found                       
+[36mINFO[0m[2024-11-21T11:32:56+05:00]mongo_db.go:98 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "motherboard" found               
+[33mWARN[0m[2024-11-21T11:32:56+05:00]mongo_db.go:102 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "motherboard" has no documents    
+[36mINFO[0m[2024-11-21T11:32:56+05:00]mongo_db.go:98 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "ram" found                       
+[33mWARN[0m[2024-11-21T11:32:56+05:00]mongo_db.go:102 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "ram" has no documents            
+[36mINFO[0m[2024-11-21T11:32:56+05:00]mongo_db.go:98 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "ssd" found                       
+[33mWARN[0m[2024-11-21T11:32:56+05:00]mongo_db.go:102 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "ssd" has no documents            
+[36mINFO[0m[2024-11-21T11:32:56+05:00]mongo_db.go:98 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "hdd" found                       
+[33mWARN[0m[2024-11-21T11:32:56+05:00]mongo_db.go:102 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "hdd" has no documents            
+[36mINFO[0m[2024-11-21T11:32:56+05:00]mongo_db.go:98 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "cooling" found                   
+[33mWARN[0m[2024-11-21T11:32:56+05:00]mongo_db.go:102 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "cooling" has no documents        
+[36mINFO[0m[2024-11-21T11:32:56+05:00]mongo_db.go:98 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "powersupply" found               
+[33mWARN[0m[2024-11-21T11:32:56+05:00]mongo_db.go:102 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "powersupply" has no documents    
+[36mINFO[0m[2024-11-21T11:32:56+05:00]mongo_db.go:98 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "gpu" found                       
+[36mINFO[0m[2024-11-21T11:32:56+05:00]mongo_db.go:98 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "housing" found                   
+[33mWARN[0m[2024-11-21T11:32:56+05:00]mongo_db.go:102 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "housing" has no documents        
+[36mINFO[0m[2024-11-21T11:32:56+05:00]mongo_db.go:98 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "orders" found                    
+[33mWARN[0m[2024-11-21T11:32:57+05:00]mongo_db.go:102 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "orders" has no documents         
+[36mINFO[0m[2024-11-21T11:32:57+05:00]mongo_db.go:98 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "categories" found                
+[33mWARN[0m[2024-11-21T11:32:57+05:00]mongo_db.go:102 BetterPC_2.0/internal/repository/database/mongoDb.ConnectCollection() Collection "categories" has no documents     
+[36mINFO[0m[2024-11-21T11:32:57+05:00]server.go:23 BetterPC_2%2e0.(*Server).Run() Server started on port 8080                  

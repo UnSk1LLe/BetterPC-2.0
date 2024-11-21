@@ -1,38 +1,55 @@
 package decomposers
 
 import (
-	"fmt"
 	"reflect"
 	"strings"
 )
 
-func DecomposeWithTag(instance interface{}, tagKey string) (map[string]interface{}, error) {
-	fieldsValues := make(map[string]interface{})
+func DecomposeWithTag[T any](input *T, tag string) (map[string]interface{}, error) {
+	result := make(map[string]interface{})
+	err := flattenStruct(reflect.ValueOf(input).Elem(), "", tag, result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
 
-	val := reflect.ValueOf(instance).Elem() // Get the value of the UpdateCpuInput instance
-	for i := 0; i < val.NumField(); i++ {
-		field := val.Field(i)
-		fieldType := val.Type().Field(i)
-		tag := getTagName(fieldType, tagKey)
+func flattenStruct(v reflect.Value, prefix, tag string, result map[string]interface{}) error {
+	for i := 0; i < v.NumField(); i++ {
+		field := v.Type().Field(i)
+		tagValue := getTagName(field, tag) // Use your tag parsing logic here
+		if tagValue == "" || tagValue == "-" {
+			continue
+		}
 
-		// Only process non-nil fields
-		if !field.IsNil() {
-			fieldValue := field.Elem().Interface() // Get the actual value inside the pointer
+		fullKey := tagValue
+		if prefix != "" {
+			fullKey = prefix + "." + tagValue
+		}
 
-			// Handle nested structs
-			if field.Kind() == reflect.Ptr && field.Elem().Kind() == reflect.Struct {
-				// Decompose nested struct fields if they are non-zero
-				nestedFields := decomposeStructWithTag(fieldValue, tag, tagKey)
-				for k, v := range nestedFields {
-					fieldsValues[k] = v
-				}
-			} else {
-				// Add the simple field to fieldsValues
-				fieldsValues[tag] = fieldValue
+		fieldValue := v.Field(i)
+		if fieldValue.Kind() == reflect.Ptr {
+			if fieldValue.IsNil() {
+				continue // Skip nil pointers
+			}
+			fieldValue = fieldValue.Elem()
+		} else {
+			if fieldValue.IsZero() {
+				continue
 			}
 		}
+
+		// Handle nested structs
+		if fieldValue.Kind() == reflect.Struct {
+			if err := flattenStruct(fieldValue, fullKey, tag, result); err != nil {
+				return err
+			}
+			continue
+		}
+
+		result[fullKey] = fieldValue.Interface()
 	}
-	return fieldsValues, nil
+	return nil
 }
 
 func getTagName(field reflect.StructField, tagKey string) string {
@@ -43,43 +60,4 @@ func getTagName(field reflect.StructField, tagKey string) string {
 		return tagName
 	}
 	return ""
-}
-
-// Helper function to decompose nested structs
-func decomposeStructWithTag(data interface{}, prefix string, tagKey string) map[string]interface{} {
-	result := make(map[string]interface{})
-	v := reflect.ValueOf(data)
-	t := v.Type()
-
-	for i := 0; i < v.NumField(); i++ {
-		field := v.Field(i)
-		fieldType := t.Field(i)
-		tag := getTagName(fieldType, tagKey)
-		fieldName := tag
-		if prefix != "" {
-			fieldName = fmt.Sprintf("%s.%s", prefix, tag)
-		}
-
-		// Check for zero value; only add non-zero values
-		if !isZeroValue(field) {
-			result[fieldName] = field.Interface()
-		}
-	}
-	return result
-}
-
-// Check if a reflect.Value is the zero value for its type
-func isZeroValue(v reflect.Value) bool {
-	switch v.Kind() {
-	case reflect.Slice, reflect.Map, reflect.Array:
-		return v.Len() == 0
-	case reflect.Struct:
-		// For structs, check if each field is the zero value
-		return v.Interface() == reflect.Zero(v.Type()).Interface()
-	case reflect.Ptr, reflect.Interface:
-		return v.IsNil()
-	default:
-		// Compare basic comparable types directly
-		return v.Interface() == reflect.Zero(v.Type()).Interface()
-	}
 }

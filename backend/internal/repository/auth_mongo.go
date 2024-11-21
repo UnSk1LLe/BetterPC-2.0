@@ -14,10 +14,10 @@ import (
 )
 
 type AuthMongo struct {
-	db *mongoDb.MongoConnection
+	db mongoDb.Database
 }
 
-func NewAuthMongo(conn *mongoDb.MongoConnection) *AuthMongo {
+func NewAuthMongo(conn mongoDb.Database) *AuthMongo {
 	return &AuthMongo{db: conn}
 }
 
@@ -25,7 +25,7 @@ func (a *AuthMongo) CreateUser(user users.User) (primitive.ObjectID, error) {
 	//checking if user with the given Email already exists
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 
-	res := a.db.Collections["users"].FindOne(ctx, bson.M{"user_info.email": user.UserInfo.Email})
+	res := a.db.GetUsersCollection().FindOne(ctx, bson.M{"user_info.email": user.UserInfo.Email})
 
 	if !errors.Is(res.Err(), mongo.ErrNoDocuments) && res.Err() != nil {
 		return primitive.NilObjectID, res.Err()
@@ -35,7 +35,7 @@ func (a *AuthMongo) CreateUser(user users.User) (primitive.ObjectID, error) {
 	}
 
 	//Inserting the user into users collection
-	newUser, err := a.db.Collections["users"].InsertOne(ctx, user)
+	newUser, err := a.db.GetUsersCollection().InsertOne(ctx, user)
 	if err != nil {
 		return primitive.NilObjectID, errors.New(fmt.Sprintf("error creating new user: %s", err.Error()))
 	}
@@ -46,7 +46,7 @@ func (a *AuthMongo) CreateUser(user users.User) (primitive.ObjectID, error) {
 func (a *AuthMongo) GetUserByEmail(email string) (users.User, error) {
 	var user users.User
 
-	res := a.db.Collections["users"].FindOne(context.TODO(), bson.M{"user_info.email": email})
+	res := a.db.GetUsersCollection().FindOne(context.TODO(), bson.M{"user_info.email": email})
 	if res.Err() != nil {
 		return users.User{}, res.Err()
 	}
@@ -63,7 +63,7 @@ func (a *AuthMongo) CheckUserExists(userId primitive.ObjectID) (bool, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	res := a.db.Collections["users"].FindOne(ctx, bson.M{"_id": userId})
+	res := a.db.GetUsersCollection().FindOne(ctx, bson.M{"_id": userId})
 
 	if res.Err() != nil {
 		return false, res.Err()
@@ -81,7 +81,7 @@ func (a *AuthMongo) HasRole(userId primitive.ObjectID, roles []string) (bool, er
 		"user_info.role": bson.M{"$in": roles},
 	}
 
-	res := a.db.Collections["users"].FindOne(ctx, filter)
+	res := a.db.GetUsersCollection().FindOne(ctx, filter)
 
 	if res.Err() != nil {
 		return false, res.Err()

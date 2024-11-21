@@ -6,10 +6,10 @@ import (
 )
 
 type CategoriesMongo struct {
-	db *mongoDb.MongoConnection
+	db mongoDb.Database
 }
 
-func NewCategoriesMongo(db *mongoDb.MongoConnection) *CategoriesMongo {
+func NewCategoriesMongo(db mongoDb.Database) *CategoriesMongo {
 	return &CategoriesMongo{db: db}
 }
 

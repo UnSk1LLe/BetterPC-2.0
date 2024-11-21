@@ -6,10 +6,10 @@ server:
   port: "8080"
 
 mongoDb:
-  username: "betterPC"
-  password: "median1"
-  clusterAddress: "cluster0.qtpqc.mongodb.net"
-  options: "retryWrites=true&w=majority&appName=Cluster0"
+  username: "<username>"
+  password: "<password>"
+  clusterAddress: "<cluster>.<addr>.mongodb.net"
+  options: "retryWrites=true&w=majority&appName=<name>"
 
   usersDbName: "users"
   usersCollection:
@@ -37,16 +37,16 @@ localCache:
 
 tokens:
   accessTokenTTL: "15m"
-  accessTokenSigningKey: "agjl#@$k5gag7-=ad[pfadpkadm32"
+  accessTokenSigningKey: "<accessTokenKey>"
   refreshTokenTTL: "168h"
-  refreshTokenSigningKey: "lfgSDFk^481&df1@_asdpogD25fE"
+  refreshTokenSigningKey: "<refreshTokenKey>"
   verificationTokenTTL: "24h"
 
 notifications:
-  email: "betterpc@mail.ru"
-  password: "YkrvYMZ8KgEnqqtyUtGG"
-  smtpHost: "smtp.mail.ru"
-  smtpPort: "587"
+  email: "<emailAddress>"
+  password: "<password>"
+  smtpHost: "<smtp.host>"
+  smtpPort: "<smtp.port>"
 
 users:
   image: "/assets/icons/userdefault.png"
