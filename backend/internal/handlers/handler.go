@@ -49,12 +49,16 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 	verification := router.Group("/verification")
 	{
+		verification.Use(middleware.RateLimitFromClient(middlewares.DefaultRateLimit, middlewares.DefaultRateInterval))
+
 		verification.GET("/", h.SendVerificationLink)
 		verification.POST("/:token", h.VerifyUser)
 	}
 
 	passwordRecovery := router.Group("/password_recovery")
 	{
+		verification.Use(middleware.RateLimitFromClient(middlewares.DefaultRateLimit, middlewares.DefaultRateInterval))
+
 		passwordRecovery.GET("/", h.SendRecoveryLink)
 		passwordRecovery.POST("/:token", h.RecoverPassword)
 	}
@@ -70,15 +74,35 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			products := categories.Group(":product_type")
 			{
 				products.GET("/", h.ListStandardizedProducts)
-				products.GET("/:product_id", h.ShowProductInfo)
+				products.GET("/:id", h.ShowProductInfo)
 			}
+		}
 
+		orders := shop.Group("/orders")
+		{
+			orders.Use(middleware.IsAuthorized())
+
+			orders.GET("/", h.ListUserOrders)
+			orders.GET("/:id", h.GetUserOrder)
+			orders.POST("/", h.CreateOrderWithItemHeaders)
+			//orders.PATCH("/:id/update", h.UpdateUserOrder)
+			orders.PATCH("/:id/cancel", h.CancelUserOrder)
+		}
+
+		userInfo := shop.Group("/user_info")
+		{
+			userInfo.Use(middleware.IsAuthorized())
+
+			userInfo.GET("/", h.GetUserInfo)
+			userInfo.PATCH("/", h.UpdateUserInfo)
+			userInfo.POST("/verification", h.SendNewVerificationLink)
+			userInfo.POST("/image", h.UploadUserImage)
 		}
 	}
 
 	adminPanel := router.Group("/admin_panel") //endpoints for admins
 	{
-		adminPanel.Use(middleware.UserIdentity(), middleware.AdminOnly())
+		adminPanel.Use(middleware.UserIdentity(), middleware.StaffOnly())
 
 		categories := adminPanel.Group("/categories")
 		{
@@ -89,35 +113,37 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 			products := categories.Group(":product_type")
 			{
-				//products.GET("/", h.ListProductsAdmin)
-				//products.GET("/:product_id", h.ShowProductInfoAdmin)
+				products.GET("/", h.ListStandardizedProducts)
+				products.GET("/:id", h.ShowProductInfo)
 				products.POST("/", h.CreateProduct)
-				//products.PATCH("/:product_id/update_general", h.UpdateProductGeneral)
+				products.PATCH("/:product_id/update_general", h.UpdateProductGeneral)
 				products.PATCH("/:id/update_details", h.UpdateProduct)
-				products.DELETE("/:id", h.DeleteProduct)
+				products.DELETE("/:id", middleware.AdminOnly(), h.DeleteProduct)
 			}
 		}
 
-		orders := shop.Group("/orders")
+		orders := adminPanel.Group("/orders")
 		{
 			orders.GET("/", h.ListOrders)
 			orders.GET("/:order_id", h.OrderDetails)
 			orders.POST("/", h.CreateOrderWithItemHeaders)
 			orders.PATCH("/:id/cancel", h.CancelOrder)
 			//orders.PATCH("/:order_id", h.UpdateOrder)
-			orders.DELETE("/:id", h.DeleteOrder)
+			orders.DELETE("/:id", middleware.AdminOnly(), h.DeleteOrder)
 		}
 
-		/*users := router.Group("/users")
+		users := adminPanel.Group("/users")
 		{
-			users.GET("/")
-			users.GET("/:user_id")
-			users.POST("/")
-			users.PATCH("/")
-			users.DELETE("/")
+			users.Use(middleware.AdminOnly())
+
+			users.GET("/", h.GetUserList)
+			users.GET("/:id", h.GetUser)
+			users.POST("/", h.CreateUser)
+			users.PATCH("/", h.UpdateUser)
+			users.DELETE("/", h.DeleteUser)
 		}
 
-		roles := router.Group("/roles")
+		/*roles := adminPanel.Group("/roles")
 		{
 			roles.GET("/")
 			roles.GET("/:role_id")

@@ -31,8 +31,9 @@ type Verification interface {
 
 type User interface {
 	Create(user users.User) (primitive.ObjectID, error)
-	UpdateUserImageById(userId primitive.ObjectID, imageUrl string) error
+	UpdateUserImageById(userId primitive.ObjectID, imageUrl string) (string, error)
 	UpdateUserInfoById(userId primitive.ObjectID, input userUpdateRequests.UpdateUserInfoRequest) error
+	SetRole(userId primitive.ObjectID, role users.UserRole) error
 	DeleteById(userId primitive.ObjectID) error
 	GetList(filter bson.M) ([]users.User, error)
 	GetById(userId primitive.ObjectID) (users.User, error)
@@ -50,15 +51,16 @@ type Product interface {
 	GetList(filter bson.M, productType products.ProductType) ([]products.Product, error)
 	UpdateById(id primitive.ObjectID, input productRequests.ProductUpdateRequest, productType products.ProductType) error
 	UpdateGeneralInfoById(productId primitive.ObjectID, input generalRequests.UpdateGeneralRequest, productType products.ProductType) error
-	DeleteById(productId primitive.ObjectID, productType products.ProductType) error
+	DeleteById(productId primitive.ObjectID, productType products.ProductType) (products.Product, error)
 }
 
 type Order interface {
 	Create(order orders.Order) (primitive.ObjectID, error)
-	Cancel(orderId primitive.ObjectID) error
+	Cancel(userId, orderId primitive.ObjectID) error
 	Update(orderId primitive.ObjectID, input orders.UpdateOrderInput) error
 	SetStatus(orderId primitive.ObjectID, status orders.OrderStatus) error
 	Delete(orderId primitive.ObjectID) error
+	GetOneByFilter(filter bson.M) (orders.Order, error)
 	GetById(id primitive.ObjectID) (orders.Order, error)
 	GetList(filter bson.M) ([]orders.Order, error)
 }

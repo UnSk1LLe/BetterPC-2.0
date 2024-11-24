@@ -1,6 +1,7 @@
 package middlewares
 
 import (
+	"BetterPC_2.0/internal/middlewares/helpers/userContext"
 	userResponses "BetterPC_2.0/pkg/data/models/users/responses"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
@@ -25,7 +26,7 @@ func (m *Middleware) UserIdentity() gin.HandlerFunc {
 			if err != nil {
 				m.logger.Errorf("error parsing access token: %v", err)
 			} else {
-				c.Set(UserCtx, response)
+				userContext.SetUserCtx(c, response)
 				c.Next()
 				return
 			}
@@ -56,7 +57,7 @@ func (m *Middleware) UserIdentity() gin.HandlerFunc {
 
 		m.logger.Info("tokens refreshed successfully")
 
-		c.Set(UserCtx, response)
+		userContext.SetUserCtx(c, response)
 		c.Next()
 	}
 }

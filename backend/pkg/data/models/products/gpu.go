@@ -50,6 +50,14 @@ func (gpu Gpu) GetStock() int {
 	return gpu.General.Amount
 }
 
+func (gpu Gpu) GetImage() string {
+	return gpu.General.Image
+}
+
+func (gpu Gpu) SetImage(imageName string) {
+	gpu.General.Image = imageName
+}
+
 func (gpu Gpu) Standardize() generalResponses.StandardizedProductData {
 	var product generalResponses.StandardizedProductData
 	product.ProductHeader.ID = gpu.ID.Hex()

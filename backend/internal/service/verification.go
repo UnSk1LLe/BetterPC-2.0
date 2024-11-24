@@ -5,6 +5,7 @@ import (
 	"BetterPC_2.0/internal/service/helpers/passwordHasher"
 	userErrors "BetterPC_2.0/pkg/data/models/users/errors"
 	"BetterPC_2.0/pkg/data/models/users/requests/patch"
+	"BetterPC_2.0/pkg/logging"
 	"BetterPC_2.0/pkg/tokensGen"
 	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -15,11 +16,17 @@ const VerificationTokenByteLength = 32
 const DefaultVerificationTokenTTL = 24 * time.Hour
 
 type VerificationService struct {
-	repo repository.Verification
+	repo                repository.Verification
+	notificationService *NotificationService
+	logger              *logging.Logger
 }
 
-func NewVerificationService(repo repository.Verification) *VerificationService {
-	return &VerificationService{repo: repo}
+func NewVerificationService(repo repository.Verification, notificationService *NotificationService, logger *logging.Logger) *VerificationService {
+	return &VerificationService{
+		repo:                repo,
+		notificationService: notificationService, //TODO manage notifications from verification service itself adn not from handlers
+		logger:              logger,
+	}
 }
 
 func (vs *VerificationService) SetNewToken(email string, tokenTTL time.Duration) (string, error) {

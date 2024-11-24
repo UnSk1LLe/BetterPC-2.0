@@ -16,5 +16,5 @@ var (
 	ErrUnsupportedProductType    = ProductError{errors.New("unsupported product type")}
 	ErrProductTypesMismatch      = ProductError{errors.New("product types mismatch")}
 	ErrInsufficientStock         = ProductError{errors.New("not enough stock available")}
-	ErrProductNotModified        = ProductError{errors.New("product not modified")}
+	ErrProductNotModified        = ProductError{errors.New("product not modified, no new changes for product")}
 )

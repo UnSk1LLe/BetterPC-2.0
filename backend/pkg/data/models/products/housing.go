@@ -34,6 +34,14 @@ func (housing Housing) GetStock() int {
 	return housing.General.Amount
 }
 
+func (housing Housing) GetImage() string {
+	return housing.General.Image
+}
+
+func (housing Housing) SetImage(imageName string) {
+	housing.General.Image = imageName
+}
+
 func (housing Housing) Standardize() generalResponses.StandardizedProductData {
 	var product generalResponses.StandardizedProductData
 	product.ProductHeader.ID = housing.ID.Hex()

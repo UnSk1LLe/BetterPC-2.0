@@ -22,32 +22,36 @@ type UpdateMainCpu struct {
 	Category   string `bson:"category" json:"category,omitempty"`
 	Generation string `bson:"generation" json:"generation,omitempty"`
 	Socket     string `bson:"socket" json:"socket,omitempty"`
-	Year       *int   `bson:"year" json:"year,omitempty"`
+	Year       *int   `bson:"year" json:"year,omitempty" binding:"min=2005"`
 }
 
 type UpdateCoresCpu struct {
 	Pcores           *int `bson:"p-cores" json:"p-cores,omitempty"`
 	Ecores           *int `bson:"e-cores" json:"e-cores,omitempty"`
 	Threads          *int `bson:"threads" json:"threads,omitempty"`
-	TechnicalProcess *int `bson:"technical_process" json:"technical_process,omitempty"`
+	TechnicalProcess *int `bson:"technical_process" json:"technical_process,omitempty" binding:"min=0,max=30"`
 }
 
 type UpdateClockFrequencyCpu struct {
-	Pcores         *[]float64 `bson:"p-cores" json:"p-cores,omitempty"`
-	Ecores         *[]float64 `bson:"e-cores" json:"e-cores,omitempty"`
-	FreeMultiplier *bool      `bson:"free_multiplier" json:"free_multiplier,omitempty"`
+	Pcores         *[]float64 `bson:"p-cores" json:"p-cores,omitempty" binding:"min=0"`
+	Ecores         *[]float64 `bson:"e-cores" json:"e-cores,omitempty" binding:"min=0"`
+	FreeMultiplier *bool      `bson:"free_multiplier" json:"free_multiplier,omitempty" binding:"min=0"`
 }
 
 type UpdateRamCpu struct {
-	Channels     *int   `bson:"channels" json:"channels,omitempty"`
-	MaxFrequency *[]int `bson:"max_frequency" json:"max_frequency,omitempty"`
-	MaxCapacity  *int   `bson:"max_capacity" json:"max_capacity,omitempty"`
+	Channels     *int   `bson:"channels" json:"channels,omitempty" binding:"min=0"`
+	MaxFrequency *[]int `bson:"max_frequency" json:"max_frequency,omitempty" binding:"min=0"`
+	MaxCapacity  *int   `bson:"max_capacity" json:"max_capacity,omitempty" binding:"min=0"`
 }
 
-func (c *UpdateCpuRequest) Validate() error {
-	return validators.ValidateStruct(c)
+func (cpuRequest *UpdateCpuRequest) Validate() error {
+	return validators.ValidateStruct(cpuRequest)
 }
 
-func (c *UpdateCpuRequest) Decompose() (map[string]interface{}, error) {
-	return decomposers.DecomposeWithTag(c, "bson")
+func (cpuRequest *UpdateCpuRequest) Decompose() (map[string]interface{}, error) {
+	return decomposers.DecomposeWithTag(cpuRequest, "bson")
+}
+
+func (cpuRequest *UpdateCpuRequest) SetImage(imageName *string) {
+	cpuRequest.General.Image = imageName
 }

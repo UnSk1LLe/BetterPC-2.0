@@ -2,11 +2,54 @@ package users
 
 import (
 	"BetterPC_2.0/configs"
+	userErrors "BetterPC_2.0/pkg/data/models/users/errors"
 	userResponses "BetterPC_2.0/pkg/data/models/users/responses"
 	"BetterPC_2.0/pkg/email/helpers"
+	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"strings"
 	"time"
 )
+
+const MaxUserRoleLength = 20
+
+type UserRole string
+
+var UserRoles = struct {
+	Customer      UserRole
+	ShopAssistant UserRole
+	Admin         UserRole
+}{
+	Customer:      "CUSTOMER",
+	ShopAssistant: "SHOP_ASSISTANT",
+	Admin:         "ADMIN",
+} // TODO change all user roles dependencies to this struct
+
+func (u UserRole) String() string {
+	return string(u)
+}
+
+func UserRoleFromString(input string) (UserRole, error) {
+	if len(input) > MaxUserRoleLength {
+		return "", errors.Wrapf(userErrors.ErrInvalidUserRole, "user role must be shorter than %d characters", MaxUserRoleLength)
+	}
+
+	normalizedInput := strings.ToLower(strings.TrimSpace(input))
+	if len(normalizedInput) == 0 {
+		return "", errors.Wrap(userErrors.ErrInvalidUserRole, "user role cannot not be empty")
+	}
+
+	switch UserRole(normalizedInput) {
+	case UserRoles.Customer:
+		return UserRoles.Customer, nil
+	case UserRoles.ShopAssistant:
+		return UserRoles.ShopAssistant, nil
+	case UserRoles.Admin:
+		return UserRoles.Admin, nil
+	}
+
+	return "", userErrors.ErrInvalidUserRole
+}
 
 type User struct {
 	ID           primitive.ObjectID `bson:"_id"`
@@ -35,21 +78,22 @@ type Verification struct {
 }
 
 func NewUserDefault(token string, cfg *configs.Config) *User {
+	currentTime := time.Now()
+	currentDateTime := primitive.NewDateTimeFromTime(currentTime)
 	user := &User{
 		ID: primitive.NewObjectID(),
 		UserInfo: UserInfo{
-			Image: cfg.User.Image,
-			Role:  cfg.User.Roles.CustomerRole,
+			Role: cfg.User.Roles.CustomerRole,
 		},
 		Verification: Verification{
 			Token:      token,
-			CreatedAt:  primitive.NewDateTimeFromTime(time.Now()),
-			UpdatedAt:  primitive.NewDateTimeFromTime(time.Now()),
-			ExpiresAt:  primitive.NewDateTimeFromTime(time.Now().Add(cfg.Tokens.VerificationTokenTTL)),
+			CreatedAt:  currentDateTime,
+			UpdatedAt:  currentDateTime,
+			ExpiresAt:  primitive.NewDateTimeFromTime(currentTime.Add(cfg.Tokens.VerificationTokenTTL)),
 			IsVerified: false,
 		},
-		CreatedAt: primitive.NewDateTimeFromTime(time.Now()),
-		UpdatedAt: primitive.NewDateTimeFromTime(time.Now()),
+		CreatedAt: currentDateTime,
+		UpdatedAt: currentDateTime,
 	}
 	return user
 }

@@ -30,6 +30,14 @@ func (ssd Ssd) GetStock() int {
 	return ssd.General.Amount
 }
 
+func (ssd Ssd) GetImage() string {
+	return ssd.General.Image
+}
+
+func (ssd Ssd) SetImage(imageName string) {
+	ssd.General.Image = imageName
+}
+
 func (ssd Ssd) Standardize() generalResponses.StandardizedProductData {
 	var product generalResponses.StandardizedProductData
 	product.ProductHeader.ID = ssd.ID.Hex()

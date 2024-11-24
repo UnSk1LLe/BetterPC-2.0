@@ -103,6 +103,8 @@ var ProductTypeFactory = map[ProductType]func() Product{
 type Product interface {
 	GetModel() string
 	GetStock() int
+	GetImage() string
+	SetImage(imageName string)
 	CalculateFinalPrice() int
 	Standardize() generalResponses.StandardizedProductData
 }

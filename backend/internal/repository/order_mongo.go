@@ -59,14 +59,17 @@ func (o *OrderMongo) Create(order orders.Order) (primitive.ObjectID, error) {
 	return result.(primitive.ObjectID), nil
 }
 
-func (o *OrderMongo) Cancel(orderId primitive.ObjectID) error {
+func (o *OrderMongo) Cancel(userId, orderId primitive.ObjectID) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
 
 	callback := func(sesCtx mongo.SessionContext) (interface{}, error) {
 		var order orders.Order
 
-		filter := bson.M{"_id": orderId}
+		filter := bson.M{
+			"_id":     orderId,
+			"user_id": userId,
+		}
 		update := bson.M{"$set": bson.M{
 			"status":     orders.OrderStatuses.Cancelled,
 			"updated_at": time.Now(),
@@ -259,6 +262,30 @@ func (o *OrderMongo) Delete(orderId primitive.ObjectID) error {
 		return errors.Wrap(err, errMsg)
 	}
 	return nil
+}
+
+func (o *OrderMongo) GetOneByFilter(filter bson.M) (orders.Order, error) {
+	var order orders.Order
+
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
+
+	res := o.db.GetOrdersCollection().FindOne(ctx, filter)
+	if res.Err() != nil {
+		switch {
+		case errors.Is(res.Err(), mongo.ErrNoDocuments):
+			return order, errors.Wrapf(orderErrors.ErrOrderNotFound, "error getting order")
+		}
+		return order, errors.Wrap(res.Err(), "error getting order")
+	}
+
+	err := res.Decode(&order)
+	if err != nil {
+		return order, errors.Wrap(res.Err(), "error decoding order")
+	}
+
+	return order, nil
+
 }
 
 func (o *OrderMongo) GetById(id primitive.ObjectID) (orders.Order, error) {

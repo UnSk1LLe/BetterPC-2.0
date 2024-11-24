@@ -71,6 +71,10 @@ func (h *Handler) SendVerificationLink(c *gin.Context) {
 	responseManager.MessageResponseWithLog(c, http.StatusOK, logMessage, message)
 }
 
+func (h *Handler) SendNewVerificationLink(c *gin.Context) {
+
+}
+
 func (h *Handler) VerifyUser(c *gin.Context) {
 	token := c.Param("token")
 	if token == "" {

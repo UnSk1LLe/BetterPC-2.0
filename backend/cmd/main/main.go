@@ -49,7 +49,7 @@ func main() {
 	smtpServer.InitWithConfig(configs.GetConfig())
 
 	appRepos := repository.NewRepository(mongoDbConnection)
-	appServices := service.NewService(appRepos)
+	appServices := service.NewService(appRepos, logger)
 	appHandlers := handlers.NewHandler(appServices, logger, configs.GetConfig(), localCache.GetLocalCache())
 
 	server := new(BetterPC_2_0.Server)

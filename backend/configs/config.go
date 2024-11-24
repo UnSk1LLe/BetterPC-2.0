@@ -59,7 +59,6 @@ type Notifications struct {
 }
 
 type User struct {
-	Image string
 	Roles UserRoles
 }
 
@@ -117,7 +116,6 @@ func SetConfig() {
 			SmtpPort: viper.GetString("notifications.smtpPort"),
 		},
 		User: User{
-			Image: viper.GetString("users.image"),
 			Roles: UserRoles{
 				CustomerRole:      viper.GetString("users.roles.customerRole"),
 				ShopAssistantRole: viper.GetString("users.roles.shopAssistantRole"),

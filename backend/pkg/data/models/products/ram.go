@@ -32,6 +32,14 @@ func (ram Ram) GetStock() int {
 	return ram.General.Amount
 }
 
+func (ram Ram) GetImage() string {
+	return ram.General.Image
+}
+
+func (ram Ram) SetImage(imageName string) {
+	ram.General.Image = imageName
+}
+
 func (ram Ram) Standardize() generalResponses.StandardizedProductData {
 	var product generalResponses.StandardizedProductData
 	product.ProductHeader.ID = ram.ID.Hex()

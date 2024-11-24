@@ -70,7 +70,7 @@ func MustConnectMongo(cfg *configs.Config, logger *logging.Logger) {
 		logger.Fatalf("error initializing users collection: %v", err)
 	}
 
-	ordersCollection, err := ConnectCollection(client, cfg.MongoDB.UsersDbName, cfg.MongoDB.UsersCollectionName, logger)
+	ordersCollection, err := ConnectCollection(client, cfg.MongoDB.ShopDbName, cfg.MongoDB.OrdersCollectionName, logger)
 	if err != nil {
 		logger.Fatalf("error initializing orders collection: %v", err)
 	}
@@ -91,6 +91,13 @@ func MustConnectMongo(cfg *configs.Config, logger *logging.Logger) {
 }
 
 func ConnectCollection(client *mongo.Client, dbName, collectionName string, logger *logging.Logger) (*mongo.Collection, error) {
+	switch {
+	case dbName == "":
+		return nil, errors.New("database name is specified")
+	case collectionName == "":
+		return nil, errors.New("collection name is not specified")
+	}
+
 	collection := client.Database(dbName).Collection(collectionName)
 	if collection == nil {
 		return nil, errors.New(fmt.Sprintf("nil pointer for collection <%s> in db <%s>.", collectionName, dbName))

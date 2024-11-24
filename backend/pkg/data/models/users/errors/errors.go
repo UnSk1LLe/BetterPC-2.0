@@ -16,4 +16,6 @@ var (
 	ErrUserAlreadyVerified = UserError{errors.New("user already verified")}
 	ErrUserNotVerified     = UserError{errors.New("user is not verified")}
 	ErrTokenExpired        = UserError{errors.New("token expired")}
+	ErrInvalidUserRole     = UserError{errors.New("invalid user role")}
+	ErrUserNotModified     = UserError{errors.New("user not modified, no new changes for user")}
 )

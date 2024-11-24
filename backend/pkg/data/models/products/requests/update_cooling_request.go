@@ -8,21 +8,25 @@ import (
 
 type UpdateCoolingRequest struct {
 	General    *generalRequests.UpdateGeneralRequest `bson:"general" json:"general"`
-	Type       *string                               `bson:"type" json:"type"`
+	Type       string                                `bson:"type" json:"type"`
 	Sockets    *[]string                             `bson:"sockets" json:"sockets"`
 	Fans       *[]int                                `bson:"fans" json:"fans"`
 	Rpm        *[]int                                `bson:"rpm" json:"rpm"`
 	Tdp        *int                                  `bson:"tdp" json:"tdp"`
 	NoiseLevel *int                                  `bson:"noise_level" json:"noiseLevel"`
-	MountType  *string                               `bson:"mount_type" json:"mountType"`
+	MountType  string                                `bson:"mount_type" json:"mountType"`
 	Power      *int                                  `bson:"power" json:"power"`
 	Height     *int                                  `bson:"height" json:"height"`
 }
 
-func (m *UpdateCoolingRequest) Validate() error {
-	return validators.ValidateStruct(m)
+func (coolingRequest *UpdateCoolingRequest) Validate() error {
+	return validators.ValidateStruct(coolingRequest)
 }
 
-func (m *UpdateCoolingRequest) Decompose() (map[string]interface{}, error) {
-	return decomposers.DecomposeWithTag(m, "bson")
+func (coolingRequest *UpdateCoolingRequest) Decompose() (map[string]interface{}, error) {
+	return decomposers.DecomposeWithTag(coolingRequest, "bson")
+}
+
+func (coolingRequest *UpdateCoolingRequest) SetImage(imageName *string) {
+	coolingRequest.General.Image = imageName
 }

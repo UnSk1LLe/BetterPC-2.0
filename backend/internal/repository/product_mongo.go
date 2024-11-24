@@ -189,16 +189,28 @@ func (p *ProductMongo) UpdateGeneralInfoById(productId primitive.ObjectID, input
 	return nil
 }
 
-func (p *ProductMongo) DeleteById(productId primitive.ObjectID, productType products.ProductType) error {
+func (p *ProductMongo) DeleteById(productId primitive.ObjectID, productType products.ProductType) (products.Product, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	delRes, err := p.db.GetProductCollection(productType).DeleteOne(ctx, bson.M{"productId": productId})
-	if err != nil {
-		return errors.New(fmt.Sprintf("error deleting product with id <%s> in collection <%s>: %s", productId, productType, err.Error()))
-	} else if delRes.DeletedCount == 0 {
-		return productErrors.ErrNoProductsFound
+	factory, ok := products.ProductTypeFactory[productType]
+	if !ok {
+		return nil, productErrors.ErrUnsupportedProductType
 	}
 
-	return nil
+	delRes := p.db.GetProductCollection(productType).FindOneAndDelete(ctx, bson.M{"productId": productId})
+	if delRes.Err() != nil {
+		switch {
+		case errors.Is(delRes.Err(), mongo.ErrNoDocuments):
+			return nil, productErrors.ErrNoProductsFound
+		}
+		return nil, errors.New(fmt.Sprintf("error deleting product with id <%s> in collection <%s>: %s", productId, productType, delRes.Err().Error()))
+	}
+
+	product, err := productsDecoders.DecodeProduct(delRes, factory)
+	if err != nil {
+		return nil, err
+	}
+
+	return *product, nil
 }

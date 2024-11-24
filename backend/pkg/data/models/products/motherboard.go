@@ -42,6 +42,14 @@ func (motherboard Motherboard) GetStock() int {
 	return motherboard.General.Amount
 }
 
+func (motherboard Motherboard) GetImage() string {
+	return motherboard.General.Image
+}
+
+func (motherboard Motherboard) SetImage(imageName string) {
+	motherboard.General.Image = imageName
+}
+
 func (motherboard Motherboard) Standardize() generalResponses.StandardizedProductData {
 	var product generalResponses.StandardizedProductData
 	product.ProductHeader.ID = motherboard.ID.Hex()

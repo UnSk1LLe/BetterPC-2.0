@@ -45,7 +45,7 @@ func (h *Handler) ListStandardizedProducts(c *gin.Context) {
 }
 
 func (h *Handler) ShowProductInfo(c *gin.Context) {
-	productId, err := primitive.ObjectIDFromHex(c.Param("product_id"))
+	productId, err := primitive.ObjectIDFromHex(c.Param("id"))
 	if err != nil {
 		logMessage := fmt.Sprintf("error getting product id: %s", err.Error())
 		responseManager.ErrorResponseWithLog(c, http.StatusInternalServerError, logMessage)

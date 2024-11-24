@@ -12,14 +12,19 @@ import (
 	productRequests "BetterPC_2.0/pkg/data/models/products/requests"
 	"BetterPC_2.0/pkg/data/models/users"
 	userFilters "BetterPC_2.0/pkg/data/models/users/filters"
+	adminUserRequests "BetterPC_2.0/pkg/data/models/users/requests/admin"
 	userAuthRequests "BetterPC_2.0/pkg/data/models/users/requests/auth"
 	userUpdateRequests "BetterPC_2.0/pkg/data/models/users/requests/patch"
 	userResponses "BetterPC_2.0/pkg/data/models/users/responses"
 	"BetterPC_2.0/pkg/email/smtpServer"
+	"BetterPC_2.0/pkg/logging"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"mime/multipart"
 	"time"
 )
+
+const staticFilesPath = "./static"
 
 type Authorization interface {
 	CreateUser(input userAuthRequests.RegisterRequest) (primitive.ObjectID, error)
@@ -44,11 +49,13 @@ type Notification interface {
 }
 
 type User interface {
-	Create(user users.User) (string, error)
-	Update(userId string, input userUpdateRequests.UpdateUserInfoRequest) error
+	Create(user adminUserRequests.CreateUserRequest) (string, error)
+	UpdateUserInfo(userId string, input userUpdateRequests.UpdateUserInfoRequest) error
+	SetRole(userId string, role string) error
 	Delete(userId string) error
 	GetList(filters userFilters.AdminUserFilters) ([]users.User, error)
 	GetById(userId string) (users.User, error)
+	UpdateUserImage(userId string, image *multipart.FileHeader) error
 }
 
 type Categories interface {
@@ -58,29 +65,35 @@ type Categories interface {
 }
 
 type Product interface {
-	Create(product products.Product, productType products.ProductType) (primitive.ObjectID, error)
+	Create(product products.Product, productType products.ProductType, image *multipart.FileHeader) (primitive.ObjectID, error)
 	GetById(id primitive.ObjectID, productType products.ProductType) (products.Product, error)
 	GetList(filter bson.M, productType products.ProductType) ([]products.Product, error)
 	GetStandardizedList(filter bson.M, productType products.ProductType) ([]generalResponses.StandardizedProductData, error)
-	UpdateById(id primitive.ObjectID, input productRequests.ProductUpdateRequest, productType products.ProductType) error
-	UpdateGeneralInfoById(productId primitive.ObjectID, input generalRequests.UpdateGeneralRequest, productType products.ProductType) error
+	UpdateById(id primitive.ObjectID, input productRequests.ProductUpdateRequest,
+		productType products.ProductType, image *multipart.FileHeader) error
+	UpdateGeneralInfoById(productId primitive.ObjectID, input generalRequests.UpdateGeneralRequest,
+		productType products.ProductType, image *multipart.FileHeader) error
 	DeleteById(productId primitive.ObjectID, productType products.ProductType) error
 }
 
-type Filters interface {
-	SetSearchFilter()
-	GetSearchFilter() bson.M
-	SetBuildFilter()
-	GetBuildFilter() bson.M
+type Files interface {
+	AddUserImage(file *multipart.FileHeader) (string, error)
+	AddProductImage(file *multipart.FileHeader) (string, error)
+	AddImage(file *multipart.FileHeader, subDirectory string) (string, error)
+	DeleteUserImage(imageName string) error
+	DeleteProductImage(imageName string) error
+	DeleteImage(imageName, subDirectory string) error
 }
 
 type Order interface {
 	CreateWithItemHeaders(userId string, itemHeaders orderRequests.CreateOrderRequest) (primitive.ObjectID, error)
 	Update(orderId string, input orders.UpdateOrderInput) error
-	CancelOrder(orderId string) error
+	CancelOrder(userId, orderId string) error
 	SetStatus(orderId string, status string) error
 	Delete(orderId string) error
 	GetById(orderId string) (orders.Order, error)
+	GetUserOrders(userId string) ([]orders.Order, error)
+	GetUserOrder(userId, orderId string) (orders.Order, error)
 	GetList(filter orderFilters.AdminOrderFilters) ([]orders.Order, error)
 }
 
@@ -94,14 +107,18 @@ type Service struct {
 	Order
 }
 
-func NewService(repos *repository.Repository) *Service {
+func NewService(repos *repository.Repository, logger *logging.Logger) *Service {
+
+	fileService := NewFileService(staticFilesPath)
+	notificationService := NewNotificationService(smtpServer.MustGet(), logger)
+
 	return &Service{
-		Categories:    NewCategoryService(repos.Categories),
-		Authorization: NewAuthService(repos.Authorization, repos.User),
-		Verification:  NewVerificationService(repos.Verification),
-		Notification:  NewNotificationService(smtpServer.MustGet()),
-		Product:       NewProductService(repos.Product),
-		Order:         NewOrderService(repos.Order, repos.Product),
-		User:          NewUserService(repos.User),
+		Categories:    NewCategoryService(repos.Categories, logger),
+		Authorization: NewAuthService(repos.Authorization, repos.User, logger),
+		Verification:  NewVerificationService(repos.Verification, notificationService, logger),
+		Notification:  NewNotificationService(smtpServer.MustGet(), logger),
+		Product:       NewProductService(repos.Product, fileService, logger),
+		Order:         NewOrderService(repos.Order, repos.Product, logger),
+		User:          NewUserService(repos.User, fileService, logger),
 	}
 }

@@ -8,6 +8,7 @@ import (
 	orderRequests "BetterPC_2.0/pkg/data/models/orders/requests"
 	"BetterPC_2.0/pkg/data/models/products"
 	productErrors "BetterPC_2.0/pkg/data/models/products/errors"
+	"BetterPC_2.0/pkg/logging"
 	"fmt"
 	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/bson"
@@ -17,12 +18,14 @@ import (
 type OrderService struct {
 	repo        repository.Order
 	productRepo repository.Product
+	logger      *logging.Logger
 }
 
-func NewOrderService(repo repository.Order, productRepo repository.Product) *OrderService {
+func NewOrderService(repo repository.Order, productRepo repository.Product, logger *logging.Logger) *OrderService {
 	return &OrderService{
 		repo:        repo,
 		productRepo: productRepo,
+		logger:      logger,
 	}
 }
 
@@ -79,8 +82,13 @@ func (o *OrderService) CreateWithItemHeaders(userId string, input orderRequests.
 	return o.repo.Create(order)
 }
 
-func (o *OrderService) CancelOrder(orderId string) error {
+func (o *OrderService) CancelOrder(userId, orderId string) error {
 	orderObjId, err := primitive.ObjectIDFromHex(orderId)
+	if err != nil {
+		return err
+	}
+
+	userObjId, err := primitive.ObjectIDFromHex(userId)
 	if err != nil {
 		return err
 	}
@@ -96,7 +104,7 @@ func (o *OrderService) CancelOrder(orderId string) error {
 	}
 
 	//TODO add logic if order is paid then give money back to the client, else cancel order
-	err = o.repo.Cancel(orderObjId)
+	err = o.repo.Cancel(userObjId, orderObjId)
 	if err != nil {
 		return err
 	}
@@ -153,6 +161,35 @@ func (o *OrderService) GetById(orderId string) (orders.Order, error) {
 	}
 
 	return order, nil
+}
+
+func (o *OrderService) GetUserOrders(userId string) ([]orders.Order, error) {
+	userObjId, err := primitive.ObjectIDFromHex(userId)
+	if err != nil {
+		return nil, errors.Wrap(err, "invalid user id: %v")
+	}
+
+	bsonFilter := bson.M{"user_id": userObjId}
+
+	return o.repo.GetList(bsonFilter)
+}
+
+func (o *OrderService) GetUserOrder(userId, orderId string) (orders.Order, error) {
+	var order orders.Order
+
+	userObjId, err := primitive.ObjectIDFromHex(userId)
+	if err != nil {
+		return order, errors.Wrap(err, "invalid user id: %v")
+	}
+
+	orderObjId, err := primitive.ObjectIDFromHex(orderId)
+	if err != nil {
+		return order, errors.Wrap(err, "invalid order id: %v")
+	}
+
+	bsonFilter := bson.M{"_id": orderObjId, "user_id": userObjId}
+
+	return o.repo.GetOneByFilter(bsonFilter)
 }
 
 func (o *OrderService) GetList(filters orderFilters.AdminOrderFilters) ([]orders.Order, error) {

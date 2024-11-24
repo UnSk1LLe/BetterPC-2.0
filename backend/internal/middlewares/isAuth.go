@@ -2,31 +2,24 @@ package middlewares
 
 import (
 	"BetterPC_2.0/internal/handlers/helpers/responseManager"
-	userResponses "BetterPC_2.0/pkg/data/models/users/responses"
-	"fmt"
+	"BetterPC_2.0/internal/middlewares/helpers/userContext"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"reflect"
 )
 
-func (m *Middleware) IsAuthorized(c *gin.Context) {
-	user, exists := c.Get(UserCtx)
-	if !exists || user == nil {
-		message := "no user context found"
-		m.logger.Error(message)
-		responseManager.ErrorResponseWithLog(c, http.StatusUnauthorized, message)
-		return
-	}
+func (m *Middleware) IsAuthorized() gin.HandlerFunc {
+	return func(c *gin.Context) {
 
-	_, ok := user.(userResponses.UserResponse)
-	if !ok {
-		message := fmt.Sprintf("failed type assertion from <%v> to <%v>",
-			reflect.TypeOf(user), reflect.TypeOf(userResponses.UserResponse{}),
-		)
-		m.logger.Error(message)
-		responseManager.ErrorResponseWithLog(c, http.StatusUnauthorized, message)
-		return
-	}
+		user, err := userContext.GetUserCtx(c)
+		if err != nil {
+			responseManager.ErrorResponseWithLog(c, http.StatusUnauthorized, err.Error())
+			return
+		}
+		if user.ID == "" {
+			responseManager.ErrorResponseWithLog(c, http.StatusUnauthorized, "invalid user data")
+			return
+		}
 
-	c.Next()
+		c.Next()
+	}
 }

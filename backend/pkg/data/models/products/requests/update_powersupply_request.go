@@ -3,27 +3,38 @@ package requests
 import (
 	"BetterPC_2.0/pkg/data/helpers/decomposers"
 	"BetterPC_2.0/pkg/data/helpers/validators"
-	"BetterPC_2.0/pkg/data/models/products/general"
+	generalRequests "BetterPC_2.0/pkg/data/models/products/general/requests"
 )
 
 type UpdatePowerSupplyRequest struct {
-	General    *general.General `bson:"general" json:"general"`
-	Type       *string          `bson:"type" json:"type"`
-	Capacity   *int             `bson:"capacity" json:"capacity"`
-	Interface  *string          `bson:"interface" json:"interface"`
-	MemoryType *string          `bson:"memory_type" json:"memory_type"`
-	Read       *int             `bson:"read" json:"read"`
-	Write      *int             `bson:"write" json:"write"`
-	FormFactor *string          `bson:"form_factor" json:"form_factor"`
-	Mftb       *float64         `bson:"mftb" json:"mftb"`
-	Size       *[]float64       `bson:"size" json:"size"`
-	Weight     *int             `bson:"weight" json:"weight"`
+	General     *generalRequests.UpdateGeneralRequest `bson:"general" json:"general"`
+	FormFactor  string                                `bson:"form_factor"`
+	OutputPower *int                                  `bson:"output_power"`
+	Connectors  *UpdateConnectors                     `bson:"connectors"`
+	Modules     *bool                                 `bson:"modules"`
+	MbPower     *int                                  `bson:"mb_power"`
+	CpuPower    *UpdateCpuPower                       `bson:"cpu_power"`
 }
 
-func (m *UpdatePowerSupplyRequest) Validate() error {
-	return validators.ValidateStruct(m)
+type UpdateConnectors struct {
+	Sata  *int   `bson:"SATA"`
+	Molex *int   `bson:"MOLEX"`
+	PciE  *[]int `bson:"PCI_E"`
 }
 
-func (m *UpdatePowerSupplyRequest) Decompose() (map[string]interface{}, error) {
-	return decomposers.DecomposeWithTag(m, "bson")
+type UpdateCpuPower struct {
+	Amount *int   `bson:"amount"`
+	Type   *[]int `bson:"type"`
+}
+
+func (powerSupplyRequest *UpdatePowerSupplyRequest) Validate() error {
+	return validators.ValidateStruct(powerSupplyRequest)
+}
+
+func (powerSupplyRequest *UpdatePowerSupplyRequest) Decompose() (map[string]interface{}, error) {
+	return decomposers.DecomposeWithTag(powerSupplyRequest, "bson")
+}
+
+func (powerSupplyRequest *UpdatePowerSupplyRequest) SetImage(imageName *string) {
+	powerSupplyRequest.General.Image = imageName
 }

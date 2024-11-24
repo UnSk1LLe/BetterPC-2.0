@@ -49,7 +49,6 @@ notifications:
   smtpPort: "<smtp.port>"
 
 users:
-  image: "/assets/icons/userdefault.png"
   roles:
     customerRole: "CUSTOMER"
     adminRole: "ADMIN"

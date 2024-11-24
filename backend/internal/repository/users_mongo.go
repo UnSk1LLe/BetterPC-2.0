@@ -45,8 +45,31 @@ func (u *UsersMongo) Create(user users.User) (primitive.ObjectID, error) {
 	return newUser.InsertedID.(primitive.ObjectID), nil
 }
 
-func (u *UsersMongo) UpdateUserImageById(userId primitive.ObjectID, imageUrl string) error {
-	return nil
+func (u *UsersMongo) UpdateUserImageById(userId primitive.ObjectID, imageUrl string) (string, error) {
+	var user users.User
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	filter := bson.M{"_id": userId}
+	update := bson.M{"$set": bson.M{"user_info.image": imageUrl}}
+
+	res := u.db.GetUsersCollection().FindOneAndUpdate(ctx, filter, update)
+	if res.Err() != nil {
+		switch {
+		case errors.Is(res.Err(), mongo.ErrNoDocuments):
+			return "", userErrors.ErrUserNotFound
+		}
+		return "", res.Err()
+	}
+
+	err := res.Decode(&user)
+	if err != nil {
+		return "", err
+	}
+
+	prevImg := user.UserInfo.Image
+	return prevImg, nil
 }
 
 func (u *UsersMongo) UpdateUserInfoById(userId primitive.ObjectID, input userUpdateRequests.UpdateUserInfoRequest) error {
@@ -56,6 +79,26 @@ func (u *UsersMongo) UpdateUserInfoById(userId primitive.ObjectID, input userUpd
 	defer cancel()
 
 	res, err := u.db.GetUsersCollection().UpdateByID(ctx, userId, input)*/
+	return nil
+}
+
+func (u *UsersMongo) SetRole(userId primitive.ObjectID, role users.UserRole) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	update := bson.M{"$set": bson.M{"user_info.role": role.String()}}
+
+	res, err := u.db.GetUsersCollection().UpdateByID(ctx, userId, update)
+	if err != nil {
+		return err
+	}
+	if res.MatchedCount == 0 {
+		return userErrors.ErrUserNotFound
+	}
+	if res.ModifiedCount == 0 {
+		return userErrors.ErrUserNotModified
+	}
+
 	return nil
 }
 

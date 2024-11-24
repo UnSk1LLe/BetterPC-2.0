@@ -3,6 +3,7 @@ package service
 import (
 	"BetterPC_2.0/internal/repository"
 	"BetterPC_2.0/pkg/data/models/categories"
+	"BetterPC_2.0/pkg/logging"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -11,7 +12,7 @@ type CategoryService struct {
 	repo repository.Categories
 }
 
-func NewCategoryService(repo repository.Categories) *CategoryService {
+func NewCategoryService(repo repository.Categories, logger *logging.Logger) *CategoryService {
 	return &CategoryService{repo: repo}
 }
 

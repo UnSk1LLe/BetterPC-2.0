@@ -30,6 +30,14 @@ func (hdd Hdd) GetStock() int {
 	return hdd.General.Amount
 }
 
+func (hdd Hdd) GetImage() string {
+	return hdd.General.Image
+}
+
+func (hdd Hdd) SetImage(imageName string) {
+	hdd.General.Image = imageName
+}
+
 func (hdd Hdd) Standardize() generalResponses.StandardizedProductData {
 	var product generalResponses.StandardizedProductData
 	product.ProductHeader.ID = hdd.ID.Hex()

@@ -30,6 +30,14 @@ func (cooling Cooling) GetStock() int {
 	return cooling.General.Amount
 }
 
+func (cooling Cooling) GetImage() string {
+	return cooling.General.Image
+}
+
+func (cooling Cooling) SetImage(imageName string) {
+	cooling.General.Image = imageName
+}
+
 func (cooling Cooling) Standardize() generalResponses.StandardizedProductData {
 	var product generalResponses.StandardizedProductData
 	product.ProductHeader.ID = cooling.ID.Hex()

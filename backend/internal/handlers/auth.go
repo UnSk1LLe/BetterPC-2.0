@@ -77,7 +77,7 @@ func (h *Handler) Login(c *gin.Context) {
 		}
 
 		message := "Could not authorize user"
-		responseManager.ErrorResponseWithLog(c, http.StatusInternalServerError, message)
+		responseManager.ErrorResponseWithLog(c, http.StatusInternalServerError, message+err.Error())
 		//errors.RenderError(c, http.StatusInternalServerError, "/auth/login", "get", err, message)
 		return
 	}

@@ -3,10 +3,12 @@ package service
 import (
 	"BetterPC_2.0/configs"
 	"BetterPC_2.0/internal/repository"
+	"BetterPC_2.0/internal/service/helpers/converters"
 	"BetterPC_2.0/internal/service/helpers/passwordHasher"
 	"BetterPC_2.0/pkg/data/models/users"
 	userRequests "BetterPC_2.0/pkg/data/models/users/requests/auth"
 	userResponses "BetterPC_2.0/pkg/data/models/users/responses"
+	"BetterPC_2.0/pkg/logging"
 	"BetterPC_2.0/pkg/tokensGen"
 	"errors"
 	"fmt"
@@ -41,6 +43,7 @@ type tokenClaims struct {
 type AuthService struct {
 	repo     repository.Authorization
 	userRepo repository.User
+	logger   *logging.Logger
 }
 
 func InitAuth(cfg *configs.Config) {
@@ -50,18 +53,19 @@ func InitAuth(cfg *configs.Config) {
 	refreshTTL = cfg.Tokens.RefreshTokenTTL
 }
 
-func NewAuthService(repo repository.Authorization, userRepo repository.User) *AuthService {
+func NewAuthService(repo repository.Authorization, userRepo repository.User, logger *logging.Logger) *AuthService {
 	return &AuthService{
 		repo:     repo,
 		userRepo: userRepo,
+		logger:   logger,
 	}
 }
 
 func (s *AuthService) CreateUser(input userRequests.RegisterRequest) (primitive.ObjectID, error) {
 
-	dob, err := time.Parse("2006-01-02", input.Dob) //Parse dob string to time.Time
+	dob, err := converters.ConvertDateFromString(input.Dob)
 	if err != nil {
-		return primitive.NilObjectID, errors.New("invalid date of birth format")
+		return primitive.NilObjectID, err
 	}
 
 	passwordHash, err := passwordHasher.GeneratePasswordHash(input.Password)

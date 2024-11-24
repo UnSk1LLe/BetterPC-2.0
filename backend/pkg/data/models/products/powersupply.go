@@ -4,7 +4,6 @@ import (
 	"BetterPC_2.0/pkg/data/models/products/general"
 	generalResponses "BetterPC_2.0/pkg/data/models/products/general/responses"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/x/bsonx/bsoncore"
 	"strconv"
 )
 
@@ -16,7 +15,7 @@ type PowerSupply struct {
 	Connectors  Connectors         `bson:"connectors"`
 	Modules     bool               `bson:"modules"`
 	MbPower     int                `bson:"mb_power"`
-	CpuPower    bsoncore.Array     `bson:"cpu_power"`
+	CpuPower    CpuPower           `bson:"cpu_power"`
 }
 
 type Connectors struct {
@@ -25,12 +24,25 @@ type Connectors struct {
 	PciE  []int `bson:"PCI_E"`
 }
 
+type CpuPower struct {
+	Amount int   `bson:"amount"`
+	Type   []int `bson:"type"`
+}
+
 func (powerSupply PowerSupply) GetModel() string {
 	return powerSupply.General.Model
 }
 
 func (powerSupply PowerSupply) GetStock() int {
 	return powerSupply.General.Amount
+}
+
+func (powerSupply PowerSupply) GetImage() string {
+	return powerSupply.General.Image
+}
+
+func (powerSupply PowerSupply) SetImage(imageName string) {
+	powerSupply.General.Image = imageName
 }
 
 func (powerSupply PowerSupply) Standardize() generalResponses.StandardizedProductData {

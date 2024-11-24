@@ -54,6 +54,14 @@ func (cpu Cpu) GetStock() int {
 	return cpu.General.Amount
 }
 
+func (cpu Cpu) GetImage() string {
+	return cpu.General.Image
+}
+
+func (cpu Cpu) SetImage(imageName string) {
+	cpu.General.Image = imageName
+}
+
 func (cpu Cpu) Standardize() generalResponses.StandardizedProductData {
 	var product generalResponses.StandardizedProductData
 	product.ProductHeader.ID = cpu.ID.Hex()

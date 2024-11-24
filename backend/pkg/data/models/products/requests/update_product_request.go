@@ -1,6 +1,8 @@
 package requests
 
-import "BetterPC_2.0/pkg/data/models/products"
+import (
+	"BetterPC_2.0/pkg/data/models/products"
+)
 
 var ProductUpdateRequestFactory = map[products.ProductType]func() ProductUpdateRequest{
 	products.ProductTypes.Cpu:         func() ProductUpdateRequest { return &UpdateCpuRequest{} },
@@ -17,4 +19,5 @@ var ProductUpdateRequestFactory = map[products.ProductType]func() ProductUpdateR
 type ProductUpdateRequest interface {
 	Validate() error
 	Decompose() (map[string]interface{}, error)
+	SetImage(imageName *string)
 }
