@@ -11,21 +11,25 @@ import (
 	"BetterPC_2.0/pkg/logging"
 	"fmt"
 	"github.com/pkg/errors"
+	"github.com/stripe/stripe-go/v81"
+	"github.com/stripe/stripe-go/v81/paymentintent"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type OrderService struct {
-	repo        repository.Order
-	productRepo repository.Product
-	logger      *logging.Logger
+	repo          repository.Order
+	productRepo   repository.Product
+	stripeService *StripeService
+	logger        *logging.Logger
 }
 
-func NewOrderService(repo repository.Order, productRepo repository.Product, logger *logging.Logger) *OrderService {
+func NewOrderService(repo repository.Order, productRepo repository.Product, stripeService *StripeService, logger *logging.Logger) *OrderService {
 	return &OrderService{
-		repo:        repo,
-		productRepo: productRepo,
-		logger:      logger,
+		repo:          repo,
+		productRepo:   productRepo,
+		stripeService: stripeService,
+		logger:        logger,
 	}
 }
 
@@ -82,6 +86,58 @@ func (o *OrderService) CreateWithItemHeaders(userId string, input orderRequests.
 	return o.repo.Create(order)
 }
 
+func (o *OrderService) PayForOrder(userId, orderId string, amount int64, currency, paymentMethodId, returnUrl string) (string, error) {
+	// Step 1: Fetch the order from the database
+	userObjId, err := primitive.ObjectIDFromHex(userId)
+	if err != nil {
+		return "", err
+	}
+
+	orderObjId, err := primitive.ObjectIDFromHex(orderId)
+	if err != nil {
+		return "", err
+	}
+
+	order, err := o.repo.GetById(orderObjId)
+	if err != nil {
+		return "", err
+	}
+
+	if order.UserID != userObjId {
+		return "", orderErrors.ErrOrderOwnerMismatch
+	}
+
+	// Step 2: Create Payment Intent using StripeService
+	metadata := map[string]string{
+		"order_id": orderId,
+		"user_id":  userId,
+	}
+
+	paymentIntent, err := o.stripeService.CreatePaymentIntent(amount, currency, paymentMethodId, returnUrl, metadata)
+	if err != nil {
+		return "", fmt.Errorf("failed to create payment intent: %w", err)
+	}
+
+	// Step 3: Confirm the payment (this can also be done on the client-side using Stripe.js)
+	// Here, we are assuming that `Confirm` was set to true in `CreatePaymentIntent`, so Stripe will handle confirmation automatically.
+
+	// Step 4: Update order status
+	if paymentIntent.Status == stripe.PaymentIntentStatusSucceeded {
+		input := orders.PaymentDetails{
+			PaymentIntentId: paymentIntent.ID,
+			IsPaid:          true,
+		}
+		err := o.repo.UpdatePaymentDetails(orderObjId, input)
+		if err != nil {
+			return paymentIntent.ID, fmt.Errorf("failed to update order status: %w", err)
+		}
+	} else {
+		return paymentIntent.ID, fmt.Errorf("payment was not successful, status: %s", paymentIntent.Status)
+	}
+
+	return paymentIntent.ID, nil
+}
+
 func (o *OrderService) CancelOrder(userId, orderId string) error {
 	orderObjId, err := primitive.ObjectIDFromHex(orderId)
 	if err != nil {
@@ -103,8 +159,16 @@ func (o *OrderService) CancelOrder(userId, orderId string) error {
 		return err
 	}
 
+	params := &stripe.PaymentIntentParams{}
+
+	paymentintent.Get(order.Payment.PaymentIntentId, params)
 	//TODO add logic if order is paid then give money back to the client, else cancel order
 	err = o.repo.Cancel(userObjId, orderObjId)
+	if err != nil {
+		return err
+	}
+
+	_, err = o.stripeService.RefundPayment(order.Payment.PaymentIntentId, 0)
 	if err != nil {
 		return err
 	}
@@ -112,14 +176,14 @@ func (o *OrderService) CancelOrder(userId, orderId string) error {
 	return nil
 }
 
-func (o *OrderService) Update(orderId string, input orders.UpdateOrderInput) error {
+/*func (o *OrderService) Update(orderId string, input orders.UpdateOrderInput) error {
 	orderObjId, err := primitive.ObjectIDFromHex(orderId)
 	if err != nil {
 		return err
 	}
 
 	return o.repo.Update(orderObjId, input)
-}
+}*/
 
 func (o *OrderService) SetStatus(orderId string, status string) error {
 	orderObjId, err := primitive.ObjectIDFromHex(orderId)

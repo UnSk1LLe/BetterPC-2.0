@@ -15,6 +15,7 @@ type Config struct {
 	Tokens        Tokens
 	Notifications Notifications
 	User          User
+	Stripe        Stripe
 }
 
 type App struct {
@@ -66,6 +67,11 @@ type UserRoles struct {
 	CustomerRole      string
 	ShopAssistantRole string
 	AdminRole         string
+}
+
+type Stripe struct {
+	PublicKey  string
+	PrivateKey string
 }
 
 func InitConfig() error {
@@ -121,6 +127,10 @@ func SetConfig() {
 				ShopAssistantRole: viper.GetString("users.roles.shopAssistantRole"),
 				AdminRole:         viper.GetString("users.roles.adminRole"),
 			},
+		},
+		Stripe: Stripe{
+			PublicKey:  viper.GetString("stripe.publicKey"),
+			PrivateKey: viper.GetString("stripe.privateKey"),
 		},
 	}
 }

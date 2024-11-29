@@ -22,23 +22,23 @@ type Cooling struct {
 	Height     int                `bson:"height"`
 }
 
-func (cooling Cooling) GetModel() string {
+func (cooling *Cooling) GetModel() string {
 	return cooling.General.Model
 }
 
-func (cooling Cooling) GetStock() int {
+func (cooling *Cooling) GetStock() int {
 	return cooling.General.Amount
 }
 
-func (cooling Cooling) GetImage() string {
+func (cooling *Cooling) GetImage() string {
 	return cooling.General.Image
 }
 
-func (cooling Cooling) SetImage(imageName string) {
+func (cooling *Cooling) SetImage(imageName string) {
 	cooling.General.Image = imageName
 }
 
-func (cooling Cooling) Standardize() generalResponses.StandardizedProductData {
+func (cooling *Cooling) Standardize() generalResponses.StandardizedProductData {
 	var product generalResponses.StandardizedProductData
 	product.ProductHeader.ID = cooling.ID.Hex()
 	product.ProductHeader.ProductType = "cooling"
@@ -49,6 +49,6 @@ func (cooling Cooling) Standardize() generalResponses.StandardizedProductData {
 	return product
 }
 
-func (cooling Cooling) CalculateFinalPrice() int {
+func (cooling *Cooling) CalculateFinalPrice() int {
 	return cooling.General.GetFinalPrice()
 }

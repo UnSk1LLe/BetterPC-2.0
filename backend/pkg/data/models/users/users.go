@@ -52,11 +52,12 @@ func UserRoleFromString(input string) (UserRole, error) {
 }
 
 type User struct {
-	ID           primitive.ObjectID `bson:"_id"`
-	UserInfo     UserInfo           `bson:"user_info"`
-	Verification Verification       `bson:"verification"`
-	CreatedAt    primitive.DateTime `bson:"created_at" json:"created_at,omitempty"`
-	UpdatedAt    primitive.DateTime `bson:"updated_at" json:"updated_at,omitempty"`
+	ID           primitive.ObjectID `bson:"_id" json:"id,omitempty"`
+	UserInfo     UserInfo           `bson:"user_info" json:"user_info"`
+	Verification Verification       `bson:"verification" json:"verification"`
+	StripeId     string             `bson:"stripe_id,omitempty" json:"stripe_id,omitempty"`
+	CreatedAt    primitive.DateTime `bson:"created_at" json:"created_at,omitempty" json:"created_at,omitempty"`
+	UpdatedAt    primitive.DateTime `bson:"updated_at" json:"updated_at,omitempty" json:"updated_at,omitempty"`
 }
 
 type UserInfo struct {

@@ -1,4 +1,4 @@
-package backend
+package httpServer
 
 import (
 	"BetterPC_2.0/pkg/logging"

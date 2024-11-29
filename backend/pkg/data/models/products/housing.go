@@ -26,23 +26,23 @@ type DriveBays struct {
 	D25 int `bson:"2_5"`
 }
 
-func (housing Housing) GetModel() string {
+func (housing *Housing) GetModel() string {
 	return housing.General.Model
 }
 
-func (housing Housing) GetStock() int {
+func (housing *Housing) GetStock() int {
 	return housing.General.Amount
 }
 
-func (housing Housing) GetImage() string {
+func (housing *Housing) GetImage() string {
 	return housing.General.Image
 }
 
-func (housing Housing) SetImage(imageName string) {
+func (housing *Housing) SetImage(imageName string) {
 	housing.General.Image = imageName
 }
 
-func (housing Housing) Standardize() generalResponses.StandardizedProductData {
+func (housing *Housing) Standardize() generalResponses.StandardizedProductData {
 	var product generalResponses.StandardizedProductData
 	product.ProductHeader.ID = housing.ID.Hex()
 	product.ProductHeader.ProductType = "housing"
@@ -53,6 +53,6 @@ func (housing Housing) Standardize() generalResponses.StandardizedProductData {
 	return product
 }
 
-func (housing Housing) CalculateFinalPrice() int {
+func (housing *Housing) CalculateFinalPrice() int {
 	return housing.General.GetFinalPrice()
 }

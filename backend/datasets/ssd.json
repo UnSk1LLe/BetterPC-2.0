@@ -1,0 +1,400 @@
+[
+	{
+		"general": {
+			"manufacturer": "Kingston",
+			"model": "NV1 SNVS/500G",
+			"price": 30580,
+	        "discount": 0,
+	        "amount": 2,
+          "image": "https://forcecom.kz/upload/iblock/093/zm1xw2ua8vxu4qtmefazd1o8n4shery3.jpg"
+	    },
+		"type": "internal",
+		"capacity": 500,
+		"interface": "PCI-E 4x 3.0",
+		"memory_type": "3D QLC NAND", 
+		"read": 2100,
+		"write": 1700,
+		"form_factor": "M2",
+		"mftb": 1.7,
+		"size": [22, 80, 2],
+		"weight": 7
+	},
+	{
+		"general": {
+			"manufacturer": "Samsung",
+			"model": "870 EVO MZ-77E250",
+			"price": 31990,
+	        "discount": 0,
+	        "amount": 4,
+          "image": "https://forcecom.kz/upload/iblock/093/zm1xw2ua8vxu4qtmefazd1o8n4shery3.jpg"
+	    },
+		"type": "internal",
+		"capacity": 250,
+		"interface": "SATA 3",
+		"memory_type": "3D TLC NAND",
+		"read": 560,
+		"write": 530,
+		"form_factor": "2.5",
+		"mftb": 1.5,
+		"size": [100, 70, 7]	},
+	{
+		"general": {
+	        "manufacturer": "Kingston",
+	        "model": "KC600",
+	        "price": 34240,
+	        "discount": 0,
+	        "amount": 5,
+          "image": "https://forcecom.kz/upload/iblock/093/zm1xw2ua8vxu4qtmefazd1o8n4shery3.jpg"
+	    },
+        "type": "internal",
+        "capacity": 1000,
+        "interface": "SATA 3",
+        "memory_type": "3D TLC NAND",
+        "read": 550,
+        "write": 520,
+        "form_factor": "2.5",
+        "mftb": 2.0,
+        "size": [100, 69.9, 7],
+        "weight": 40
+    },
+    {
+    	"general": {
+	        "manufacturer": "Transcend",
+	        "model": "PCIe SSD220S TS1TMTE220S",
+	        "price": 38390,
+	        "discount": 0,
+	        "amount": 3,
+          "image": "https://forcecom.kz/upload/iblock/093/zm1xw2ua8vxu4qtmefazd1o8n4shery3.jpg"
+	    },
+        "type": "internal",
+        "capacity": 1000,
+        "interface": "PCIe Gen3 x4",
+        "memory_type": "3D NAND",
+        "read": 3500,
+        "write": 3000,
+        "form_factor": "M.2 2280",
+        "mftb": 1.5,
+        "size": [80, 22, 3.5],
+        "weight": 9
+    },
+    {
+    	"general": {
+	        "manufacturer": "Kingston",
+	        "model": "Fury Renegade SFYRS/1000G",
+	        "price": 45590,
+	        "discount": 0,
+	        "amount": 5,
+          "image": "https://forcecom.kz/upload/iblock/093/zm1xw2ua8vxu4qtmefazd1o8n4shery3.jpg"
+	    },
+        "type": "internal",
+        "capacity": 1000,
+        "interface": "PCIe Gen4 x4",
+        "memory_type": "3D TLC NAND",
+        "read": 7000,
+        "write": 6850,
+        "form_factor": "M.2 2280",
+        "mftb": 1.5,
+        "size": [80, 22, 3.5],
+        "weight": 9
+    },
+	{   
+		"general": {
+			"manufacturer": "Samsung",
+			"model": "Portable T7 MU-PC500T/WW",
+	        "price": 51890,
+	        "discount": 0,
+	        "amount": 2,
+          "image": "https://forcecom.kz/upload/iblock/093/zm1xw2ua8vxu4qtmefazd1o8n4shery3.jpg"
+	    },
+		"type": "external",
+		"capacity": 500,
+		"interface": "USB 3.2 Gen 2",
+		"memory_type": "NVMe SSD",
+		"read": 1050,
+		"write": 1000,
+		"form_factor": "2.5",
+		"mftb": 0.058,
+		"size": [85, 57, 8.0],
+        "weight": 58
+    },
+    	{
+        "general": {
+            "manufacturer": "Western Digital",
+            "model": "Blue SN550",
+            "price": 29590,
+            "discount": 0,
+            "amount": 8,
+          "image": "https://forcecom.kz/upload/iblock/093/zm1xw2ua8vxu4qtmefazd1o8n4shery3.jpg"
+        },
+        "type": "internal",
+        "capacity": 500,
+        "interface": "PCIe Gen3 x4",
+        "memory_type": "3D NAND",
+        "read": 2400,
+        "write": 1750,
+        "form_factor": "M.2 2280",
+        "mftb": 1.7,
+        "size": [80, 22, 2.38],
+        "weight": 8
+    },
+    {
+        "general": {
+            "manufacturer": "Crucial",
+            "model": "MX500",
+            "price": 35990,
+            "discount": 0,
+            "amount": 6,
+          "image": "https://forcecom.kz/upload/iblock/093/zm1xw2ua8vxu4qtmefazd1o8n4shery3.jpg"
+        },
+        "type": "internal",
+        "capacity": 1000,
+        "interface": "SATA 3",
+        "memory_type": "3D NAND",
+        "read": 560,
+        "write": 510,
+        "form_factor": "2.5",
+        "mftb": 1.8,
+        "size": [100, 70, 7],
+        "weight": 45
+    },
+    {
+        "general": {
+            "manufacturer": "Intel",
+            "model": "660p Series",
+            "price": 41990,
+            "discount": 0,
+            "amount": 4,
+          "image": "https://forcecom.kz/upload/iblock/093/zm1xw2ua8vxu4qtmefazd1o8n4shery3.jpg"
+        },
+        "type": "internal",
+        "capacity": 1000,
+        "interface": "PCIe Gen3 x4",
+        "memory_type": "3D QLC NAND",
+        "read": 1800,
+        "write": 1800,
+        "form_factor": "M.2 2280",
+        "mftb": 1.6,
+        "size": [80, 22, 2.38],
+        "weight": 10
+    },
+    {
+        "general": {
+            "manufacturer": "Samsung",
+            "model": "980 PRO",
+            "price": 52990,
+            "discount": 0,
+            "amount": 7,
+          "image": "https://forcecom.kz/upload/iblock/093/zm1xw2ua8vxu4qtmefazd1o8n4shery3.jpg"
+        },
+        "type": "internal",
+        "capacity": 500,
+        "interface": "PCIe Gen4 x4",
+        "memory_type": "3D TLC NAND",
+        "read": 6900,
+        "write": 5000,
+        "form_factor": "M.2 2280",
+        "mftb": 1.5,
+        "size": [80, 22, 2.38],
+        "weight": 9
+    },
+    {
+        "general": {
+            "manufacturer": "SanDisk",
+            "model": "Ultra 3D",
+            "price": 28590,
+            "discount": 0,
+            "amount": 5,
+          "image": "https://forcecom.kz/upload/iblock/093/zm1xw2ua8vxu4qtmefazd1o8n4shery3.jpg"
+        },
+        "type": "internal",
+        "capacity": 500,
+        "interface": "SATA 3",
+        "memory_type": "3D NAND",
+        "read": 560,
+        "write": 530,
+        "form_factor": "2.5",
+        "mftb": 1.75,
+        "size": [100, 69.85, 7],
+        "weight": 40
+    },
+    {
+        "general": {
+            "manufacturer": "Toshiba",
+            "model": "XG6",
+            "price": 40990,
+            "discount": 0,
+            "amount": 6,
+          "image": "https://forcecom.kz/upload/iblock/093/zm1xw2ua8vxu4qtmefazd1o8n4shery3.jpg"
+        },
+        "type": "internal",
+        "capacity": 1000,
+        "interface": "PCIe Gen3 x4",
+        "memory_type": "3D TLC NAND",
+        "read": 3180,
+        "write": 2960,
+        "form_factor": "M.2 2280",
+        "mftb": 1.5,
+        "size": [80, 22, 2.38],
+        "weight": 8
+    },
+    {
+        "general": {
+            "manufacturer": "Seagate",
+            "model": "Barracuda 510",
+            "price": 32990,
+            "discount": 0,
+            "amount": 3,
+          "image": "https://forcecom.kz/upload/iblock/093/zm1xw2ua8vxu4qtmefazd1o8n4shery3.jpg"
+        },
+        "type": "internal",
+        "capacity": 500,
+        "interface": "PCIe Gen3 x4",
+        "memory_type": "3D TLC NAND",
+        "read": 3400,
+        "write": 2180,
+        "form_factor": "M.2 2280",
+        "mftb": 1.8,
+        "size": [80, 22, 2.38],
+        "weight": 8
+    },
+    {
+        "general": {
+            "manufacturer": "WD",
+            "model": "Black SN750",
+            "price": 58990,
+            "discount": 0,
+            "amount": 4,
+          "image": "https://forcecom.kz/upload/iblock/093/zm1xw2ua8vxu4qtmefazd1o8n4shery3.jpg"
+        },
+        "type": "internal",
+        "capacity": 1000,
+        "interface": "PCIe Gen3 x4",
+        "memory_type": "3D NAND",
+        "read": 3430,
+        "write": 3000,
+        "form_factor": "M.2 2280",
+        "mftb": 1.75,
+        "size": [80, 22, 2.38],
+        "weight": 8
+    },
+    {
+        "general": {
+            "manufacturer": "PNY",
+            "model": "CS900",
+            "price": 25990,
+            "discount": 0,
+            "amount": 6,
+          "image": "https://forcecom.kz/upload/iblock/093/zm1xw2ua8vxu4qtmefazd1o8n4shery3.jpg"
+        },
+        "type": "internal",
+        "capacity": 500,
+        "interface": "SATA 3",
+        "memory_type": "3D NAND",
+        "read": 535,
+        "write": 515,
+        "form_factor": "2.5",
+        "mftb": 1.5,
+        "size": [100, 70, 7],
+        "weight": 45
+    },
+    {
+        "general": {
+            "manufacturer": "Adata",
+            "model": "XPG SX8200 Pro",
+            "price": 38990,
+            "discount": 0,
+            "amount": 5,
+          "image": "https://forcecom.kz/upload/iblock/093/zm1xw2ua8vxu4qtmefazd1o8n4shery3.jpg"
+        },
+        "type": "internal",
+        "capacity": 1000,
+        "interface": "PCIe Gen3 x4",
+        "memory_type": "3D NAND",
+        "read": 3500,
+        "write": 3000,
+        "form_factor": "M.2 2280",
+        "mftb": 1.75,
+        "size": [80, 22, 3.5],
+        "weight": 9
+    },
+    {
+        "general": {
+            "manufacturer": "Team Group",
+            "model": "MP33",
+            "price": 27990,
+            "discount": 0,
+            "amount": 7,
+          "image": "https://forcecom.kz/upload/iblock/093/zm1xw2ua8vxu4qtmefazd1o8n4shery3.jpg"
+        },
+        "type": "internal",
+        "capacity": 500,
+        "interface": "PCIe Gen3 x4",
+        "memory_type": "3D NAND",
+        "read": 1700,
+        "write": 1400,
+        "form_factor": "M.2 2280",
+        "mftb": 1.5,
+        "size": [80, 22, 3.5],
+        "weight": 8
+    },
+    {
+        "general": {
+            "manufacturer": "SK Hynix",
+            "model": "Gold P31",
+            "price": 45990,
+            "discount": 0,
+            "amount": 4,
+          "image": "https://forcecom.kz/upload/iblock/093/zm1xw2ua8vxu4qtmefazd1o8n4shery3.jpg"
+        },
+        "type": "internal",
+        "capacity": 1000,
+        "interface": "PCIe Gen3 x4",
+        "memory_type": "3D NAND",
+        "read": 3500,
+        "write": 3200,
+        "form_factor": "M.2 2280",
+        "mftb": 1.5,
+        "size": [80, 22, 2.38],
+        "weight": 8
+    },
+    {
+        "general": {
+            "manufacturer": "Patriot",
+            "model": "Burst Elite",
+            "price": 23990,
+            "discount": 0,
+            "amount": 6,
+          "image": "https://forcecom.kz/upload/iblock/093/zm1xw2ua8vxu4qtmefazd1o8n4shery3.jpg"
+        },
+        "type": "internal",
+        "capacity": 500,
+        "interface": "SATA 3",
+        "memory_type": "3D NAND",
+        "read": 540,
+        "write": 500,
+        "form_factor": "2.5",
+        "mftb": 1.5,
+        "size": [100, 69.85, 7],
+        "weight": 46
+    },
+    {
+        "general": {
+            "manufacturer": "Silicon Power",
+            "model": "A60",
+            "price": 39990,
+            "discount": 0,
+            "amount": 5,
+          "image": "https://forcecom.kz/upload/iblock/093/zm1xw2ua8vxu4qtmefazd1o8n4shery3.jpg"
+        },
+        "type": "internal",
+        "capacity": 1000,
+        "interface": "PCIe Gen3 x4",
+        "memory_type": "3D NAND",
+        "read": 2200,
+        "write": 1600,
+        "form_factor": "M.2 2280",
+        "mftb": 1.5,
+        "size": [80, 22, 3.5],
+        "weight": 8
+    }
+]

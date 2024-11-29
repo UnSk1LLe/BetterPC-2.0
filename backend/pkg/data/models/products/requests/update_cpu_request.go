@@ -39,9 +39,14 @@ type UpdateClockFrequencyCpu struct {
 }
 
 type UpdateRamCpu struct {
-	Channels     *int   `bson:"channels" json:"channels,omitempty" binding:"min=0"`
-	MaxFrequency *[]int `bson:"max_frequency" json:"max_frequency,omitempty" binding:"min=0"`
-	MaxCapacity  *int   `bson:"max_capacity" json:"max_capacity,omitempty" binding:"min=0"`
+	Channels    *int                `bson:"channels" json:"channels,omitempty" binding:"min=0"`
+	Types       *[]UpdateRamCpuType `bson:"types,omitempty" json:"types,omitempty"`
+	MaxCapacity *int                `bson:"max_capacity" json:"max_capacity,omitempty" binding:"min=0"`
+}
+
+type UpdateRamCpuType struct {
+	Type         string `bson:"type" json:"type,omitempty"`
+	MaxFrequency *int   `bson:"max_frequency" json:"max_frequency,omitempty"`
 }
 
 func (cpuRequest *UpdateCpuRequest) Validate() error {

@@ -9,6 +9,8 @@ import (
 	"BetterPC_2.0/pkg/data/models/users/requests/admin"
 	userUpdateRequests "BetterPC_2.0/pkg/data/models/users/requests/patch"
 	"BetterPC_2.0/pkg/logging"
+	"fmt"
+	"github.com/stripe/stripe-go/v81"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"mime/multipart"
@@ -16,16 +18,18 @@ import (
 )
 
 type UserService struct {
-	repo        repository.User
-	fileService *FileService
-	logger      *logging.Logger
+	repo          repository.User
+	fileService   *FileService
+	stripeService *StripeService
+	logger        *logging.Logger
 }
 
-func NewUserService(repo repository.User, fileService *FileService, logger *logging.Logger) *UserService {
+func NewUserService(repo repository.User, fileService *FileService, stripeService *StripeService, logger *logging.Logger) *UserService {
 	return &UserService{
-		repo:        repo,
-		fileService: fileService,
-		logger:      logger,
+		repo:          repo,
+		fileService:   fileService,
+		stripeService: stripeService,
+		logger:        logger,
 	}
 }
 
@@ -160,4 +164,59 @@ func (u *UserService) GetById(userId string) (users.User, error) {
 	}
 
 	return u.repo.GetById(userObjId)
+}
+
+func (u *UserService) AttachPaymentMethodToUser(userId, paymentMethodId string) error {
+	userObjId, err := primitive.ObjectIDFromHex(userId)
+	if err != nil {
+		return err
+	}
+
+	user, err := u.repo.GetById(userObjId)
+	if err != nil {
+		return err
+	}
+
+	err = u.stripeService.AttachPaymentMethodToCustomer(user.StripeId, paymentMethodId)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (u *UserService) RemovePaymentMethod(userId, paymentMethodId string) error {
+	paymentMethods, err := u.ListPaymentMethodsByUser(userId)
+	if err != nil {
+		return err
+	}
+
+	for _, paymentMethod := range paymentMethods {
+		if paymentMethod.ID == paymentMethodId {
+			return u.stripeService.RemovePaymentMethod(paymentMethodId)
+		}
+	}
+
+	return fmt.Errorf("no payment method with id %s found for specified user", paymentMethodId)
+}
+
+func (u *UserService) ListPaymentMethodsByUser(userId string) ([]*stripe.PaymentMethod, error) {
+	var paymentMethods []*stripe.PaymentMethod
+
+	userObjId, err := primitive.ObjectIDFromHex(userId)
+	if err != nil {
+		return paymentMethods, err
+	}
+
+	userData, err := u.repo.GetById(userObjId)
+	if err != nil {
+		return paymentMethods, err
+	}
+
+	paymentMethods, err = u.stripeService.ListPaymentMethodsByCustomer(userData.StripeId)
+	if err != nil {
+		return paymentMethods, err
+	}
+
+	return paymentMethods, nil
 }

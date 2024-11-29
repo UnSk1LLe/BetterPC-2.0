@@ -1,0 +1,2 @@
+[36mINFO[0m[2024-11-29T13:15:23+05:00]serve.go:36 BetterPC_2.0/cmd.serve() Starting BetterPC 2.0 server                 
+[31mFATA[0m[2024-11-29T13:15:23+05:00]serve.go:40 BetterPC_2.0/cmd.serve() failed to initialize config: Config File "config" Not Found in "[C:\\Users\\pasha\\OneDrive\\Рабочий стол\\BetterPC-2.0\\configs]" 

@@ -24,23 +24,23 @@ type Ram struct {
 	Height       int                `bson:"height"`
 }
 
-func (ram Ram) GetModel() string {
+func (ram *Ram) GetModel() string {
 	return ram.General.Model
 }
 
-func (ram Ram) GetStock() int {
+func (ram *Ram) GetStock() int {
 	return ram.General.Amount
 }
 
-func (ram Ram) GetImage() string {
+func (ram *Ram) GetImage() string {
 	return ram.General.Image
 }
 
-func (ram Ram) SetImage(imageName string) {
+func (ram *Ram) SetImage(imageName string) {
 	ram.General.Image = imageName
 }
 
-func (ram Ram) Standardize() generalResponses.StandardizedProductData {
+func (ram *Ram) Standardize() generalResponses.StandardizedProductData {
 	var product generalResponses.StandardizedProductData
 	product.ProductHeader.ID = ram.ID.Hex()
 	product.ProductHeader.ProductType = "ram"
@@ -50,6 +50,6 @@ func (ram Ram) Standardize() generalResponses.StandardizedProductData {
 		", Frequency: " + strconv.Itoa(ram.Frequency) + "MHz, CAS Latency: " + ram.CasLatency
 	return product
 }
-func (ram Ram) CalculateFinalPrice() int {
+func (ram *Ram) CalculateFinalPrice() int {
 	return ram.General.GetFinalPrice()
 }

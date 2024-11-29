@@ -85,6 +85,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			orders.GET("/", h.ListUserOrders)
 			orders.GET("/:id", h.GetUserOrder)
 			orders.POST("/", h.CreateOrderWithItemHeaders)
+			orders.POST("/:id/payment", h.ProcessOrderPayment)
 			//orders.PATCH("/:id/update", h.UpdateUserOrder)
 			orders.PATCH("/:id/cancel", h.CancelUserOrder)
 		}
@@ -97,6 +98,13 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			userInfo.PATCH("/", h.UpdateUserInfo)
 			userInfo.POST("/verification", h.SendNewVerificationLink)
 			userInfo.POST("/image", h.UploadUserImage)
+
+			paymentDetails := userInfo.Group("/payment_methods")
+			{
+				paymentDetails.GET("/", h.GetUserPaymentMethods)
+				paymentDetails.POST("/:id", h.AttachNewPaymentMethod)
+				paymentDetails.DELETE("/:id", h.RemovePaymentMethod)
+			}
 		}
 	}
 
@@ -116,7 +124,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 				products.GET("/", h.ListStandardizedProducts)
 				products.GET("/:id", h.ShowProductInfo)
 				products.POST("/", h.CreateProduct)
-				products.PATCH("/:product_id/update_general", h.UpdateProductGeneral)
+				products.PATCH("/:id/update_general", h.UpdateProductGeneral)
 				products.PATCH("/:id/update_details", h.UpdateProduct)
 				products.DELETE("/:id", middleware.AdminOnly(), h.DeleteProduct)
 			}
@@ -142,15 +150,6 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			users.PATCH("/", h.UpdateUser)
 			users.DELETE("/", h.DeleteUser)
 		}
-
-		/*roles := adminPanel.Group("/roles")
-		{
-			roles.GET("/")
-			roles.GET("/:role_id")
-			roles.POST("/")
-			roles.PATCH("/")
-			roles.DELETE("/")
-		}*/
 	}
 
 	return router

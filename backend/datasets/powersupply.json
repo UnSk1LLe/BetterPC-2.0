@@ -1,0 +1,117 @@
+[
+	{
+		"general": {
+			"manufacturer": "Deepcool",
+			"model": "Aurora",
+			"price": 28990,
+	        "discount": 0,
+	        "amount": 3,
+			"image": "https://forcecom.kz/upload/iblock/7df/7df7626f6d7e3ccf57bd0b8c24bd840d.jpg"
+		},
+		"form_factor": "ATX",
+		"output_power": 700,
+		"connectors": {
+			 "sata": 8 ,
+			 "molex": 3 ,
+			 "pci_e": [6, 2]
+		},
+		"modules": true,
+		"mb_power": 24,
+		"cpu_power": {
+			"amount": 2,
+			"type": [4, 4]
+		}
+	},
+	{
+		"general": {
+			"manufacturer": "Gamemax",
+			"model": "GM Series",
+			"price": 37890,
+	        "discount": 0,
+	        "amount": 5,
+			"image": "https://forcecom.kz/upload/iblock/7df/7df7626f6d7e3ccf57bd0b8c24bd840d.jpg"
+		},
+		"form_factor": "ATX",
+		"output_power": 750,
+		"connectors": {
+			"sata": 6,
+			"molex": 3,
+			"pci_e": [8, 6]
+		},
+		"modules": true,
+		"mb_power": 20,
+		"cpu_power": {
+			"amount": 1,
+			"type": [4, 4]
+		}
+	},
+	{
+		"general": {
+			"manufacturer": "be quiet!",
+			"model": "System Power 10",
+			"price": 52540,
+	        "discount": 0,
+	        "amount": 8,
+			"image": "https://forcecom.kz/upload/iblock/7df/7df7626f6d7e3ccf57bd0b8c24bd840d.jpg"
+		},
+		"form_factor": "ATX",
+		"output_power": 600,
+		"connectors": {
+			"sata": 6,
+			"molex": 2,
+			"pci_e": [6, 2]
+		},
+		"modules": false,
+		"mb_power": 24,
+		"cpu_power": {
+			"amount": 8,
+			"type": [4, 4]
+		}
+	},
+	{
+		"general": {
+			"manufacturer": "Asus",
+			"model": "ROG Thor Platinum II",
+			"price": 275870,
+	        "discount": 0,
+	        "amount": 2,
+			"image": "https://forcecom.kz/upload/iblock/7df/7df7626f6d7e3ccf57bd0b8c24bd840d.jpg"
+		},
+		"form_factor": "ATX",
+		"output_power": 1200,
+		"connectors": {
+			"sata": 8,
+			"molex": 4,
+			"pci_e": [8, 8, 6]
+		},
+		"modules": true,
+		"mb_power": 24,
+		"cpu_power": {
+			"amount": 8,
+			"type": [4, 4]
+		}
+	},
+	{
+		"general": {
+		    "manufacturer": "Chieftec",
+			"model": "Polaris",
+			"price": 38690,
+	        "discount": 0,
+	        "amount": 7,
+			"image": "https://forcecom.kz/upload/iblock/7df/7df7626f6d7e3ccf57bd0b8c24bd840d.jpg"
+	    },
+		"form_factor": "ATX",
+		"output_power": 650,
+		"connectors": {
+			"sata": 6,
+			"molex": 2,
+			"pci_e": [8, 6]
+		},
+		"modules": false,
+		"mb_power": 20,
+		"cpu_power": {
+			"amount": 8,
+			"type": [4, 4]
+		}
+	}
+]

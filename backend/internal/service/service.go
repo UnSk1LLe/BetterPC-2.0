@@ -1,6 +1,7 @@
 package service
 
 import (
+	"BetterPC_2.0/configs"
 	"BetterPC_2.0/internal/repository"
 	"BetterPC_2.0/pkg/data/models/categories"
 	"BetterPC_2.0/pkg/data/models/orders"
@@ -18,13 +19,14 @@ import (
 	userResponses "BetterPC_2.0/pkg/data/models/users/responses"
 	"BetterPC_2.0/pkg/email/smtpServer"
 	"BetterPC_2.0/pkg/logging"
+	"github.com/stripe/stripe-go/v81"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"mime/multipart"
 	"time"
 )
 
-const staticFilesPath = "./static"
+const StaticFilesPath = "./static"
 
 type Authorization interface {
 	CreateUser(input userAuthRequests.RegisterRequest) (primitive.ObjectID, error)
@@ -56,6 +58,10 @@ type User interface {
 	GetList(filters userFilters.AdminUserFilters) ([]users.User, error)
 	GetById(userId string) (users.User, error)
 	UpdateUserImage(userId string, image *multipart.FileHeader) error
+
+	AttachPaymentMethodToUser(userId, paymentMethodId string) error
+	RemovePaymentMethod(userId, paymentMethodId string) error
+	ListPaymentMethodsByUser(userId string) ([]*stripe.PaymentMethod, error)
 }
 
 type Categories interface {
@@ -87,7 +93,8 @@ type Files interface {
 
 type Order interface {
 	CreateWithItemHeaders(userId string, itemHeaders orderRequests.CreateOrderRequest) (primitive.ObjectID, error)
-	Update(orderId string, input orders.UpdateOrderInput) error
+	//Update(orderId string, input orders.UpdateOrderInput) error
+	PayForOrder(userId, orderId string, amount int64, currency, paymentMethodId, returnUrl string) (string, error)
 	CancelOrder(userId, orderId string) error
 	SetStatus(orderId string, status string) error
 	Delete(orderId string) error
@@ -95,6 +102,16 @@ type Order interface {
 	GetUserOrders(userId string) ([]orders.Order, error)
 	GetUserOrder(userId, orderId string) (orders.Order, error)
 	GetList(filter orderFilters.AdminOrderFilters) ([]orders.Order, error)
+}
+
+type Stripe interface {
+	CreateCustomer(email string, metadata map[string]string) (string, error)
+	AttachPaymentMethodToCustomer(customerId, paymentMethodId string) error
+	RemovePaymentMethod(paymentMethodId string) error
+	ListPaymentMethodsByCustomer(customerId string) ([]*stripe.PaymentMethod, error)
+	CreatePaymentIntent(amount int64, currency, paymentMethodID, returnUrl string, metadata map[string]string) (*stripe.PaymentIntent, error)
+	GetPaymentIntent(paymentIntentId string, params *stripe.PaymentIntentParams) (*stripe.PaymentIntent, error)
+	RefundPayment(chargeId string, amount int64) (*stripe.Refund, error)
 }
 
 type Service struct {
@@ -109,8 +126,9 @@ type Service struct {
 
 func NewService(repos *repository.Repository, logger *logging.Logger) *Service {
 
-	fileService := NewFileService(staticFilesPath)
+	fileService := NewFileService(StaticFilesPath)
 	notificationService := NewNotificationService(smtpServer.MustGet(), logger)
+	stripeService := NewStripeService(configs.GetConfig().Stripe.PrivateKey)
 
 	return &Service{
 		Categories:    NewCategoryService(repos.Categories, logger),
@@ -118,7 +136,7 @@ func NewService(repos *repository.Repository, logger *logging.Logger) *Service {
 		Verification:  NewVerificationService(repos.Verification, notificationService, logger),
 		Notification:  NewNotificationService(smtpServer.MustGet(), logger),
 		Product:       NewProductService(repos.Product, fileService, logger),
-		Order:         NewOrderService(repos.Order, repos.Product, logger),
-		User:          NewUserService(repos.User, fileService, logger),
+		Order:         NewOrderService(repos.Order, repos.Product, stripeService, logger),
+		User:          NewUserService(repos.User, fileService, stripeService, logger),
 	}
 }

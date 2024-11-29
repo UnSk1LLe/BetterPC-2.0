@@ -1,0 +1,90 @@
+[
+	{
+		"general": {
+			"manufacturer": "Deepcool",
+			"model": "Matrexx 70",
+			"price": 58990,
+        	"discount": 0,
+        	"amount": 8,
+			"image": "https://forcecom.kz/upload/iblock/8b6/c55tkjmos9xvf9pfc22896t5b5ooqbqu.jpg"
+		},
+		"form_factor": "Midi Tower",
+		"drive_bays": {
+			"3_5": 2,
+			"2_5": 4
+		},
+		"mb_form_factor": "E-ATX",
+		"ps_form_factor": "ATX",
+		"expansion_slots": 9,
+		"graphic_card_size": 380,
+		"cooler_height": 170,
+		"size": [492, 228, 475],
+		"weight": 9.39
+	},
+	{
+		"general": {
+			"manufacturer": "Asus",
+			"model": "TUF Gaming GT301",
+			"price": 54490,
+	        "discount": 0,
+	        "amount": 3,
+			"image": "https://forcecom.kz/upload/iblock/8b6/c55tkjmos9xvf9pfc22896t5b5ooqbqu.jpg"
+		},
+		"form_factor": "Mid Tower",
+		"drive_bays": {
+			"3_5": 2,
+			"2_5": 4
+		},
+		"mb_form_factor": "ATX",
+		"ps_form_factor": "ATX",
+		"expansion_slots": 7,
+		"graphic_card_size": 320,
+		"cooler_height": 160,
+		"size": [426, 214, 482],
+		"weight": 6.7
+	},
+	{
+		"general": {
+			"manufacturer": "be quiet!",
+			"model": "Pure Base 500DX",
+			"price": 62580,
+	        "discount": 0,
+	        "amount": 7,
+			"image": "https://forcecom.kz/upload/iblock/8b6/c55tkjmos9xvf9pfc22896t5b5ooqbqu.jpg"
+		},
+		"form_factor": "Mid Tower",
+		"drive_bays": {
+			"3_5": 2,
+			"2_5": 5
+		},
+		"mb_form_factor": "ATX",
+		"ps_form_factor": "ATX",
+		"expansion_slots": 7,
+		"graphic_card_size": 369,
+		"cooler_height": 190,
+		"size": [231, 463, 450],
+		"weight": 7.8
+	},
+	{
+		"general": {
+			"manufacturer": "Gamemax",
+			"model": "Expedition",
+			"price": 28390,
+	        "discount": 0,
+	        "amount": 11,
+			"image": "https://forcecom.kz/upload/iblock/8b6/c55tkjmos9xvf9pfc22896t5b5ooqbqu.jpg"
+		},
+		"form_factor": "Mid Tower",
+		"drive_bays": {
+			"3_5": 2,
+			"2_5": 2
+		},
+		"mb_form_factor": "micro-ATX",
+		"ps_form_factor": "ATX",
+		"expansion_slots": 7,
+		"graphic_card_size": 360,
+		"cooler_height": 160,
+		"size": [203, 455, 415],
+		"weight": 4.3
+	}
+]

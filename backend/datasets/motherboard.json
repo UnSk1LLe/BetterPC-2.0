@@ -1,0 +1,142 @@
+[
+	{
+		"general": {
+			"manufacturer": "ASRock",
+			"model": "B560M Steel Legend",
+			"price": 129990,
+			"discount": 0,
+	        "amount": 4,
+			"image": "https://cdn.kns.ru/linkpics/asus-rog-maximus-z790-dark-hero_kod_843904-v1.jpg"
+		},
+		"socket": "LGA 1200",
+		"chipset": "B560",
+		"form_factor": "micro-ATX",
+		"ram": {
+			"slots": 4,
+			"type": "DDR4",
+			"max_frequency": 4800,
+			"max_capacity": 128
+		},
+		"interfaces": {
+			"sata3": 6,
+			"m2": 2,
+			"pci_e_1x": 2,
+			"pci_e_16x": 1
+		},
+		"pci_standard": 4,
+		"mb_power": 24,
+		"cpu_power": 8
+	},
+	{
+		"general": {
+			"manufacturer": "Gigabyte",
+			"model": "B550M AORUS ELITE",
+			"price": 62790,
+			"discount": 0,
+	        "amount": 7,
+			"image": "https://cdn.kns.ru/linkpics/asus-rog-maximus-z790-dark-hero_kod_843904-v1.jpg"
+		},
+		"socket": "AM4",
+		"chipset": "B550",
+		"form_factor": "micro-ATX",
+		"ram": {
+			"slots": 4,
+			"type": "DDR4",
+			"max_frequency": 5300,
+			"max_capacity": 128
+		},
+		"interfaces": {
+			"sata3": 6,
+			"m2": 2,
+			"pci_e_1x": 1,
+			"pci_e_16x": 1
+		},
+		"pci_standard": 4,
+		"mb_power": 24,
+		"cpu_power": 8
+	},
+	{
+		"general": {
+			"manufacturer": "MSI",
+			"model": "MAG B550 TOMAHAWK",
+			"price": 93690,
+			"discount": 0,
+	        "amount": 5,
+			"image": "https://cdn.kns.ru/linkpics/asus-rog-maximus-z790-dark-hero_kod_843904-v1.jpg"
+		},
+		"socket": "AM4",
+		"chipset": "B550",
+		"form_factor": "ATX",
+		"ram": {
+			"slots": 4,
+			"type": "DDR4",
+			"max_frequency": 5100,
+			"max_capacity": 128
+		},
+		"interfaces": {
+			"sata3": 6,
+			"m2": 2,
+			"pci_e_1x": 2,
+			"pci_e_16x": 2
+		},
+		"pci_standard": 4,
+		"mb_power": 24,
+		"cpu_power": 8
+	},
+	{
+		"general": {
+			"manufacturer": "ASRock",
+			"model": "Z690 PG Velocita",
+			"price": 157990,
+			"discount": 0,
+	        "amount": 2,
+			"image": "https://cdn.kns.ru/linkpics/asus-rog-maximus-z790-dark-hero_kod_843904-v1.jpg"
+		},
+		"socket": "LGA 1700",
+		"chipset": "Z690",
+		"form_factor": "ATX",
+		"ram": {
+			"slots": 4,
+			"type": "DDR5",
+			"max_frequency": 5200,
+			"max_capacity": 128
+		},
+		"interfaces": {
+			"sata3": 8,
+			"m2": 3,
+			"pci_e_1x": 2,
+			"pci_e_16x": 3
+		},
+		"pci_standard": 5,
+		"mb_power": 24,
+		"cpu_power": 8
+	},
+	{
+		"general": {
+			"manufacturer": "MSI",
+			"model": "H510M-A PRO",
+			"price": 37490,
+			"discount": 0,
+	        "amount": 15,
+			"image": "https://cdn.kns.ru/linkpics/asus-rog-maximus-z790-dark-hero_kod_843904-v1.jpg"
+		},
+		"socket": "LGA 1200",
+		"chipset": "H510",
+		"form_factor": "micro-ATX",
+		"ram": {
+			"slots": 2,
+			"type": "DDR4",
+			"max_frequency": 3200,
+			"max_capacity": 64
+		},
+		"interfaces": {
+			"sata3": 4,
+			"m2": 1,
+			"pci_e_1x": 2,
+			"pci_e_16x": 1
+		},
+		"pci_standard": 4,
+		"mb_power": 24,
+		"cpu_power": 8
+	}
+]

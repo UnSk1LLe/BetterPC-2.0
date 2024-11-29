@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 	"net/http"
 	"sync"
 )
@@ -185,4 +186,51 @@ func (h *Handler) GetUserOrder(c *gin.Context) {
 
 	c.JSON(http.StatusOK, orderList)
 	return
+}
+
+func (h *Handler) ProcessOrderPayment(c *gin.Context) {
+	type PaymentRequest struct {
+		Amount          int64  `json:"amount"`
+		Currency        string `json:"currency"`
+		PaymentMethodId string `json:"payment_method_id"`
+	}
+
+	user, err := userContext.GetUserCtx(c)
+	if err != nil {
+		responseManager.ErrorResponse(c, http.StatusUnauthorized, "unauthorized")
+		return
+	}
+
+	orderId := c.Param("id")
+	if orderId == "" {
+		responseManager.ErrorResponse(c, http.StatusBadRequest, "no order id provided")
+		return
+	}
+
+	var req PaymentRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		responseManager.ErrorResponse(c, http.StatusBadRequest, "invalid request")
+		return
+	}
+
+	host := c.Request.URL.Host
+	endpoint := "shop/orders/"
+	returnUrl := "http://localhost:8080/shop/orders/"
+	logrus.Info(host, " ", endpoint)
+	paymentIntentId, err := h.services.Order.PayForOrder(user.ID, orderId, req.Amount, req.Currency, req.PaymentMethodId, returnUrl)
+	if err != nil {
+		switch {
+		case errors.As(err, &orderErrors.OrderError{}):
+			responseManager.ErrorResponse(c, http.StatusConflict, err.Error())
+			return
+		default:
+			responseManager.ErrorResponse(c, http.StatusInternalServerError, err.Error())
+		}
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success":           true,
+		"payment_intent_id": paymentIntentId,
+	})
 }

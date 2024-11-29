@@ -18,4 +18,6 @@ var (
 	ErrInvalidInput           = OrderError{err: errors.New("invalid input")}
 	ErrActiveOrder            = OrderError{err: errors.New("active order")}
 	ErrUnsupportedOrderStatus = OrderError{err: errors.New("unsupported order status")}
+	ErrOrderAlreadyPaid       = OrderError{err: errors.New("order already paid")}
+	ErrOrderOwnerMismatch     = OrderError{err: errors.New("order does not belong to the user")}
 )

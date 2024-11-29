@@ -57,7 +57,8 @@ type Product interface {
 type Order interface {
 	Create(order orders.Order) (primitive.ObjectID, error)
 	Cancel(userId, orderId primitive.ObjectID) error
-	Update(orderId primitive.ObjectID, input orders.UpdateOrderInput) error
+	UpdatePaymentDetails(orderId primitive.ObjectID, input orders.PaymentDetails) error
+	//Update(orderId primitive.ObjectID, input orders.UpdateOrderInput) error
 	SetStatus(orderId primitive.ObjectID, status orders.OrderStatus) error
 	Delete(orderId primitive.ObjectID) error
 	GetOneByFilter(filter bson.M) (orders.Order, error)

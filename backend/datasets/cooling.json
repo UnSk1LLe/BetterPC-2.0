@@ -1,0 +1,85 @@
+[
+	{
+		"general": {
+			"manufacturer": "Asus",
+			"model": "ROG STRIX LC II 360 ARGB",
+			"price": 62990,
+			"discount": 0,
+	        "amount": 7,
+			"image": "https://forcecom.kz/upload/iblock/d2f/69nx3x1ujwzvvtuxyeydtj8sqfseinrw.jpg"
+        },
+		"type": "water",
+		"sockets": ["AM4", "LGA 1150", "LGA 1155", "LGA 1156", "LGA 2011", 
+			"LGA 2011 v3", "LGA 2066", "LGA 1151", "LGA 1151 v2", 
+			"LGA 1200", "LGA 1700"],
+		"fans": [3, 120],
+		"rpm": [800, 2500],
+		"tdp": 180,
+		"noise_level": 38,
+		"mount_type": "backplate",
+		"power": 4,
+		"height": 45
+	},
+	{
+		"general": {
+			"manufacturer": "Deepcool",
+			"model": "GAMMAXX 400",
+			"price": 11990,
+			"discount": 0,
+	        "amount": 8,
+			"image": "https://forcecom.kz/upload/iblock/d2f/69nx3x1ujwzvvtuxyeydtj8sqfseinrw.jpg"
+        },
+		"type": "air",
+		"sockets": ["AM4", "LGA 1150", "LGA 1151", "LGA 1155", "LGA 1156", 
+			"LGA 1200", "LGA 1366", "LGA 2011", "LGA 2011 v3", "LGA 2066"],
+		"fans": [1, 120],
+		"rpm": [900, 1500],
+		"tdp": 130,
+		"noise_level": 30,
+		"mount_type": "clip",
+		"rgb": false,
+		"power": 3,
+		"height": 155
+	},
+	{
+		"general": {
+			"manufacturer": "ID-COOLING",
+			"model": "SE-226-XT ARGB",
+			"price": 32490,
+			"discount": 0,
+	        "amount": 11,
+			"image": "https://forcecom.kz/upload/iblock/d2f/69nx3x1ujwzvvtuxyeydtj8sqfseinrw.jpg"
+        },
+		"type": "air",
+		"sockets": ["AM4", "LGA 1200", "LGA 1151", "LGA 1150", "LGA 1155", "LGA 1156"],
+		"fans": [1, 120],
+		"rpm": [800, 2000],
+		"tdp": 220,
+		"noise_level": 30,
+		"mount_type": "clip",
+		"rgb": true,
+		"power": 4,
+		"height": 153
+	},
+	{
+		"general": {
+			"manufacturer": "Gigabyte",
+			"model": "AORUS WATERFORCE X 360",
+			"price": 61790,
+			"discount": 0,
+	        "amount": 3,
+			"image": "https://forcecom.kz/upload/iblock/d2f/69nx3x1ujwzvvtuxyeydtj8sqfseinrw.jpg"
+        },
+		"type": "water",
+		"sockets": ["AM4", "LGA 1150", "LGA 1151", "LGA 1155", "LGA 1156", 
+			"LGA 1200", "LGA 1366", "LGA 2011", "LGA 2011 v3", "LGA 2066"],
+		"fans": [3, 120],
+		"rpm": [600, 2500],
+		"tdp": 200,
+		"noise_level": 18,
+		"mount_type": "backplate",
+		"rgb": true,
+		"power": 7,
+		"height": 77
+	}
+]

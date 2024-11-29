@@ -22,23 +22,23 @@ type Ssd struct {
 	Weight     int                `bson:"weight"`
 }
 
-func (ssd Ssd) GetModel() string {
+func (ssd *Ssd) GetModel() string {
 	return ssd.General.Model
 }
 
-func (ssd Ssd) GetStock() int {
+func (ssd *Ssd) GetStock() int {
 	return ssd.General.Amount
 }
 
-func (ssd Ssd) GetImage() string {
+func (ssd *Ssd) GetImage() string {
 	return ssd.General.Image
 }
 
-func (ssd Ssd) SetImage(imageName string) {
+func (ssd *Ssd) SetImage(imageName string) {
 	ssd.General.Image = imageName
 }
 
-func (ssd Ssd) Standardize() generalResponses.StandardizedProductData {
+func (ssd *Ssd) Standardize() generalResponses.StandardizedProductData {
 	var product generalResponses.StandardizedProductData
 	product.ProductHeader.ID = ssd.ID.Hex()
 	product.ProductHeader.ProductType = "ssd"
@@ -50,6 +50,6 @@ func (ssd Ssd) Standardize() generalResponses.StandardizedProductData {
 	return product
 }
 
-func (ssd Ssd) CalculateFinalPrice() int {
+func (ssd *Ssd) CalculateFinalPrice() int {
 	return ssd.General.GetFinalPrice()
 }

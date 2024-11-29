@@ -41,9 +41,10 @@ type tokenClaims struct {
 }
 
 type AuthService struct {
-	repo     repository.Authorization
-	userRepo repository.User
-	logger   *logging.Logger
+	repo          repository.Authorization
+	userRepo      repository.User
+	stripeService *StripeService
+	logger        *logging.Logger
 }
 
 func InitAuth(cfg *configs.Config) {
@@ -84,6 +85,15 @@ func (s *AuthService) CreateUser(input userRequests.RegisterRequest) (primitive.
 	user.UserInfo.Surname = input.Surname
 	user.UserInfo.Dob = primitive.NewDateTimeFromTime(dob)
 	user.UserInfo.Password = passwordHash
+
+	metadata := map[string]string{
+		"user_id": user.ID.String(),
+	}
+
+	user.StripeId, err = s.stripeService.CreateCustomer(input.Email, metadata)
+	if err != nil {
+		return primitive.NilObjectID, err
+	}
 
 	return s.repo.CreateUser(*user)
 }

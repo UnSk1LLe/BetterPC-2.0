@@ -162,7 +162,7 @@ func (o *OrderMongo) updateProductStock(ctx mongo.SessionContext, productList ma
 	return nil
 }
 
-func (o *OrderMongo) Update(orderId primitive.ObjectID, input orders.UpdateOrderInput) error {
+/*func (o *OrderMongo) Update(orderId primitive.ObjectID, input orders.UpdateOrderInput) error {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
@@ -172,6 +172,55 @@ func (o *OrderMongo) Update(orderId primitive.ObjectID, input orders.UpdateOrder
 
 		filter := bson.M{"_id": orderId}
 		update := bson.M{"$set": bson.M{}}
+
+		res := o.db.GetOrdersCollection().FindOneAndUpdate(sesCtx, filter, update)
+		if res.Err() != nil {
+			switch {
+			case errors.Is(res.Err(), mongo.ErrNoDocuments):
+				return nil, orderErrors.ErrOrderNotFound
+			}
+			return nil, res.Err()
+		}
+
+		err := res.Decode(&order)
+		if err != nil {
+			return nil, err
+		}
+
+		//only proceed if the order is active
+		if err := order.IsActive(); err != nil {
+			return nil, err
+		}
+
+		return nil, nil
+	}
+
+	session, err := o.db.GetClient().StartSession()
+	if err != nil {
+		return err
+	}
+	defer session.EndSession(ctx)
+
+	if _, err := session.WithTransaction(ctx, callback); err != nil {
+		return err
+	}
+
+	return nil
+}*/
+
+func (o *OrderMongo) UpdatePaymentDetails(orderId primitive.ObjectID, input orders.PaymentDetails) error {
+
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
+	defer cancel()
+
+	callback := func(sesCtx mongo.SessionContext) (interface{}, error) {
+		var order orders.Order
+
+		filter := bson.M{"_id": orderId}
+		update := bson.M{"$set": bson.M{
+			"payment.intent_id": input.PaymentIntentId,
+			"payment.is_paid":   input.IsPaid,
+		}}
 
 		res := o.db.GetOrdersCollection().FindOneAndUpdate(sesCtx, filter, update)
 		if res.Err() != nil {

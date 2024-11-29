@@ -28,41 +28,46 @@ type MainCpu struct {
 }
 
 type CoresCpu struct {
-	Pcores           int `bson:"p-cores" json:"p-cores,omitempty"`
-	Ecores           int `bson:"e-cores" json:"e-cores,omitempty"`
+	Pcores           int `bson:"p_cores" json:"p_cores,omitempty"`
+	Ecores           int `bson:"e_cores" json:"e_cores,omitempty"`
 	Threads          int `bson:"threads" json:"threads,omitempty"`
 	TechnicalProcess int `bson:"technical_process" json:"technical_process,omitempty"`
 }
 
 type ClockFrequencyCpu struct {
-	Pcores         []float64 `bson:"p-cores" json:"p-cores,omitempty"`
-	Ecores         []float64 `bson:"e-cores" json:"e-cores,omitempty"`
+	Pcores         []float64 `bson:"p_cores" json:"p_cores,omitempty"`
+	Ecores         []float64 `bson:"e_cores" json:"e_cores,omitempty"`
 	FreeMultiplier bool      `bson:"free_multiplier" json:"free_multiplier,omitempty"`
 }
 
 type RamCpu struct {
-	Channels     int   `bson:"channels" json:"channels,omitempty"`
-	MaxFrequency []int `bson:"max_frequency" json:"max_frequency,omitempty"`
-	MaxCapacity  int   `bson:"max_capacity" json:"max_capacity,omitempty"`
+	Channels    int          `bson:"channels" json:"channels,omitempty"`
+	Types       []RamCpuType `bson:"types" json:"types,omitempty"`
+	MaxCapacity int          `bson:"max_capacity" json:"max_capacity,omitempty"`
 }
 
-func (cpu Cpu) GetModel() string {
+type RamCpuType struct {
+	Type         string `bson:"type" json:"type,omitempty"`
+	MaxFrequency int    `bson:"max_frequency" json:"max_frequency,omitempty"`
+}
+
+func (cpu *Cpu) GetModel() string {
 	return cpu.General.Model
 }
 
-func (cpu Cpu) GetStock() int {
+func (cpu *Cpu) GetStock() int {
 	return cpu.General.Amount
 }
 
-func (cpu Cpu) GetImage() string {
+func (cpu *Cpu) GetImage() string {
 	return cpu.General.Image
 }
 
-func (cpu Cpu) SetImage(imageName string) {
+func (cpu *Cpu) SetImage(imageName string) {
 	cpu.General.Image = imageName
 }
 
-func (cpu Cpu) Standardize() generalResponses.StandardizedProductData {
+func (cpu *Cpu) Standardize() generalResponses.StandardizedProductData {
 	var product generalResponses.StandardizedProductData
 	product.ProductHeader.ID = cpu.ID.Hex()
 	product.ProductHeader.ProductType = "cpu"
@@ -80,6 +85,6 @@ func (cpu Cpu) Standardize() generalResponses.StandardizedProductData {
 	return product
 }
 
-func (cpu Cpu) CalculateFinalPrice() int {
+func (cpu *Cpu) CalculateFinalPrice() int {
 	return cpu.General.GetFinalPrice()
 }

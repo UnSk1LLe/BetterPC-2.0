@@ -59,8 +59,22 @@ type Order struct {
 	UserID      primitive.ObjectID                       `bson:"user_id" json:"user_id"`
 	Price       int                                      `bson:"price" json:"price"`
 	Status      OrderStatus                              `bson:"status" json:"status"`
+	Payment     PaymentDetails                           `bson:"payment" json:"payment"`
+	Refunds     []RefundDetails                          `bson:"refunds,omitempty" json:"refunds,omitempty"`
 	CreatedAt   primitive.DateTime                       `bson:"created_at" json:"created_at"`
 	UpdatedAt   primitive.DateTime                       `bson:"updated_at" json:"updated_at"`
+}
+
+type PaymentDetails struct {
+	PaymentIntentId string `bson:"intent_id,omitempty" json:"intent_id,omitempty"`
+	IsPaid          bool   `bson:"is_paid" json:"is_paid"`
+}
+
+type RefundDetails struct {
+	RefundID   string             `bson:"refund_id" json:"refund_id"`
+	Amount     int64              `bson:"amount" json:"amount"`
+	Currency   string             `bson:"currency" json:"currency"`
+	RefundedAt primitive.DateTime `bson:"refunded_at" json:"refunded_at"`
 }
 
 type ProductHeader struct {
@@ -83,8 +97,12 @@ func NewOrder(userId primitive.ObjectID, productHeaders map[products.ProductType
 		UserID:      userId,
 		Price:       CalculateOrderPrice(productHeaders),
 		Status:      OrderStatuses.Created,
-		CreatedAt:   primitive.NewDateTimeFromTime(time.Now()),
-		UpdatedAt:   primitive.NewDateTimeFromTime(time.Now()),
+		Payment: PaymentDetails{
+			PaymentIntentId: "",
+			IsPaid:          false,
+		},
+		CreatedAt: primitive.NewDateTimeFromTime(time.Now()),
+		UpdatedAt: primitive.NewDateTimeFromTime(time.Now()),
 	}
 }
 

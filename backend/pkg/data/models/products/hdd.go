@@ -22,23 +22,23 @@ type Hdd struct {
 	Weight       int                `bson:"weight"`
 }
 
-func (hdd Hdd) GetModel() string {
+func (hdd *Hdd) GetModel() string {
 	return hdd.General.Model
 }
 
-func (hdd Hdd) GetStock() int {
+func (hdd *Hdd) GetStock() int {
 	return hdd.General.Amount
 }
 
-func (hdd Hdd) GetImage() string {
+func (hdd *Hdd) GetImage() string {
 	return hdd.General.Image
 }
 
-func (hdd Hdd) SetImage(imageName string) {
+func (hdd *Hdd) SetImage(imageName string) {
 	hdd.General.Image = imageName
 }
 
-func (hdd Hdd) Standardize() generalResponses.StandardizedProductData {
+func (hdd *Hdd) Standardize() generalResponses.StandardizedProductData {
 	var product generalResponses.StandardizedProductData
 	product.ProductHeader.ID = hdd.ID.Hex()
 	product.ProductHeader.ProductType = "hdd"
@@ -49,6 +49,6 @@ func (hdd Hdd) Standardize() generalResponses.StandardizedProductData {
 	return product
 }
 
-func (hdd Hdd) CalculateFinalPrice() int {
+func (hdd *Hdd) CalculateFinalPrice() int {
 	return hdd.General.GetFinalPrice()
 }

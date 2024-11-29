@@ -70,7 +70,7 @@ func (fileService *FileService) AddImage(file *multipart.FileHeader, subDirector
 
 	ext := strings.ToLower(filepath.Ext(file.Filename))
 	if !allowedExtensions[ext] {
-		return "", FileServiceError{Operation: "AddImage", Err: errors.Wrap(ErrUnsupportedFormat, "allowed formats are: .png, .jpg, .jpeg, .bmp")}
+		return "", FileServiceError{Operation: "AddImage", Err: errors.Wrap(ErrUnsupportedFormat, fmt.Sprintf("expected: .png, .jpg, .jpeg, .bmp; got <%s>", ext))}
 	}
 
 	imgPath := filepath.Join(fileService.StaticPath, imgDirectoryName, subDirectory)
@@ -82,7 +82,7 @@ func (fileService *FileService) AddImage(file *multipart.FileHeader, subDirector
 	destination := filepath.Join(imgPath, fileName)
 
 	if err := addFile(file, destination); err != nil {
-		return "", FileServiceError{Operation: "AddImage", Err: errors.Wrapf(ErrCouldNotCreateFile, "failed to add image from file: %s", file.Filename)}
+		return "", FileServiceError{Operation: "AddImage", Err: errors.Wrapf(ErrCouldNotCreateFile, "failed to add image from file: %s; %s", file.Filename, err.Error())}
 	}
 
 	return fileName, nil

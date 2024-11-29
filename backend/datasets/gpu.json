@@ -1,0 +1,203 @@
+[
+	{
+        "general": {
+            "manufacturer": "MSI",
+            "model": "NVIDIA GeForce RTX 3080",
+            "price": 639990,
+            "discount": 0,
+            "amount": 3,
+            "image": "https://forcecom.kz/upload/iblock/08a/xgjan3uj0sx4x3biqqooq8o19ozm4vnq.png"
+        },
+		"architecture": "Ampere",
+		"memory":{
+			"capacity": 10,
+			"type": "GDDR6X",
+			"interface_width": 320,
+			"frequency": 19000
+		},
+		"gpu_frequency": 1830,
+		"process_size": 8,
+		"max_resolution": "7680x4320",
+		"interfaces": [
+			{
+				"type": "HDMI",
+				"number": 1
+			},
+			{
+				"type": "DisplayPort",
+				"number": 3
+			}
+		],
+		"max_monitors": 4,
+		"cooling": {
+			"type":"active",
+			"fan_number": 3
+		}, 
+		"tdp": 370,
+		"tdp_r": 750,
+		"power_supply": [8, 8, 8],
+		"slots": 2.7,
+		"size": [323, 140, 56]
+	},
+	{
+        "general": {
+            "manufacturer": "Nvidia",
+            "model": "GeForce RTX 2060 Super",
+            "price": 117990,
+            "discount": 0,
+            "amount": 5,
+            "image": "https://forcecom.kz/upload/iblock/08a/xgjan3uj0sx4x3biqqooq8o19ozm4vnq.png"
+        },
+        "architecture": "Turing",
+        "memory": {
+          "capacity": 8,
+          "type": "GDDR6",
+          "interface_width": 256,
+          "frequency": 14700
+        },
+        "gpu_frequency": 1650,
+        "process_size": 12,
+        "max_resolution": "7680x4320",
+        "interfaces": [
+          {
+            "type": "HDMI",
+            "number": 1
+          },
+          {
+            "type": "DisplayPort",
+            "number": 2
+          }
+        ],
+        "max_monitors": 3,
+        "cooling": {
+          "type": "active",
+          "fan_number": 2
+        },
+        "tdp": 175,
+        "tdp_r": 550,
+        "power_supply": [8, 6],
+        "slots": 2,
+        "size": [229, 131, 41]
+    },
+    {
+        "general": {
+            "manufacturer": "Nvidia",
+            "model": "GeForce GTX 1660 Ti",
+            "price": 144220,
+            "discount": 0,
+            "amount": 8,
+          "image": "https://forcecom.kz/upload/iblock/08a/xgjan3uj0sx4x3biqqooq8o19ozm4vnq.png"
+        },
+        "architecture": "Turing",
+        "memory": {
+          "capacity": 6,
+          "type": "GDDR6",
+          "interface_width": 192,
+          "frequency": 12000
+        },
+        "gpu_frequency": 1770,
+        "process_size": 12,
+        "max_resolution": "7680x4320",
+        "interfaces": [
+          {
+            "type": "HDMI",
+            "number": 1
+          },
+          {
+            "type": "DisplayPort",
+            "number": 3
+          }
+        ],
+        "max_monitors": 4,
+        "cooling": {
+          "type": "active",
+          "fan_number": 2
+        },
+        "tdp": 120,
+        "tdp_r": 450,
+        "power_supply": [8, 6],
+        "slots": 2,
+        "size": [225, 128, 41]
+    },
+    {
+        "general": {
+            "manufacturer": "MSI",
+            "model": "AMD Radeon RX 6900 XT",
+            "price": 599990,
+            "discount": 0,
+            "amount": 2,
+          "image": "https://forcecom.kz/upload/iblock/08a/xgjan3uj0sx4x3biqqooq8o19ozm4vnq.png"
+        },
+        "architecture": "RDNA 2",
+        "memory": {
+            "capacity": 16,
+            "type": "GDDR6",
+            "interface_width": 256,
+            "frequency": 16000
+        },
+        "gpu_frequency": 2015,
+        "process_size": 7,
+        "max_resolution": "7680x4320",
+        "interfaces": [
+            {
+                "type": "HDMI",
+                "number": 1
+            },
+            {
+                "type": "DisplayPort",
+                "number": 3
+            }
+        ],
+        "max_monitors": 4,
+        "cooling": {
+            "type": "active",
+            "fan_number": 3
+        },
+        "tdp": 300,
+        "tdp_r": 700,
+        "power_supply": [8, 8],
+        "slots": 2.7,
+        "size": [324, 140, 55]
+    },
+    {
+        "general": {
+            "manufacturer": "MSI",
+            "model": "AMD Radeon RX 5700",
+            "price": 129990,
+            "discount": 0,
+            "amount": 9,
+          "image": "https://forcecom.kz/upload/iblock/08a/xgjan3uj0sx4x3biqqooq8o19ozm4vnq.png"
+        },
+        "architecture": "RDNA 1",
+        "memory": {
+            "capacity": 8,
+            "type": "GDDR6",
+            "interface_width": 256,
+            "frequency": 14000
+        },
+        "gpu_frequency": 1625,
+        "process_size": 7,
+        "max_resolution": "7680x4320",
+        "interfaces": [
+            {
+                "type": "HDMI",
+                "number": 1
+            },
+            {
+                "type": "DisplayPort",
+                "number": 3
+            }
+        ],
+        "max_monitors": 4,
+        "cooling": {
+            "type": "active",
+            "fan_number": 2
+        },
+        "tdp": 180,
+        "tdp_r": 600,
+        "power_supply": [8],
+        "slots": 2.0,
+        "size": [276, 129, 51]
+    }
+]
+

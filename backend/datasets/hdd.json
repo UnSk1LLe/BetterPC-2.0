@@ -1,0 +1,102 @@
+[
+	{
+		"general": {
+			"manufacturer": "WD Blue",
+			"model": "WD10EZEX",
+			"price": 25090,
+	        "discount": 0,
+	        "amount": 18,
+			"image": "https://forcecom.kz/upload/iblock/703/7033c11cc4f4b17c726fdc7037b2200c.png"
+        },
+		"type": "internal",
+		"capacity": 1000,
+		"interface": "SATA 3",
+		"write_method": "CMR",
+		"transfer_rate": 150,
+		"spindle_speed": 7200,
+		"form_factor": "3.5",
+		"mftb": 300,
+		"size": [147, 102, 25],
+		"weight": 450
+	},
+	{
+		"general": {
+			"manufacturer": "Seagate",
+			"model": "BarraCuda Compute ST2000DM008",
+			"price": 31890,
+	        "discount": 0,
+	        "amount": 15,
+			"image": "https://forcecom.kz/upload/iblock/703/7033c11cc4f4b17c726fdc7037b2200c.png"
+        },
+		"type": "internal",
+		"capacity": 2000,
+		"interface": "SATA 3",
+		"write_method": "CMR",
+		"transfer_rate": 180,
+		"spindle_speed": 7200,
+		"form_factor": "3.5",
+		"mftb": 256,
+		"size": [146.99, 101.6, 26.11],
+		"weight": 626
+	},
+	{
+		"general": {
+			"manufacturer": "Toshiba",
+			"model": "MQ01ABD050",
+			"price": 24990,
+	        "discount": 0,
+	        "amount": 5,
+			"image": "https://forcecom.kz/upload/iblock/703/7033c11cc4f4b17c726fdc7037b2200c.png"
+        },
+		"type": "internal",
+		"capacity": 500,
+		"interface": "SATA 3",
+		"write_method": "AF",
+		"transfer_rate": 140,
+		"spindle_speed": 5400,
+		"form_factor": "2.5",
+		"mftb": 4096,
+		"size": [100, 69.85, 9.5],
+		"weight": 117
+	},
+	{
+		"general": {
+			"manufacturer": "Seagate",
+			"model": "Basic STJL1000400",
+			"price": 27690,
+	        "discount": 0,
+	        "amount": 10,
+			"image": "https://forcecom.kz/upload/iblock/703/7033c11cc4f4b17c726fdc7037b2200c.png"
+        },
+		"type": "external",
+		"capacity": 1000,
+		"interface": "USB 3.0",
+		"write_method": "SMR",
+		"transfer_rate": 120,
+		"spindle_speed": 5400,
+		"form_factor": "2.5",
+		"mftb": 512,
+		"size": [117, 80, 14.8],
+		"weight": 170
+	},
+	{
+		"general": {
+			"manufacturer": "WD",
+			"model": "Black Performance Mobile WD10SPSX",
+			"price": 30290,
+	        "discount": 0,
+	        "amount": 4,
+			"image": "https://forcecom.kz/upload/iblock/703/7033c11cc4f4b17c726fdc7037b2200c.png"
+        },
+		"type": "internal",
+		"capacity": 1000,
+		"interface": "SATA 3",
+		"write_method": "SMR",
+		"transfer_rate": 140,
+		"spindle_speed": 7200,
+		"form_factor": "2.5",
+		"mftb": 512,
+		"size": [100.2, 69.85, 7],
+		"weight": 92
+	}
+]

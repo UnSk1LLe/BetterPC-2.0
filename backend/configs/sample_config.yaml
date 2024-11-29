@@ -53,3 +53,7 @@ users:
     customerRole: "CUSTOMER"
     adminRole: "ADMIN"
     shopAssistantRole: "SHOP_ASSISTANT"
+
+stripe:
+  publicKey: <public_key>
+  privateKey: <private_key>

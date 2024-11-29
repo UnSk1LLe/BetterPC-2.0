@@ -1,7 +1,6 @@
-package main
+package cmd
 
 import (
-	BetterPC_2_0 "BetterPC_2.0"
 	"BetterPC_2.0/configs"
 	"BetterPC_2.0/internal/handlers"
 	"BetterPC_2.0/internal/repository"
@@ -9,13 +8,26 @@ import (
 	"BetterPC_2.0/internal/service"
 	"BetterPC_2.0/pkg/cache/localCache"
 	"BetterPC_2.0/pkg/email/smtpServer"
+	backendServer "BetterPC_2.0/pkg/httpServer"
 	"BetterPC_2.0/pkg/logging"
-	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/cobra"
 )
 
-func main() {
+func init() {
+	rootCmd.AddCommand(serveCmd)
+}
 
+var serveCmd = &cobra.Command{
+	Use:   "serve",
+	Short: "Start application",
+	Long:  `Initialize all dependencies, establish connections and run the server`,
+	Run: func(cmd *cobra.Command, args []string) {
+		serve()
+	},
+}
+
+func serve() {
 	logger := logging.GetLogger()
 	//initializing logger
 
@@ -29,8 +41,6 @@ func main() {
 	}
 
 	configs.SetConfig() //setting config from yaml
-
-	fmt.Println(configs.GetConfig())
 
 	service.InitAuth(configs.GetConfig())
 
@@ -52,7 +62,7 @@ func main() {
 	appServices := service.NewService(appRepos, logger)
 	appHandlers := handlers.NewHandler(appServices, logger, configs.GetConfig(), localCache.GetLocalCache())
 
-	server := new(BetterPC_2_0.Server)
+	server := new(backendServer.Server)
 
 	port := configs.GetConfig().Server.Port
 
