@@ -2,12 +2,12 @@ package service
 
 import (
 	"BetterPC_2.0/internal/repository"
+	"BetterPC_2.0/internal/service/helpers/searchEngine"
 	"BetterPC_2.0/pkg/data/models/products"
 	generalRequests "BetterPC_2.0/pkg/data/models/products/general/requests"
 	generalResponses "BetterPC_2.0/pkg/data/models/products/general/responses"
 	productRequests "BetterPC_2.0/pkg/data/models/products/requests"
 	"BetterPC_2.0/pkg/logging"
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"mime/multipart"
 )
@@ -42,7 +42,9 @@ func (p *ProductService) GetById(id primitive.ObjectID, productType products.Pro
 	return p.repo.GetById(id, productType)
 }
 
-func (p *ProductService) GetStandardizedList(filter bson.M, productType products.ProductType) ([]generalResponses.StandardizedProductData, error) {
+func (p *ProductService) GetStandardizedList(searchQuery string, propertyFilters map[string]interface{}, productType products.ProductType) ([]generalResponses.StandardizedProductData, error) {
+	_, filter := searchEngine.GetSearchFilter(searchQuery)
+
 	productsList, err := p.repo.GetList(filter, productType)
 	if err != nil {
 		return nil, err
@@ -56,8 +58,25 @@ func (p *ProductService) GetStandardizedList(filter bson.M, productType products
 	return standardizedProductsList, nil
 }
 
-func (p *ProductService) GetList(filter bson.M, productType products.ProductType) ([]products.Product, error) {
-	return p.repo.GetList(filter, productType)
+func (p *ProductService) GetList(searchQuery string, propertyFilter map[string]interface{}, productType products.ProductType) ([]products.Product, error) {
+	_, searchFilter := searchEngine.GetSearchFilter(searchQuery)
+	return p.repo.GetList(searchFilter, productType)
+}
+
+func (p *ProductService) CountProductsForEachCategory(searchQuery string) (map[products.ProductType]int, error) {
+	productTypeCount := make(map[products.ProductType]int)
+
+	productTypes, filter := searchEngine.GetSearchFilter(searchQuery)
+	if len(productTypes) != 0 {
+		for _, productType := range productTypes {
+			count, err := p.repo.CountCategoryProducts(filter, productType)
+			if err != nil {
+				return productTypeCount, err
+			}
+			productTypeCount[productType] = count
+		}
+	}
+	return productTypeCount, nil
 }
 
 func (p *ProductService) DeleteById(id primitive.ObjectID, productType products.ProductType) error {

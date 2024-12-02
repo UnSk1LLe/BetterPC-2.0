@@ -49,6 +49,7 @@ type Product interface {
 	Create(product products.Product, productType products.ProductType) (primitive.ObjectID, error)
 	GetById(id primitive.ObjectID, productType products.ProductType) (products.Product, error)
 	GetList(filter bson.M, productType products.ProductType) ([]products.Product, error)
+	CountCategoryProducts(filter bson.M, productType products.ProductType) (int, error)
 	UpdateById(id primitive.ObjectID, input productRequests.ProductUpdateRequest, productType products.ProductType) error
 	UpdateGeneralInfoById(productId primitive.ObjectID, input generalRequests.UpdateGeneralRequest, productType products.ProductType) error
 	DeleteById(productId primitive.ObjectID, productType products.ProductType) (products.Product, error)

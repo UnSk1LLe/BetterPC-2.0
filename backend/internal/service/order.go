@@ -12,7 +12,6 @@ import (
 	"fmt"
 	"github.com/pkg/errors"
 	"github.com/stripe/stripe-go/v81"
-	"github.com/stripe/stripe-go/v81/paymentintent"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -87,7 +86,6 @@ func (o *OrderService) CreateWithItemHeaders(userId string, input orderRequests.
 }
 
 func (o *OrderService) PayForOrder(userId, orderId string, amount int64, currency, paymentMethodId, returnUrl string) (string, error) {
-	// Step 1: Fetch the order from the database
 	userObjId, err := primitive.ObjectIDFromHex(userId)
 	if err != nil {
 		return "", err
@@ -107,10 +105,13 @@ func (o *OrderService) PayForOrder(userId, orderId string, amount int64, currenc
 		return "", orderErrors.ErrOrderOwnerMismatch
 	}
 
-	// Step 2: Create Payment Intent using StripeService
 	metadata := map[string]string{
 		"order_id": orderId,
 		"user_id":  userId,
+	}
+
+	if currency != "USD" {
+		return "", errors.New("payment must be in USD")
 	}
 
 	paymentIntent, err := o.stripeService.CreatePaymentIntent(amount, currency, paymentMethodId, returnUrl, metadata)
@@ -118,10 +119,6 @@ func (o *OrderService) PayForOrder(userId, orderId string, amount int64, currenc
 		return "", fmt.Errorf("failed to create payment intent: %w", err)
 	}
 
-	// Step 3: Confirm the payment (this can also be done on the client-side using Stripe.js)
-	// Here, we are assuming that `Confirm` was set to true in `CreatePaymentIntent`, so Stripe will handle confirmation automatically.
-
-	// Step 4: Update order status
 	if paymentIntent.Status == stripe.PaymentIntentStatusSucceeded {
 		input := orders.PaymentDetails{
 			PaymentIntentId: paymentIntent.ID,
@@ -155,22 +152,21 @@ func (o *OrderService) CancelOrder(userId, orderId string) error {
 	}
 
 	//only proceed if the order is active
-	if err := order.IsActive(); err != nil {
-		return err
+	if !order.IsActive() {
+		return orderErrors.ErrNotActiveOrder
 	}
 
-	params := &stripe.PaymentIntentParams{}
-
-	paymentintent.Get(order.Payment.PaymentIntentId, params)
-	//TODO add logic if order is paid then give money back to the client, else cancel order
 	err = o.repo.Cancel(userObjId, orderObjId)
 	if err != nil {
 		return err
 	}
 
-	_, err = o.stripeService.RefundPayment(order.Payment.PaymentIntentId, 0)
-	if err != nil {
-		return err
+	//TODO add logic if order is paid then give money back to the client, else cancel order
+	if order.Payment.IsPaid && order.IsActive() {
+		_, err := o.stripeService.RefundPayment(order.Payment.PaymentIntentId, int64(order.Price))
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

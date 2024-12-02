@@ -35,7 +35,11 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 	middleware := middlewares.NewMiddleware(h.services, h.logger, h.cfg, h.cache)
 
-	auth := router.Group("/auth")
+	api := router.Group("/api")
+
+	apiV1 := api.Group("/v1")
+
+	auth := apiV1.Group("/auth")
 	{
 		auth.Use(middleware.RateLimitFromClient(middlewares.DefaultRateLimit, middlewares.DefaultRateInterval))
 
@@ -47,7 +51,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		auth.POST("/logout", h.Logout)
 	}
 
-	verification := router.Group("/verification")
+	verification := apiV1.Group("/verification")
 	{
 		verification.Use(middleware.RateLimitFromClient(middlewares.DefaultRateLimit, middlewares.DefaultRateInterval))
 
@@ -55,7 +59,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		verification.POST("/:token", h.VerifyUser)
 	}
 
-	passwordRecovery := router.Group("/password_recovery")
+	passwordRecovery := apiV1.Group("/password_recovery")
 	{
 		verification.Use(middleware.RateLimitFromClient(middlewares.DefaultRateLimit, middlewares.DefaultRateInterval))
 
@@ -63,7 +67,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		passwordRecovery.POST("/:token", h.RecoverPassword)
 	}
 
-	shop := router.Group("/shop") //endpoints for customers
+	shop := apiV1.Group("/shop") //endpoints for customers
 	{
 		shop.Use(middleware.UserIdentity())
 
@@ -108,7 +112,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		}
 	}
 
-	adminPanel := router.Group("/admin_panel") //endpoints for admins
+	adminPanel := apiV1.Group("/admin_panel") //endpoints for admins
 	{
 		adminPanel.Use(middleware.UserIdentity(), middleware.StaffOnly())
 

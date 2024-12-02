@@ -8,7 +8,7 @@ import (
 
 func GetSearchFilter(searchQuery string) ([]products.ProductType, bson.M) {
 	if searchQuery == "" {
-		return nil, bson.M{}
+		return products.ProductTypes.GetAll(), bson.M{}
 	}
 
 	var productTypeFilter []products.ProductType
@@ -47,6 +47,10 @@ func GetSearchFilter(searchQuery string) ([]products.ProductType, bson.M) {
 				}
 			}
 		}
+	}
+
+	if len(productTypeFilter) == 0 {
+		productTypeFilter = products.ProductTypes.GetAll()
 	}
 
 	return productTypeFilter, bson.M{"$and": searchFilters}

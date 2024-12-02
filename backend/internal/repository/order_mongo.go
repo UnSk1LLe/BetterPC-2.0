@@ -237,8 +237,8 @@ func (o *OrderMongo) UpdatePaymentDetails(orderId primitive.ObjectID, input orde
 		}
 
 		//only proceed if the order is active
-		if err := order.IsActive(); err != nil {
-			return nil, err
+		if !order.IsActive() {
+			return nil, orderErrors.ErrNotActiveOrder
 		}
 
 		return nil, nil

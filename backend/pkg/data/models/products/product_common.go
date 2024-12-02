@@ -11,7 +11,7 @@ const MaxProductTypeLength = 20
 
 type ProductType string
 
-var ProductTypes = struct {
+type productTypes struct {
 	Cpu         ProductType
 	Motherboard ProductType
 	Ram         ProductType
@@ -21,7 +21,9 @@ var ProductTypes = struct {
 	Cooling     ProductType
 	PowerSupply ProductType
 	Housing     ProductType
-}{
+}
+
+var ProductTypes = productTypes{
 	Cpu:         "cpu",
 	Motherboard: "motherboard",
 	Ram:         "ram",
@@ -31,6 +33,20 @@ var ProductTypes = struct {
 	Cooling:     "cooling",
 	PowerSupply: "powersupply",
 	Housing:     "housing",
+}
+
+func (pt productTypes) GetAll() []ProductType {
+	return []ProductType{
+		pt.Cpu,
+		pt.Motherboard,
+		pt.Ram,
+		pt.Gpu,
+		pt.Ssd,
+		pt.Hdd,
+		pt.Cooling,
+		pt.PowerSupply,
+		pt.Housing,
+	}
 }
 
 func (pt ProductType) String() string {

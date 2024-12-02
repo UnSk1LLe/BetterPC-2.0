@@ -73,8 +73,9 @@ type Categories interface {
 type Product interface {
 	Create(product products.Product, productType products.ProductType, image *multipart.FileHeader) (primitive.ObjectID, error)
 	GetById(id primitive.ObjectID, productType products.ProductType) (products.Product, error)
-	GetList(filter bson.M, productType products.ProductType) ([]products.Product, error)
-	GetStandardizedList(filter bson.M, productType products.ProductType) ([]generalResponses.StandardizedProductData, error)
+	GetList(searchQuery string, propertyFilters map[string]interface{}, productType products.ProductType) ([]products.Product, error)
+	CountProductsForEachCategory(searchQuery string) (map[products.ProductType]int, error)
+	GetStandardizedList(searchQuery string, propertyFilters map[string]interface{}, productType products.ProductType) ([]generalResponses.StandardizedProductData, error)
 	UpdateById(id primitive.ObjectID, input productRequests.ProductUpdateRequest,
 		productType products.ProductType, image *multipart.FileHeader) error
 	UpdateGeneralInfoById(productId primitive.ObjectID, input generalRequests.UpdateGeneralRequest,

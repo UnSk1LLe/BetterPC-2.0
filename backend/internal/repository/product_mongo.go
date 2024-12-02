@@ -133,6 +133,18 @@ func (p *ProductMongo) GetList(filter bson.M, productType products.ProductType) 
 	return *productsList, nil
 }
 
+func (p *ProductMongo) CountCategoryProducts(filter bson.M, productType products.ProductType) (int, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	count, err := p.db.GetProductCollection(productType).CountDocuments(ctx, filter)
+	if err != nil && !errors.Is(err, mongo.ErrNoDocuments) {
+		return 0, err
+	}
+
+	return int(count), nil
+}
+
 func (p *ProductMongo) UpdateById(productId primitive.ObjectID, input productRequests.ProductUpdateRequest, productType products.ProductType) error {
 	err := typeValidators.ValidateType(input, ProductTypesMap[productType].updateProductType)
 	if err != nil {

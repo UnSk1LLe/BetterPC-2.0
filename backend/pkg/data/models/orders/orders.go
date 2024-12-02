@@ -83,11 +83,8 @@ type ProductHeader struct {
 	SelectedAmount int                `bson:"selected_amount" json:"selected_amount"`
 }
 
-func (o *Order) IsActive() error {
-	if o.Status == OrderStatuses.Closed || o.Status == OrderStatuses.Cancelled { //TODO other validation criteria(date based)
-		return orderErrors.ErrNotActiveOrder
-	}
-	return nil
+func (o *Order) IsActive() bool {
+	return !(o.Status == OrderStatuses.Closed || o.Status == OrderStatuses.Cancelled)
 }
 
 func NewOrder(userId primitive.ObjectID, productHeaders map[products.ProductType][]ProductHeader) Order {
